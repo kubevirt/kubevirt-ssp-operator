@@ -1,2 +1,9 @@
 ---
 # tasks file for KubevirtSsp
+- name: Install VM templates
+  k8s:
+    state: present
+    namespace: "{{ meta.namespace }}"
+    definition: "{{ item | from_yaml }}"
+  with_items: "{{ lookup('file', 'common-templates-'+ version +'.yml').split('\n---\n') }}"
+

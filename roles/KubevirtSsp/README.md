@@ -1,7 +1,16 @@
-Role Name
+Kubevirt Scheduling, Scale and Performance operator
 =========
 
-A brief description of the role goes here.
+This operator is responsible for maintaining the kubevirt components
+needed for scheduling, scale and performance of VMs.
+
+Such as:
+
+- VM templates and related infrastructure,
+- metrics collectors,
+- node feature discovery plugins,
+- scheduler extensions,
+- and anything related to those.
 
 Requirements
 ------------
@@ -11,28 +20,29 @@ Any pre-requisites that may not be covered by Ansible itself or the role should 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+The only mandatory variable that should be set by the custom resource is the
+expected `version` of the managed components.
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+The operator depends on (Node feature discovery)[https://github.com/kubernetes-sigs/node-feature-discovery] that should be provided using
+its own operator: https://github.com/openshift/cluster-nfd-operator
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: KubevirtSsp, version: "v0.3.1" }
 
 License
 -------
 
-BSD
+Apache License V2.0
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Red Hat, 2018
+
