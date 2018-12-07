@@ -1,0 +1,5 @@
+---
+- version: v1
+  group: kubevirt.io
+  kind: KubevirtSsp
+  role: /opt/ansible/roles/KubevirtSsp
