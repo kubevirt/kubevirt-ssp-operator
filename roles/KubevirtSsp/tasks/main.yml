@@ -5,5 +5,5 @@
     state: present
     namespace: "{{ meta.namespace }}"
     definition: "{{ item | from_yaml }}"
-  with_items: "{{ lookup('file', 'common-templates-'+ version +'.yml').split('\n---\n') }}"
+  with_items: "{{ lookup('file', 'common-templates-'+ version +'.yaml').split('\n---\n') |select('match', '^[^#]') |list }}"
 
