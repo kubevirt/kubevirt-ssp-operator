@@ -2,4 +2,4 @@
 - version: v1
   group: kubevirt.io
   kind: KubevirtSsp
-  role: /opt/ansible/roles/KubevirtSsp
+  playbook: /opt/ansible/playbook.yaml
