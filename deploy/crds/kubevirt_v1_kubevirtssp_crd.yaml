@@ -11,3 +11,6 @@ spec:
     singular: kubevirtssp
   scope: Namespaced
   version: v1
+  subresources:
+    status: {}
+
