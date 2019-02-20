@@ -1,0 +1,117 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  creationTimestamp: null
+  name: kubevirt-ssp-operator.v0.1.1
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - kind: KubevirtSsp
+      name: kubevirtssps.kubevirt.io
+      version: v1
+  description: Placeholder description
+  displayName: Kubevirt Ssp Operator
+  install:
+    spec:
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - oauth.openshift.io
+          - template.openshift.io
+          resources:
+          - '*'
+          verbs:
+          - '*'
+        serviceAccountName: kubevirt-ssp-operator
+      deployments:
+      - name: kubevirt-ssp-operator
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              name: kubevirt-ssp-operator
+          strategy: {}
+          template:
+            metadata:
+              creationTimestamp: null
+              labels:
+                name: kubevirt-ssp-operator
+            spec:
+              containers:
+              - env:
+                - name: WATCH_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: OPERATOR_NAME
+                  value: kubevirt-ssp-operator
+                image: REPLACE_IMAGE
+                imagePullPolicy: Always
+                name: kubevirt-ssp-operator
+                ports:
+                - containerPort: 60000
+                  name: metrics
+                resources: {}
+              serviceAccountName: kubevirt-ssp-operator
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - services
+          - endpoints
+          - persistentvolumeclaims
+          - events
+          - configmaps
+          - secrets
+          - replicationcontrollers
+          - serviceaccounts
+          - templates
+          verbs:
+          - '*'
+        - apiGroups:
+          - extensions
+          - apps
+          resources:
+          - deployments
+          - replicasets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          - daemonsets
+          - replicasets
+          - statefulsets
+          verbs:
+          - '*'
+        - apiGroups:
+          - monitoring.coreos.com
+          resources:
+          - servicemonitors
+          verbs:
+          - get
+          - create
+        - apiGroups:
+          - kubevirt.io
+          - template.openshift.io
+          - route.openshift.io
+          resources:
+          - '*'
+          verbs:
+          - '*'
+        serviceAccountName: kubevirt-ssp-operator
+    strategy: deployment
+  maturity: alpha
+  provider: {}
+  version: 0.1.1
