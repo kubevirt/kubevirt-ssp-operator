@@ -1,0 +1,42 @@
+---
+# tasks file for KubevirtTemplateValidator
+- name: Set template:view role
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'template-view-role.yaml') }}"
+- name: Make certificates
+  shell: /usr/local/bin/webhook-mkcert.sh
+  register: mkcert
+- name: Parse mkcert output
+  set_fact:
+    certsdata: "{{ mkcert.stdout | from_json }}"
+- name: Send CSR
+  k8s:
+    state: present
+    src: "{{ certsdata.webhookcsr }}"
+# TODO: wait for CSR to be created
+- name: Approve CSR
+  command: /usr/bin/oc adm certificate approve {{ certsdata.csrname }}
+- name: Fetch certificate from CSR
+  set_fact:
+    # TODO: certsdata.csrname doesn't work. Maybe different parameter handling?
+    csrdata: "{{ lookup('k8s', kind='CertificateSigningRequest', api_version='certificates.k8s.io/v1beta1', resource_name='virtualmachine-template-validator.kubevirt') }}"
+- name: Load key file
+  set_fact:
+    base64key: "{{ lookup('file', certsdata.serverkeyb64) }}"
+- name: Extract server certificate
+  set_fact:
+    servercert: "{{ csrdata.status.certificate }}"
+    cabundle: "{{ csrdata.status.certificate }}"
+- name: Create the Secret
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'secret.yaml.j2') }}"
+- name: Create the service
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'service.yaml') }}"
+- name: Register the webhook
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'webhook.yaml.j2') }}"

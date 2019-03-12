@@ -1,0 +1,87 @@
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: template-validator
+  namespace: kubevirt
+  labels:
+    kubevirt.io: virtualmachine-template-validator
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: template-validator
+  namespace: kubevirt
+  labels:
+    kubevirt.io: virtualmachine-template-validator
+roleRef:
+  kind: ClusterRole
+  name: template:view
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: template-validator
+    namespace: kubevirt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: virtualmachine-template-validator
+  namespace: kubevirt
+  labels:
+    kubevirt.io: virtualmachine-template-validator
+spec:
+  ports:
+  - name: webhook
+    port: 443
+    targetPort: 8443
+  selector:
+    kubevirt.io: virtualmachine-template-validator
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: virtualmachine-template-validator
+  namespace: kubevirt
+  labels:
+    name: virtualmachine-template-validator
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: virtualmachine-template-validator 
+      labels:
+        kubevirt.io: virtualmachine-template-validator
+    spec:
+      serviceAccountName: template-validator
+      containers:
+        - name: webhook
+          image: fromanirh/kubevirt-template-validator:devel
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 250Mi
+              cpu: 300m
+            requests:
+              memory: 250Mi
+              cpu: 300m
+          args:
+            - -v=2
+            - --port=8443
+            - --cert-file=/etc/webhook/certs/cert.pem
+            - --key-file=/etc/webhook/certs/key.pem
+          volumeMounts:
+            - name: virtualmachine-template-validator-certs
+              mountPath: /etc/webhook/certs
+              readOnly: true
+          securityContext:
+            readOnlyRootFilesystem: true
+          ports:
+          - name: webhook
+            containerPort: 8443
+            protocol: TCP
+      volumes:
+        - name: virtualmachine-template-validator-certs
+          secret:
+            secretName: virtualmachine-template-validator-certs
+
