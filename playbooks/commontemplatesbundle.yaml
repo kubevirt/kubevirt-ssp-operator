@@ -2,4 +2,4 @@
   gather_facts: no
   tasks:
   - import_role:
-      name: "KubevirtSsp"
+      name: "KubevirtCommonTemplatesBundle"

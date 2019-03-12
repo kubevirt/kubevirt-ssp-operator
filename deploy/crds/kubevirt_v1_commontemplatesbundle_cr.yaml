@@ -1,0 +1,6 @@
+apiVersion: kubevirt.io/v1
+kind: KubevirtCommonTemplateBundle
+metadata:
+  name: kubevirt-common-template-bundle
+spec:
+  version: v0.4.1
