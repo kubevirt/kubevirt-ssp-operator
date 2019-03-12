@@ -1,5 +1,5 @@
 ---
-# tasks file for KubevirtSsp
+# tasks file for KubevirtCommonTemplatesBundle
 - name: Install VM templates
   k8s:
     state: present

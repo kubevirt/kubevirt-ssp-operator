@@ -1,6 +1,0 @@
-apiVersion: kubevirt.io/v1
-kind: KubevirtSsp
-metadata:
-  name: kubevirt-ssp
-spec:
-  version: v0.4.1

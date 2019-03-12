@@ -34,7 +34,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - { role: KubevirtSsp, version: "v0.3.1" }
+         - { role: KubevirtCommonTemplatesBundle, version: "v0.4.2" }
 
 License
 -------

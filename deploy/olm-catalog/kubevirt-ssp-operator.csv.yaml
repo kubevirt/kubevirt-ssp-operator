@@ -8,8 +8,8 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - kind: KubevirtSsp
-      name: kubevirtssps.kubevirt.io
+    - kind: KubevirtCommonTemplatesBundle
+      name: kubevirtcommontemplatesbundles.kubevirt.io
       version: v1
   description: Placeholder description
   displayName: Kubevirt Ssp Operator
