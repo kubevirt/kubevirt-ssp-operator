@@ -1,5 +1,5 @@
 ---
 - version: v1
   group: kubevirt.io
-  kind: KubevirtCommonTemplatesBundles
+  kind: KubevirtCommonTemplatesBundle
   playbook: /opt/ansible/playbooks/commontemplatesbundle.yaml
