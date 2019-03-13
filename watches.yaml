@@ -2,4 +2,4 @@
 - version: v1
   group: kubevirt.io
   kind: KubevirtCommonTemplatesBundle
-  playbook: /opt/ansible/playbooks/commontemplatesbundle.yaml
+  playbook: /opt/ansible/commontemplatesbundle.yaml
