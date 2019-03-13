@@ -7,8 +7,8 @@ spec:
   names:
     kind: KubevirtCommonTemplatesBundle
     listKind: KubevirtCommonTemplatesBundleList
-    plural: kubevirtcommontemplatebundles
-    singular: kubevirtcommontemplatebundle
+    plural: kubevirtcommontemplatesbundles
+    singular: kubevirtcommontemplatesbundle
   scope: Namespaced
   version: v1
   subresources:
