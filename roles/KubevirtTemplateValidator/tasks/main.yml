@@ -18,16 +18,18 @@
 - name: Approve CSR
   command: /usr/bin/oc adm certificate approve {{ certsdata.csrname }}
 - name: Fetch certificate from CSR
-  set_fact:
-    # TODO: certsdata.csrname doesn't work. Maybe different parameter handling?
-    csrdata: "{{ lookup('k8s', kind='CertificateSigningRequest', api_version='certificates.k8s.io/v1beta1', resource_name='virtualmachine-template-validator.kubevirt') }}"
+  k8s_facts:
+    api_version: certificates.k8s.io/v1beta1
+    kind: CertificateSigningRequest
+    name: "{{ certsdata.csrname }}"
+  register: csrdata
 - name: Load key file
   set_fact:
     base64key: "{{ lookup('file', certsdata.serverkeyb64) }}"
 - name: Extract server certificate
   set_fact:
-    servercert: "{{ csrdata.status.certificate }}"
-    cabundle: "{{ csrdata.status.certificate }}"
+    servercert: "{{ csrdata.resources[0].status.certificate }}"
+    cabundle: "{{ csrdata.resources[0].status.certificate }}"
 - name: Create the Secret
   k8s:
     state: present
