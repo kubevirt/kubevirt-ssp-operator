@@ -1,0 +1,20 @@
+---
+# tasks file for KubevirtTemplateValidator
+- name: Set template:view role
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'template-view-role.yaml') }}"
+- name: Create the service
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'service.yaml') }}"
+# per https://docs.okd.io/latest/dev_guide/secrets.html#service-serving-certificate-secrets
+# *every* pod in the cluster has access to the service-ca.crt, so we can safely use
+# the one inside the operator POD
+- name: Extract the CA bundle
+  set_fact:
+    cabundle: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt') | b64encode }}"
+- name: Register the webhook
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'webhook.yaml.j2') }}"

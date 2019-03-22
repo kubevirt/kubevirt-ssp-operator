@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: template:view
+  namespace: kubevirt
+  labels:
+    kubevirt.io: ""
+rules:
+  - apiGroups:
+      - template.openshift.io
+    resources:
+      - templates
+    verbs:
+      - get
+      - list
+      - watch

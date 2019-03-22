@@ -3,3 +3,8 @@
   group: kubevirt.io
   kind: KubevirtCommonTemplatesBundle
   playbook: /opt/ansible/commontemplatesbundle.yaml
+
+- version: v1
+  group: kubevirt.io
+  kind: KubevirtTemplateValidator
+  playbook: /opt/ansible/templatevalidator.yaml
