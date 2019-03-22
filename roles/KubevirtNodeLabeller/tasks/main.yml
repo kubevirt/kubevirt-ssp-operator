@@ -21,5 +21,6 @@
   retries: 300
   delay: 10
   until:  nl_status.resources[0].status.currentNumberScheduled == nl_status.resources[0].status.numberReady |default(false)
+  when: not wait
 
 
