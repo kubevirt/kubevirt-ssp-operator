@@ -1,0 +1,6 @@
+apiVersion: kubevirt.io/v1
+kind: KubevirtTemplateValidator
+metadata:
+  name: kubevirt-template-validator
+spec:
+  version: v0.1.1
