@@ -5,7 +5,7 @@ metadata:
   name: template-validator
   namespace: kubevirt
   labels:
-    kubevirt.io: kubevirt-template-validator
+    kubevirt.io: virt-template-validator
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
@@ -13,7 +13,7 @@ metadata:
   name: template-validator
   namespace: kubevirt
   labels:
-    kubevirt.io: kubevirt-template-validator
+    kubevirt.io: virt-template-validator
 roleRef:
   kind: ClusterRole
   name: template:view
@@ -26,39 +26,39 @@ subjects:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kubevirt-template-validator
+  name: virt-template-validator
   namespace: kubevirt
   labels:
-    kubevirt.io: kubevirt-template-validator
+    kubevirt.io: virt-template-validator
   annotations:
-    service.alpha.openshift.io/serving-cert-secret-name: kubevirt-template-validator-certs
+    service.alpha.openshift.io/serving-cert-secret-name: virt-template-validator-certs
 spec:
   ports:
   - name: webhook
     port: 443
     targetPort: 8443
   selector:
-    kubevirt.io: kubevirt-template-validator
+    kubevirt.io: virt-template-validator
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: kubevirt-template-validator
+  name: virt-template-validator
   namespace: kubevirt
   labels:
-    name: kubevirt-template-validator
+    name: virt-template-validator
 spec:
   replicas: 1
   template:
     metadata:
-      name: kubevirt-template-validator
+      name: virt-template-validator
       labels:
-        kubevirt.io: kubevirt-template-validator
+        kubevirt.io: virt-template-validator
     spec:
       serviceAccountName: template-validator
       containers:
         - name: webhook
-          image: fromanirh/kubevirt-template-validator:devel
+          image: quay.io/fromani/kubevirt-template-validator:v0.3.0
           imagePullPolicy: Always
           resources:
             limits:
@@ -85,5 +85,5 @@ spec:
       volumes:
         - name: tls
           secret:
-            secretName: kubevirt-template-validator-certs
+            secretName: virt-template-validator-certs
 

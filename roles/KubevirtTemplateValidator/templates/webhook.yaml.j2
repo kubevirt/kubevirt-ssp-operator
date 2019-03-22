@@ -1,12 +1,12 @@
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: virtualmachine-template-validator
+  name: virt-template-validator
 webhooks:
-- name: virtualmachine-template-admission.kubevirt.io
+- name: virt-template-admission.kubevirt.io
   clientConfig:
     service:
-      name: virtualmachine-template-validator
+      name: virt-template-validator
       namespace: kubevirt
       path: "/virtualmachine-template-validate"
     caBundle: "{{ cabundle }}"
