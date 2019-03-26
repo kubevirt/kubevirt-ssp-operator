@@ -58,7 +58,7 @@ spec:
       serviceAccountName: template-validator
       containers:
         - name: webhook
-          image: quay.io/fromani/kubevirt-template-validator:v0.3.0
+          image: "{{ validator_image }}"
           imagePullPolicy: Always
           resources:
             limits:
