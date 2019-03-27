@@ -11,6 +11,9 @@ spec:
     - kind: KubevirtCommonTemplatesBundle
       name: kubevirtcommontemplatesbundles.kubevirt.io
       version: v1
+    - kind: KubevirtNodeLabellerBundle
+      name: kubevirtnodelabellerbundles.kubevirt.io
+      version: v1
   description: Placeholder description
   displayName: Kubevirt Ssp Operator
   install:
@@ -24,6 +27,56 @@ spec:
           - '*'
           verbs:
           - '*'
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - clusterroles
+          verbs:
+          - create
+          - get
+          - patch
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - clusterrolebindings
+          verbs:
+          - create
+          - bind
+          - get
+          - patch
+        - apiGroups:
+          - apps
+          resources:
+          - daemonsets
+          verbs:
+          - create
+          - get
+          - patch
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          verbs:
+          - create
+          - get
+          - patch
+        - apiGroups:
+          - security.openshift.io
+          resources:
+          - securitycontextconstraints
+          verbs:
+          - '*'
+          resourceName:
+          - privileged
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - nodes
+          verbs:
+          - get
+          - patch
+          - update
         serviceAccountName: kubevirt-ssp-operator
       deployments:
       - name: kubevirt-ssp-operator

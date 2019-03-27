@@ -88,8 +88,9 @@ rules:
   - create
   - bind
   - get
-  - patch
   - list
+  - watch
+  - patch
 - apiGroups:
   - extensions
   - apps
@@ -121,8 +122,10 @@ rules:
   - ""
   resources:
   - pods
+  - configmaps
   - nodes
   verbs:
+  - create
   - get
   - patch
   - update
@@ -144,3 +147,12 @@ rules:
   - get
   - list
   - patch
+- apiGroups:
+  - security.openshift.io
+  resources:
+  - securitycontextconstraints
+  verbs:
+  - '*'
+  resourceName:
+  - privileged
+
