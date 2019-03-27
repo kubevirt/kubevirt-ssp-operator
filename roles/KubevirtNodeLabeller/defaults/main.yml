@@ -1,0 +1,13 @@
+---
+# defaults file for KubevirtNodeLabeller
+namespace: "default"
+registry_url: "quay.io"
+repo_tag_cpu: "ksimon"
+repo_tag_kvm_info: "fromani"
+docker_tag_labeller: "v0.0.4"
+docker_tag_kvm_info: "v0.1.1"
+docker_tag_model_plugin: "0.0.2"
+docker_prefix_cpu: "{{ registry_url }}/{{ repo_tag_cpu }}"
+docker_prefix_kvm_info: "{{ registry_url }}/{{ repo_tag_kvm_info }}"
+libvirt_image: "kubevirt/libvirt:5.0.0"
+
