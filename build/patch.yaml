@@ -1,0 +1,3 @@
+#rules:
+#  - matchLabel: "os.template.cnv.io/win2k12r2: true"
+#    addAnnotation: "myAwesomeAnnotation: true"
