@@ -91,6 +91,17 @@ rules:
   - patch
   - list
 - apiGroups:
+  - extensions
+  - apps
+  resources:
+  - deployments
+  - replicasets
+  verbs:
+  - create
+  - get
+  - patch
+  - list
+- apiGroups:
   - apps
   resources:
   - daemonsets
