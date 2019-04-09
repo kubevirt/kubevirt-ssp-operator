@@ -98,6 +98,7 @@ if __name__ == "__main__":
     rules = load_rules(patchPath)
   except MissingPatch:
     # nothing to do, let's just bail out
+    logging.info("Empty patch file %s detected - nothing to do", patchPath)
     sys.exit(0)
   except Exception as e:
     logging.error(e)
