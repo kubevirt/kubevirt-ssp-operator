@@ -5,13 +5,18 @@ import sys
 import os
 import logging
 
+
+class MissingPatch(Exception):
+    pass
+
+
 def load_rules(path):
   with open(path, 'r') as stream:
     try:
       patch = yaml.safe_load(stream)
 
       if patch == None: 
-        raise Exception("Nothing in patch file")
+        raise MissingPatch("Nothing in patch file")
       
       rules = patch.get("rules")
       if rules.get("addAnnotation") != None:
@@ -121,6 +126,9 @@ if __name__ == "__main__":
   rules = None
   try:
     rules = load_rules(patchPath)
+  except MissingPatch:
+    # nothing to do, let's just bail out
+    sys.exit(0)
   except Exception as e:
     logging.error(e)
     sys.exit(1)
