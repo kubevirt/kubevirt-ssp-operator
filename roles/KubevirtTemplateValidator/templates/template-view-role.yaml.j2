@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: template:view
-  namespace: kubevirt
+  namespace: "{{ validator_namespace }}"
   labels:
     kubevirt.io: ""
 rules:

@@ -7,7 +7,7 @@ webhooks:
   clientConfig:
     service:
       name: virt-template-validator
-      namespace: kubevirt
+      namespace: "{{ validator_namespace }}"
       path: "/virtualmachine-template-validate"
     caBundle: "{{ cabundle }}"
   rules:

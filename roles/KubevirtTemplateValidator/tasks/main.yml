@@ -3,7 +3,7 @@
 - name: Set template:view role
   k8s:
     state: present
-    definition: "{{ lookup('file', 'template-view-role.yaml') }}"
+    definition: "{{ lookup('template', 'template-view-role.yaml.j2') }}"
 - name: Create the service
   k8s:
     state: present
