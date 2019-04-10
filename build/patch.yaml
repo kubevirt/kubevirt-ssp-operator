@@ -1,3 +1,22 @@
 #rules:
-#  - matchLabel: "os.template.cnv.io/win2k12r2: true"
-#    addAnnotation: "myAwesomeAnnotation: true"
+#  addAnnotation:
+#    - matchLabel: "os.template.cnv.io/centos7.0: true"
+#      addAnnotation: "myAwesomeAnnotation: true"
+#
+#  patchField rules replace value in specField attribute
+#  it can replace e.g. bool value, string, int, structures, ...
+#  patchField: 
+#    - matchLabel: "os.template.cnv.io/centos7.0: true" 
+#      specField: "objects.0.spec.template.spec.domain.cpu"
+#      value: 
+#        sockets: 1
+#        threads: 1
+#        cpu: 2
+#
+#    - matchLabel: "os.template.cnv.io/centos7.0: true" 
+#      specField: "objects.0.spec.template.spec.domain.cpu.sockets"
+#      value: 3
+#
+#    - matchLabel: "os.template.cnv.io/centos7.0: true" 
+#      specField: "objects.0.spec.running"
+#      value: true

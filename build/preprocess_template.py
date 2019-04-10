@@ -8,15 +8,21 @@ import logging
 def load_rules(path):
   with open(path, 'r') as stream:
     try:
-      patch = yaml.load(stream, Loader=yaml.BaseLoader)
+      patch = yaml.safe_load(stream)
 
       if patch == None: 
         raise Exception("Nothing in patch file")
       
       rules = patch.get("rules")
-      for rule in rules:
-        rule["matchLabel"] = rule.get("matchLabel").split(": ")
-        rule["addAnnotation"] = rule.get("addAnnotation").split(": ")
+      if rules.get("addAnnotation") != None:
+        for rule in rules.get("addAnnotation"):
+          rule["matchLabel"] = rule.get("matchLabel").split(": ")
+          rule["addAnnotation"] = rule.get("addAnnotation").split(": ")
+
+      if rules.get("patchField") != None:
+        for rule in rules.get("patchField"):
+          rule["matchLabel"] = rule.get("matchLabel").split(": ")
+          rule["specField"] = rule.get("specField").split(".")
 
       return rules
     except yaml.YAMLError as exc:
@@ -34,25 +40,53 @@ def load_common_templates(path):
   except yaml.YAMLError as exc:
     raise exc 
 
-def process_annotations(commonTemplates, rules):
+def process_rules(commonTemplates, rules):
   for template in commonTemplates:
       metadata = template.get("metadata", {})
       annotations = metadata.get("annotations",{})
       labels = metadata.get("labels", {})
       annotationsAdded = []
-      for rule in rules:
-        key = rule.get("matchLabel")[0]
-        value = rule.get("matchLabel")[1]
-        if labels.get(key) == value:
-          annotationKey = rule.get("addAnnotation")[0]
-          annotationValue = rule.get("addAnnotation")[1]
-          annotations[annotationKey] = annotationValue
-          annotationsAdded.append(annotationKey + ": " +  annotationValue)
+      addAnnotationRules = rules.get("addAnnotation")
+      if addAnnotationRules != None:
+        for rule in addAnnotationRules:
+          key = rule.get("matchLabel")[0]
+          value = rule.get("matchLabel")[1]
+          if labels.get(key) == value:
+            annotationKey = rule.get("addAnnotation")[0]
+            annotationValue = rule.get("addAnnotation")[1]
+            annotations[annotationKey] = annotationValue
+            annotationsAdded.append(annotationKey + ": " +  annotationValue)
 
-      if len(annotationsAdded) > 0:
+      fieldsUpdated = []
+      patchFieldRules = rules.get("patchField")
+      if patchFieldRules != None:
+        for rule in patchFieldRules:
+          key = rule.get("matchLabel")[0]
+          value = rule.get("matchLabel")[1]
+          if labels.get(key) == value:
+            obj = template
+            specFieldPath = rule.get("specField")
+            lastPathPiece = ""
+            for index, path in enumerate(specFieldPath):
+              if (index+1) == len(specFieldPath):
+                lastPathPiece = path
+                break
+              if type(obj) == list:
+                obj = obj[int(path)]
+              else:
+                obj = obj.setdefault(path, {})
+            obj[lastPathPiece] = rule.get("value")
+            fieldsUpdated.append("field " + ".".join(specFieldPath) + " updated with value: " + str(rule.get("value")))
+
+      if len(annotationsAdded) > 0 or len(fieldsUpdated) > 0:
         logging.info("Updating "+ metadata.get("name")+ " template")
-        for a in annotationsAdded:
-          logging.info("adding " + a)
+        if len(annotationsAdded) > 0:
+          for a in annotationsAdded:
+            logging.info("adding " + a)
+        if len(fieldsUpdated) > 0:
+          for p in fieldsUpdated:
+            logging.info(p)
+
   return commonTemplates
 
 def process_common_templates(commonTemplatesPath, rules):
@@ -70,7 +104,11 @@ def process_common_templates(commonTemplatesPath, rules):
     logging.info("Running script for file: " + fileName)
     logging.info("------------------------------------------------------")
 
-    updatedCommonTemplates = process_annotations(commonTemplates, rules)
+    updatedCommonTemplates = None
+    try:
+      updatedCommonTemplates = process_rules(commonTemplates, rules)
+    except Exception as e:
+      raise(e)
 
     outputFilePath = commonTemplatesPath+fileName
     try:

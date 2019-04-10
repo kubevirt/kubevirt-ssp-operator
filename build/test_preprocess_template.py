@@ -29,17 +29,36 @@ testCases = [
           }
         }
       }],        
-    "rulesParsed": [{
-      "matchLabel":["common_templates1", "true"],
-      "addAnnotation": ["new_annotation", "true"]
-    }],
-    "rulesRaw": {
-      "rules": [
+    "rulesParsed": {
+      "addAnnotation": [{
+          "matchLabel":["common_templates1", "true"],
+          "addAnnotation": ["new_annotation", "true"]
+        }
+      ],
+      "patchField": [
         {
-          "matchLabel":"common_templates1: true",
-          "addAnnotation": "new_annotation: true"
+          "matchLabel": ["common_templates1", "true"], 
+          "specField": ["objects", "0", "spec", "template", "spec", "domain", "cpu", "sockets"],
+          "value": 3
         }
       ]
+    },
+    "rulesRaw": {
+      "rules": {
+        "addAnnotation": [
+          {
+            "matchLabel":"common_templates1: true",
+            "addAnnotation": "new_annotation: true"
+          }
+        ],
+        "patchField": [
+          {
+            "matchLabel": "common_templates1: true", 
+            "specField": "objects.0.spec.template.spec.domain.cpu.sockets",
+            "value": 3
+          }
+        ]
+      }
     },
     "resultAnnotations":[{
       "my_annotation1": "true",
@@ -73,17 +92,36 @@ testCases = [
           }
         }
       }],        
-    "rulesParsed": [{
-      "matchLabel":["match_label", "true"],
-      "addAnnotation": ["new_annotation", "true"]
-    }],
-    "rulesRaw": {
-      "rules": [
+    "rulesParsed": {
+      "addAnnotation": [{
+          "matchLabel":["match_label", "true"],
+          "addAnnotation": ["new_annotation", "true"]
+        }
+      ],
+      "patchField": [
         {
-          "matchLabel":"match_label: true",
-          "addAnnotation": "new_annotation: true"
+          "matchLabel": ["match_label", "true"], 
+          "specField": ["a", "b", "c"],
+          "value": "a"
         }
       ]
+    },
+    "rulesRaw": {
+      "rules": {
+        "addAnnotation": [
+          {
+            "matchLabel":"match_label: true",
+            "addAnnotation": "new_annotation: true"
+          }
+        ],
+        "patchField": [
+          {
+            "matchLabel": "match_label: true", 
+            "specField": "a.b.c",
+            "value": "a"
+          }
+        ]
+      }
     },
     "resultAnnotations":[{
       "my_annotation1": "true",
@@ -105,7 +143,8 @@ testCases = [
             "common_templates1": "true",
             "match_label": "true"
           }
-        }
+        },
+        "a": [{},{"b":{"c": 5}}]
       },{
         "metadata": {
           "name": "template2",
@@ -119,31 +158,53 @@ testCases = [
         }
       }],
     "rulesRaw": {
-      "rules": [{
-        "matchLabel":"match_label: true",
-        "addAnnotation": "new_annotation1: true"
-      }, {
-        "matchLabel":"common_templates1: true",
-        "addAnnotation": "new_annotation2: true"
-      }]
-    },    
-    "rulesParsed": [
-      {
-        "matchLabel":["match_label", "true"],
-        "addAnnotation": ["new_annotation1", "true"]
-      }, {
-        "matchLabel":["common_templates1", "true"],
-        "addAnnotation": ["new_annotation2", "true"]
+      "rules": {
+        "addAnnotation": [
+          {
+            "matchLabel":"match_label: true",
+            "addAnnotation": "new_annotation1: true"
+          }, {
+            "matchLabel":"common_templates1: true",
+            "addAnnotation": "new_annotation2: true"
+          }
+        ],
+        "patchField": [
+          {
+            "matchLabel": "match_label: true", 
+            "specField": "a.1.b.c",
+            "value": 3
+          }
+        ]
       }
-    ],
-    "resultAnnotations":[{
-      "my_annotation1": "true",
-      "new_annotation1": "true",
-      "new_annotation2": "true"
+    },    
+    "rulesParsed": {
+      "addAnnotation": [
+        {
+          "matchLabel":["match_label", "true"],
+          "addAnnotation": ["new_annotation1", "true"]
+        }, {
+          "matchLabel":["common_templates1", "true"],
+          "addAnnotation": ["new_annotation2", "true"]
+        }
+      ],
+      "patchField": [
+        {
+          "matchLabel": ["match_label", "true"], 
+          "specField": ["a", "1", "b", "c"],
+          "value": 3
+        }
+      ]
     },
-    {
-      "my_annotation2": "true"
-    }] 
+    "resultAnnotations":[
+      {
+        "my_annotation1": "true",
+        "new_annotation1": "true",
+        "new_annotation2": "true"
+      },
+      {
+        "my_annotation2": "true"
+      }
+    ] 
   }, {
     #multiple rules, match both templates
     "commonTemplates": [{
@@ -169,23 +230,50 @@ testCases = [
           }
         }
       }],        
-    "rulesParsed": [{
-      "matchLabel":["match_label", "true"],
-      "addAnnotation": ["new_annotation1", "true"]
-    }, {
-      "matchLabel":["common_templates", "true"],
-      "addAnnotation": ["new_annotation2", "true"]
-    }],
-    "rulesRaw": {
-      "rules": [
-        {
-          "matchLabel":"match_label: true",
-          "addAnnotation": "new_annotation1: true"
+    "rulesParsed": {
+      "addAnnotation": [{
+          "matchLabel":["match_label", "true"],
+          "addAnnotation": ["new_annotation1", "true"]
         }, {
-          "matchLabel":"common_templates: true",
-          "addAnnotation": "new_annotation2: true"
+          "matchLabel":["common_templates", "true"],
+          "addAnnotation": ["new_annotation2", "true"]
         }
+      ],
+      "patchField": [
+        {
+          "matchLabel": ["match_label", "true"], 
+          "specField": ["a", "0", "b", "c"],
+          "value": 1
+        }, {
+            "matchLabel": ["match_label", "true"], 
+            "specField": ["a", "0", "d", "e", "f", "g"],
+            "value": 1
+          }
       ]
+    },
+    "rulesRaw": {
+      "rules": {
+        "addAnnotation": [
+          {
+            "matchLabel":"match_label: true",
+            "addAnnotation": "new_annotation1: true"
+          }, {
+            "matchLabel":"common_templates: true",
+            "addAnnotation": "new_annotation2: true"
+          }
+        ],
+        "patchField": [
+          {
+            "matchLabel": "match_label: true", 
+            "specField": "a.0.b.c",
+            "value": 1
+          }, {
+            "matchLabel": "match_label: true", 
+            "specField": "a.0.d.e.f.g",
+            "value": 1
+          }
+        ]
+      }
     },
     "resultAnnotations":[{
       "my_annotation1": "true",
@@ -222,23 +310,42 @@ testCases = [
           }
         }
       }],        
-    "rulesParsed": [{
-      "matchLabel":["some_nonsense1", "true"],
-      "addAnnotation": ["new_annotation1", "true"]
-    }, {
-      "matchLabel":["some_nonsense2", "true"],
-      "addAnnotation": ["new_annotation2", "true"]
-    }],
-    "rulesRaw": {
-      "rules": [
-        {
-          "matchLabel":"some_nonsense1: true",
-          "addAnnotation": "new_annotation1: true"
+    "rulesParsed": {
+      "addAnnotation": [{
+          "matchLabel":["some_nonsense1", "true"],
+          "addAnnotation": ["new_annotation1", "true"]
         }, {
-          "matchLabel":"some_nonsense2: true",
-          "addAnnotation": "new_annotation2: true"
+          "matchLabel":["some_nonsense2", "true"],
+          "addAnnotation": ["new_annotation2", "true"]
+        }
+      ],
+      "patchField": [
+        {
+          "matchLabel": ["some_nonsense2", "true"], 
+          "specField": ["a", "0", "b", "c"],
+          "value": 1
         }
       ]
+    },
+    "rulesRaw": {
+      "rules": {
+        "addAnnotation": [
+          {
+            "matchLabel":"some_nonsense1: true",
+            "addAnnotation": "new_annotation1: true"
+          }, {
+            "matchLabel":"some_nonsense2: true",
+            "addAnnotation": "new_annotation2: true"
+          }
+        ],
+        "patchField": [
+          {
+            "matchLabel": "some_nonsense2: true", 
+            "specField": "a.0.b.c",
+            "value": 1
+          }
+        ]
+      }
     },
     "resultAnnotations":[{
       "my_annotation1": "true"
@@ -250,17 +357,36 @@ testCases = [
 ]
 
 
-def test_process_annotations():
+def test_process_rules():
+  print("Running test_process_rules")
   for testCase in testCases:
     commonTemplates = testCase.get("commonTemplates")
-    updatesCommonTemplates = preprocess_template.process_annotations(commonTemplates, testCase.get("rulesParsed"))
+    updatesCommonTemplates = preprocess_template.process_rules(commonTemplates, testCase.get("rulesParsed"))
     for index, resultAnnotation in enumerate(testCase.get("resultAnnotations")):
       updatedAnnotations = updatesCommonTemplates[index].get("metadata").get("annotations")
       for key in resultAnnotation.keys():
         #compare if updated common templates have correct annotations
         assert updatedAnnotations.get(key) == resultAnnotation.get(key), "annotations should equal"
+    
+    patchRules = testCase.get("rulesParsed").get("patchField")
+    for patchRule in patchRules:
+      matchLabel = patchRule.get("matchLabel")
+      for updatedTemplate in updatesCommonTemplates:
+        metadata = updatedTemplate.get("metadata")
+        # test rule, only if updated template contains match label
+        if metadata.get("labels").get(matchLabel[0]) == matchLabel[1]:
+          path = patchRule.get("specField")
+          obj = updatedTemplate
+          for field in path:
+            if type(obj) == list:
+              obj = obj[int(field)]
+            else:
+              obj = obj.get(field)
+          assert obj == patchRule.get("value"), "values should equal"
+    
 
 def test_load_rules():
+  print("Running test_load_rules")
   patchPath = "/tmp/patch.yaml"
   for testCase in testCases:
     rawRules = testCase.get("rulesRaw")
@@ -270,28 +396,49 @@ def test_load_rules():
         yaml.safe_dump(rawRules, outfile, default_flow_style=False)
     except Exception as e:
       raise e
-
     try:
-      #load parsed rules
+      #load parsed annotations rules
       rules = preprocess_template.load_rules(patchPath)
-      parsedRulesResult = testCase.get("rulesParsed")
-      for index, rule in enumerate(rules):
+      addAnnotationrules = rules.get("addAnnotation")
+      addAnnotationRulesResult = testCase.get("rulesParsed").get("addAnnotation")
+      for index, rule in enumerate(addAnnotationrules):
         #compare if load and parsed rules are the same as result rules
         matchLabel = rule.get("matchLabel")
-        matchLabelResult = parsedRulesResult[index].get("matchLabel")
-        assert matchLabel[0] == matchLabelResult[0], "matchLabel key should equal"
+        matchLabelResult = addAnnotationRulesResult[index].get("matchLabel")
+        assert matchLabel[0] == matchLabelResult[0], "matchLabel key should equal, "
         assert matchLabel[1] == matchLabelResult[1], "matchLabel value should equal"
 
         addAnnotation = rule.get("addAnnotation")
-        addAnnotationResult = parsedRulesResult[index].get("addAnnotation")
+        addAnnotationResult = addAnnotationRulesResult[index].get("addAnnotation")
         assert addAnnotation[0] == addAnnotationResult[0], "addAnnotation key should equal"
         assert addAnnotation[1] == addAnnotationResult[1], "addAnnotation value should equal"
+
+      patchFieldrules = rules.get("patchField")
+      patchFieldRulesResult = testCase.get("rulesParsed").get("patchField")
+      for index, rule in enumerate(patchFieldrules):
+        #compare if load and parsed rules are the same as result rules
+        matchLabel = rule.get("matchLabel")
+        matchLabelResult = patchFieldRulesResult[index].get("matchLabel")
+
+        assert matchLabel[0] == matchLabelResult[0], "patchField matchLabel key should equal"
+        assert matchLabel[1] == matchLabelResult[1], "patchField matchLabel value should equal"
+
+        specFields = rule.get("specField")
+        specFieldsResult = patchFieldRulesResult[index].get("specField")
+        for i, field in enumerate(specFields):
+          assert field == specFieldsResult[i], "path parts should equal"
+        
+        valueResult = patchFieldRulesResult[index].get("value")
+        ruleValue = rule.get("value")
+        assert valueResult == ruleValue, "values should equal"
+
     except Exception as e:
       raise e
   
   os.remove(patchPath)
 
 def test_process_common_templates():
+  print("Running process_common_templates")
   commonTemplatesPath = "/tmp/commonTemplates/"
   #create temporary folder
   if not os.path.exists(commonTemplatesPath):
@@ -323,6 +470,20 @@ def test_process_common_templates():
           for key in resultAnnotations:
             #compare if result annotations are the same as updated annotations
             assert annotations.get(key) == resultAnnotations.get(key), "annotations should equal"
+          
+          patchRules = testCase.get("rulesParsed").get("patchField")
+          for patchRule in patchRules:
+            matchLabel = patchRule.get("matchLabel")
+            # test rule, only if updated template contains match label
+            if metadata.get("labels").get(matchLabel[0]) == matchLabel[1]:
+              path = patchRule.get("specField")
+              obj = updatedTemplate
+              for field in path:
+                if type(obj) == list:
+                  obj = obj[int(field)]
+                else:
+                  obj = obj.get(field)
+              assert obj == patchRule.get("value"), "values should equal"
 
 
     except Exception as e:
@@ -332,7 +493,7 @@ def test_process_common_templates():
 
 
 if __name__ == "__main__":
-  test_process_annotations()
+  test_process_rules()
   test_load_rules()
   test_process_common_templates()
   print("Everything passed")
