@@ -1,0 +1,4 @@
+# This file can be used to override default
+# role values. This is useful for "downstream"
+# packaging and opinionated releases.
+---
