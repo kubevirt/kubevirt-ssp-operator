@@ -1,5 +1,7 @@
 - hosts: localhost
   gather_facts: no
+  vars_files:
+    - _defaults.yml
   roles:
 # we want to prepare everything to pull containers from the same repo
 # as the operator, but we are not there just yet, so we disable the role

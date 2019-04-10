@@ -1,0 +1,11 @@
+# This file can be used to override default
+# role values. This is useful for "downstream"
+# packaging and opinionated releases.
+#
+# If in doubt, leave the file empty.
+#
+# Example:
+#
+# validator_namespace: myproject
+# validator_image: registry.example.com/mine/kubevirt-template-validator:v0.3.0
+---
