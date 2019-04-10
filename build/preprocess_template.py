@@ -55,7 +55,7 @@ def process_rules(commonTemplates, rules):
             annotationKey = rule.get("addAnnotation")[0]
             annotationValue = rule.get("addAnnotation")[1]
             annotations[annotationKey] = annotationValue
-            annotationsAdded.append(annotationKey + ": " +  annotationValue)
+            annotationsAdded.append("adding " + annotationKey + ": " +  annotationValue)
 
       fieldsUpdated = []
       patchFieldRules = rules.get("patchField")
@@ -80,12 +80,8 @@ def process_rules(commonTemplates, rules):
 
       if len(annotationsAdded) > 0 or len(fieldsUpdated) > 0:
         logging.info("Updating "+ metadata.get("name")+ " template")
-        if len(annotationsAdded) > 0:
-          for a in annotationsAdded:
-            logging.info("adding " + a)
-        if len(fieldsUpdated) > 0:
-          for p in fieldsUpdated:
-            logging.info(p)
+        for msg in annotationsAdded + fieldsUpdated:
+          logging.info(msg)
 
   return commonTemplates
 
@@ -104,11 +100,7 @@ def process_common_templates(commonTemplatesPath, rules):
     logging.info("Running script for file: " + fileName)
     logging.info("------------------------------------------------------")
 
-    updatedCommonTemplates = None
-    try:
-      updatedCommonTemplates = process_rules(commonTemplates, rules)
-    except Exception as e:
-      raise(e)
+    updatedCommonTemplates = process_rules(commonTemplates, rules)
 
     outputFilePath = commonTemplatesPath+fileName
     try:
