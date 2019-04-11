@@ -1,8 +1,10 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: ClusterServiceVersion
 metadata:
-  creationTimestamp: null
-  name: kubevirt-ssp-operator.v0.1.1
+  annotations:
+    alm-examples: '[{"apiVersion":"kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.4.1"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator"},"spec":{"version":"v0.1.1"}}]'
+    capabilities: Basic Install
+  name: kubevirt-ssp-operator.v0.16.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -10,6 +12,9 @@ spec:
     owned:
     - kind: KubevirtCommonTemplatesBundle
       name: kubevirtcommontemplatesbundles.kubevirt.io
+      version: v1
+    - kind: KubevirtTemplateValidator
+      name: kubevirttemplatevalidators.kubevirt.io
       version: v1
   description: Placeholder description
   displayName: Kubevirt Ssp Operator
@@ -24,6 +29,79 @@ spec:
           - '*'
           verbs:
           - '*'
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - clusterroles
+          verbs:
+          - create
+          - get
+          - patch
+          - list
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - clusterrolebindings
+          verbs:
+          - create
+          - bind
+          - get
+          - patch
+          - list
+        - apiGroups:
+          - extensions
+          - apps
+          resources:
+          - deployments
+          - replicasets
+          verbs:
+          - create
+          - get
+          - patch
+          - list
+        - apiGroups:
+          - apps
+          resources:
+          - daemonsets
+          verbs:
+          - create
+          - get
+          - patch
+        - apiGroups:
+          - ''
+          resources:
+          - serviceaccounts
+          verbs:
+          - create
+          - get
+          - patch
+        - apiGroups:
+          - ''
+          resources:
+          - pods
+          - nodes
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - ''
+          resources:
+          - services
+          verbs:
+          - list
+          - get
+          - create
+          - patch
+        - apiGroups:
+          - admissionregistration.k8s.io
+          resources:
+          - validatingwebhookconfigurations
+          verbs:
+          - create
+          - get
+          - list
+          - patch
         serviceAccountName: kubevirt-ssp-operator
       deployments:
       - name: kubevirt-ssp-operator
@@ -35,7 +113,6 @@ spec:
           strategy: {}
           template:
             metadata:
-              creationTimestamp: null
               labels:
                 name: kubevirt-ssp-operator
             spec:
@@ -58,7 +135,7 @@ spec:
       permissions:
       - rules:
         - apiGroups:
-          - ""
+          - ''
           resources:
           - pods
           - services
@@ -81,7 +158,7 @@ spec:
           verbs:
           - '*'
         - apiGroups:
-          - ""
+          - ''
           resources:
           - namespaces
           verbs:
@@ -112,6 +189,25 @@ spec:
           - '*'
         serviceAccountName: kubevirt-ssp-operator
     strategy: deployment
+  installModes:
+  - supported: true
+    type: OwnNamespace
+  - supported: true
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - KubeVirt
+  - Virtualization
+  - Template
+  - Performance
+  - VirtualMachine
+  maintainers:
+  - email: kubevirt-dev@googlegroups.com
+    name: KubeVirt project
   maturity: alpha
-  provider: {}
-  version: 0.1.1
+  provider:
+    name: KubeVirt project
+  version: 0.16.0
