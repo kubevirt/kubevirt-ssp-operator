@@ -147,6 +147,7 @@ rules:
   - get
   - list
   - patch
+  - watch
 - apiGroups:
   - security.openshift.io
   resources:

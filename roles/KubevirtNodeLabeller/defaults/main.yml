@@ -5,5 +5,5 @@ wait: true
 kubevirt_node_labeller: "quay.io/ksimon/kubevirt-node-labeller:v0.0.5"
 kvm_info_nfd_plugin: "quay.io/fromani/kvm-info-nfd-plugin:v0.4.0"
 kubevirt_cpu_nfd_plugin: "quay.io/ksimon/kubevirt-cpu-nfd-plugin:v0.0.4"
-libvirt_image: "kubevirt/libvirt:5.0.0"
+libvirt_image: "kubevirt/virt-launcher:v0.16.0"
 
