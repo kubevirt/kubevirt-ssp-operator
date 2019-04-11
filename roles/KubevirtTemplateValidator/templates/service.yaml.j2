@@ -58,7 +58,7 @@ spec:
       serviceAccountName: template-validator
       containers:
         - name: webhook
-          image: "{{ validator_image }}"
+          image: "{{ validator_image + ':' + version }}"
           imagePullPolicy: Always
           resources:
             limits:
