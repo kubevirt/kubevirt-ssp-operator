@@ -3,4 +3,4 @@ kind: KubevirtTemplateValidator
 metadata:
   name: kubevirt-template-validator
 spec:
-  version: v0.1.1
+  version: v0.3.0

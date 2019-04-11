@@ -1,4 +1,5 @@
 ---
 # defaults file for KubevirtTemplateValidator
 validator_namespace: kubevirt
-validator_image: quay.io/fromani/kubevirt-template-validator:v0.3.0
+validator_image: quay.io/fromani/kubevirt-template-validator
+version: v0.3.0
