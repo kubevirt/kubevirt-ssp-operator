@@ -1,18 +1,5 @@
 ---
 # tasks file for KubevirtTemplateValidator
-- name: Extract the operator POD info
-  k8s_facts:
-    api_version: v1
-    kind: Pod
-    label_selectors:
-      - name = kubevirt-ssp-operator
-  register: operator_pod
-- name: Extract the POD registry
-  set_fact:
-    operator_image_name: "{{ operator_pod['spec']['containers'][0]['image'] }}"
-- name: parse image info
-  set_fact:
-    repo_info: "{{ dict(['registry', 'image'] | zip(operator_image_name.rsplit('/', 1))) }}"
 - name: Set template:view role
   k8s:
     state: present
