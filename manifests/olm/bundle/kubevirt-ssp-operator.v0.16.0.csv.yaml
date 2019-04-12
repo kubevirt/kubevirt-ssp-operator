@@ -68,7 +68,7 @@ spec:
           - get
           - patch
         - apiGroups:
-          - ""
+          - ''
           resources:
           - serviceaccounts
           verbs:
@@ -76,7 +76,7 @@ spec:
           - get
           - patch
         - apiGroups:
-          - ""
+          - ''
           resources:
           - pods
           - nodes
@@ -85,7 +85,7 @@ spec:
           - patch
           - update
         - apiGroups:
-          - ""
+          - ''
           resources:
           - services
           verbs:
@@ -135,7 +135,7 @@ spec:
       permissions:
       - rules:
         - apiGroups:
-          - ""
+          - ''
           resources:
           - pods
           - services
@@ -158,7 +158,7 @@ spec:
           verbs:
           - '*'
         - apiGroups:
-          - ""
+          - ''
           resources:
           - namespaces
           verbs:
