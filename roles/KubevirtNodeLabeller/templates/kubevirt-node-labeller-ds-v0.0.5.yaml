@@ -18,12 +18,12 @@ spec:
       serviceAccount: kubevirt-node-labeller
       containers:
       - name: kubevirt-node-labeller-sleeper
-        image: {{ kubevirt_node_labeller }}
+        image: "{{ repo_info['registry'] + '/' + kubevirt_node_labeller_image + ':' + kubevirt_node_labeller_tag }}"
         command: ["sleep"]
         args: ["infinity"]
       initContainers:
 
-        - image: {{ kvm_info_nfd_plugin }}
+        - image: "{{ repo_info['registry'] + '/' + kvm_info_nfd_plugin_image + ':' + kvm_info_nfd_plugin_tag }}"
           command: ["/bin/sh","-c"]
           args: ["cp /usr/bin/kvm-caps-info-nfd-plugin /etc/kubernetes/node-feature-discovery/source.d/;"]
           imagePullPolicy: Always
@@ -32,7 +32,7 @@ spec:
             - name: nfd-source
               mountPath: "/etc/kubernetes/node-feature-discovery/source.d/"
   
-        - image: {{ kubevirt_cpu_nfd_plugin }}
+        - image: "{{ repo_info['registry'] + '/' + kubevirt_cpu_nfd_plugin_image + ':' + kubevirt_cpu_nfd_plugin_tag }}"
           command: ["/bin/sh","-c"]
           args: ["cp /plugin/dest/kubevirt-cpu-nfd-plugin /etc/kubernetes/node-feature-discovery/source.d/; cp /config/cpu-plugin-configmap.yaml /etc/kubernetes/node-feature-discovery/source.d/cpu-plugin-configmap.yaml;"]
           imagePullPolicy: Always
@@ -43,7 +43,7 @@ spec:
             - mountPath: /config
               name: cpu-config
 
-        - image: {{ libvirt_image }}
+        - image: "{{ repo_info['registry'] + '/' + libvirt_image + ':' + libvirt_tag }}"
           command: ["/bin/sh","-c"]
           args: ["libvirtd -d; chmod o+rw /dev/kvm; virsh domcapabilities --machine q35 --arch x86_64 --virttype kvm > /etc/kubernetes/node-feature-discovery/source.d/virsh_domcapabilities.xml; cp -r /usr/share/libvirt/cpu_map /etc/kubernetes/node-feature-discovery/source.d/"]
           imagePullPolicy: Always
@@ -63,7 +63,7 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
-          image: {{ kubevirt_node_labeller }}
+          image: "{{ repo_info['registry'] + '/' + kubevirt_node_labeller_image + ':' + kubevirt_node_labeller_tag }}"
           name: kubevirt-node-labeller
           securityContext:
             privileged: true
