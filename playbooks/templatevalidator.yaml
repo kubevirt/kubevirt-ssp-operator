@@ -1,5 +1,9 @@
 - hosts: localhost
   gather_facts: no
   tasks:
-  - import_role:
+  - name: Gather informations about the repository
+    import_role:
+      name: "KubevirtRepoInfo"
+  - name: Deploy the Template Validator
+    import_role:
       name: "KubevirtTemplateValidator"

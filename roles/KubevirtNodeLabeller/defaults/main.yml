@@ -2,8 +2,12 @@
 # defaults file for KubevirtNodeLabeller
 wait: true
 
-kubevirt_node_labeller: "quay.io/ksimon/kubevirt-node-labeller:v0.0.5"
-kvm_info_nfd_plugin: "quay.io/fromani/kvm-info-nfd-plugin:v0.4.0"
-kubevirt_cpu_nfd_plugin: "quay.io/ksimon/kubevirt-cpu-nfd-plugin:v0.0.4"
-libvirt_image: "kubevirt/virt-launcher:v0.16.0"
+kubevirt_node_labeller_image: "kubevirt-node-labeller"
+kubevirt_node_labeller_tag: "v0.0.5"
+kvm_info_nfd_plugin_image: "kvm-info-nfd-plugin"
+kvm_info_nfd_plugin_tag: "v0.4.0"
+kubevirt_cpu_nfd_plugin_image: "kubevirt-cpu-nfd-plugin"
+kubevirt_cpu_nfd_plugin_tag: "v0.0.4"
+libvirt_image: "virt-launcher"
+libvirt_tag: "v0.16.0"
 
