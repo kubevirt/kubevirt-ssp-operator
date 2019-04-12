@@ -4,6 +4,8 @@ metadata:
   annotations:
     alm-examples: '[{"apiVersion":"kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.4.1"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtNodeLabellerBundle","metadata":{"name":"kubevirt-node-labeller-bundle"},"spec":{"version":"v0.0.5"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator"},"spec":{"version":"v0.1.1"}}]'
     capabilities: Basic Install
+    categories: Virtualization
+    description: Manages KubeVirt addons for Scheduling, Scale, Performance
   name: kubevirt-ssp-operator.v0.16.0
   namespace: kubevirt
 spec:

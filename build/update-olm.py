@@ -5,6 +5,11 @@ import sys
 import yaml
 
 
+_ANNOTATIONS = {
+    'categories': 'Virtualization',
+    'description': \
+        'Manages KubeVirt addons for Scheduling, Scale, Performance',
+}
 _DESCRIPTION = "KubeVirt Schedule, Scale and Performance Operator"
 _NAMESPACE = 'kubevirt'
 _SPEC = {
@@ -79,6 +84,7 @@ def process(path):
         manifest = yaml.safe_load(fh)
 
     manifest['metadata']['namespace'] = _NAMESPACE
+    manifest['metadata']['annotations'].update(_ANNOTATIONS)
 
     manifest['spec'].update(_SPEC)
 
