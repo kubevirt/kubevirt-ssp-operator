@@ -2,7 +2,7 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: ClusterServiceVersion
 metadata:
   annotations:
-    alm-examples: '[{"apiVersion":"kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.4.1"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator"},"spec":{"version":"v0.1.1"}}]'
+    alm-examples: '[{"apiVersion":"kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.4.1"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtNodeLabellerBundle","metadata":{"name":"kubevirt-node-labeller-bundle"},"spec":{"version":"v0.0.5"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator"},"spec":{"version":"v0.1.1"}}]'
     capabilities: Basic Install
   name: kubevirt-ssp-operator.v0.16.0
   namespace: kubevirt
@@ -12,6 +12,9 @@ spec:
     owned:
     - kind: KubevirtCommonTemplatesBundle
       name: kubevirtcommontemplatesbundles.kubevirt.io
+      version: v1
+    - kind: KubevirtNodeLabellerBundle
+      name: kubevirtnodelabellerbundles.kubevirt.io
       version: v1
     - kind: KubevirtTemplateValidator
       name: kubevirttemplatevalidators.kubevirt.io
@@ -46,8 +49,9 @@ spec:
           - create
           - bind
           - get
-          - patch
           - list
+          - watch
+          - patch
         - apiGroups:
           - extensions
           - apps
@@ -79,8 +83,10 @@ spec:
           - ""
           resources:
           - pods
+          - configmaps
           - nodes
           verbs:
+          - create
           - get
           - patch
           - update
@@ -102,6 +108,13 @@ spec:
           - get
           - list
           - patch
+          - watch
+        - apiGroups:
+          - security.openshift.io
+          resources:
+          - securitycontextconstraints
+          verbs:
+          - '*'
         serviceAccountName: kubevirt-ssp-operator
       deployments:
       - name: kubevirt-ssp-operator

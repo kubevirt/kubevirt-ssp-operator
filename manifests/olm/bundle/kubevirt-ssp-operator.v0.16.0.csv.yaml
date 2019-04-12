@@ -2,7 +2,7 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: ClusterServiceVersion
 metadata:
   annotations:
-    alm-examples: '[{"apiVersion":"kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.4.1"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator"},"spec":{"version":"v0.1.1"}}]'
+    alm-examples: '[{"apiVersion":"kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.4.1"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtNodeLabellerBundle","metadata":{"name":"kubevirt-node-labeller-bundle"},"spec":{"version":"v0.0.5"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator"},"spec":{"version":"v0.1.1"}}]'
     capabilities: Basic Install
   name: kubevirt-ssp-operator.v0.16.0
   namespace: kubevirt
@@ -10,11 +10,31 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - kind: KubevirtCommonTemplatesBundle
+    - description: Represents a deployment of the predefined VM templates
+      displayName: KubeVirt common templates
+      kind: KubevirtCommonTemplatesBundle
       name: kubevirtcommontemplatesbundles.kubevirt.io
+      specDescriptors:
+      - description: The version of the KubeVirt Templates to deploy
+        displayName: Version
+        path: version
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.ssp:version
       version: v1
-    - kind: KubevirtTemplateValidator
+    - kind: KubevirtNodeLabellerBundle
+      name: kubevirtnodelabellerbundles.kubevirt.io
+      version: v1
+    - description: Represents a deployment of admission control webhook to validate
+        the KubeVirt templates
+      displayName: KubeVirt Template Validator admission webhook
+      kind: KubevirtTemplateValidator
       name: kubevirttemplatevalidators.kubevirt.io
+      specDescriptors:
+      - description: The version of the KubeVirt Template Validator to deploy
+        displayName: Version
+        path: version
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.ssp:version
       version: v1
   description: KubeVirt Schedule, Scale and Performance Operator
   displayName: Kubevirt Ssp Operator
@@ -46,8 +66,9 @@ spec:
           - create
           - bind
           - get
-          - patch
           - list
+          - watch
+          - patch
         - apiGroups:
           - extensions
           - apps
@@ -79,8 +100,10 @@ spec:
           - ''
           resources:
           - pods
+          - configmaps
           - nodes
           verbs:
+          - create
           - get
           - patch
           - update
@@ -102,6 +125,13 @@ spec:
           - get
           - list
           - patch
+          - watch
+        - apiGroups:
+          - security.openshift.io
+          resources:
+          - securitycontextconstraints
+          verbs:
+          - '*'
         serviceAccountName: kubevirt-ssp-operator
       deployments:
       - name: kubevirt-ssp-operator

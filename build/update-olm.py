@@ -8,6 +8,7 @@ import yaml
 _DESCRIPTION = "KubeVirt Schedule, Scale and Performance Operator"
 _NAMESPACE = 'kubevirt'
 _SPEC = {
+    'description': _DESCRIPTION,
     'provider': {
         'name': 'KubeVirt project'
     },
@@ -41,14 +42,48 @@ _SPEC = {
     },
 }
 
+_CRD_INFOS = {
+    'kubevirttemplatevalidators.kubevirt.io': {
+        'displayName': 'KubeVirt Template Validator admission webhook',
+        'description': \
+                'Represents a deployment of admission control webhook to validate the KubeVirt templates',
+        'specDescriptors': [{
+            'description': \
+                'The version of the KubeVirt Template Validator to deploy',
+            'displayName': 'Version',
+            'path': 'version',
+            'x-descriptors': [
+                'urn:alm:descriptor:io.kubernetes.ssp:version',
+            ],
+        }],
+    },
+    'kubevirtcommontemplatesbundles.kubevirt.io': {
+        'displayName': 'KubeVirt common templates',
+        'description': \
+                'Represents a deployment of the predefined VM templates',
+        'specDescriptors': [{
+            'description': \
+                'The version of the KubeVirt Templates to deploy',
+            'displayName': 'Version',
+            'path': 'version',
+            'x-descriptors': [
+                'urn:alm:descriptor:io.kubernetes.ssp:version',
+            ],
+        }],
+    },
+}
+
 
 def process(path):
     with open(path, 'rt') as fh:
         manifest = yaml.safe_load(fh)
 
-    manifest['spec'].update(_SPEC)
     manifest['metadata']['namespace'] = _NAMESPACE
-    manifest['spec']['description'] = _DESCRIPTION
+
+    manifest['spec'].update(_SPEC)
+
+    for crd in manifest['spec']['customresourcedefinitions']['owned']:
+        crd.update(_CRD_INFOS.get(crd['name'], {}))
 
     yaml.safe_dump(manifest, sys.stdout)
 
