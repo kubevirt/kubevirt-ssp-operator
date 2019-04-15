@@ -1,5 +1,8 @@
 - hosts: localhost
   gather_facts: no
   roles:
-  - KubevirtRepoInfo
+# we want to prepare everything to pull containers from the same repo
+# as the operator, but we are not there just yet, so we disable the role
+# and we rely on backward compatible defaults.
+#  - KubevirtRepoInfo
   - KubevirtCommonTemplatesBundle
