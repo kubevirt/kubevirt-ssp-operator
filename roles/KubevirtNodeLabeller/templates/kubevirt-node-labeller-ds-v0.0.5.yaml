@@ -18,36 +18,36 @@ spec:
       serviceAccount: kubevirt-node-labeller
       containers:
       - name: kubevirt-node-labeller-sleeper
-        image: "{{ repo_info['registry'] + '/' + kubevirt_node_labeller_image + ':' + kubevirt_node_labeller_tag }}"
+        image: {{ ssp_registry | default('quay.io/ksimon') }}/{{ kubevirt_node_labeller_image }}:{{ kubevirt_node_labeller_tag }}
         command: ["sleep"]
         args: ["infinity"]
       initContainers:
 
-        - image: "{{ repo_info['registry'] + '/' + kvm_info_nfd_plugin_image + ':' + kvm_info_nfd_plugin_tag }}"
+        - name: kvm-info-nfd-plugin
+          image: {{ ssp_registry | default('quay.io/fromani') }}/{{ kvm_info_nfd_plugin_image }}:{{ kvm_info_nfd_plugin_tag }}
           command: ["/bin/sh","-c"]
           args: ["cp /usr/bin/kvm-caps-info-nfd-plugin /etc/kubernetes/node-feature-discovery/source.d/;"]
           imagePullPolicy: Always
-          name: kvm-info-nfd-plugin
           volumeMounts:
             - name: nfd-source
               mountPath: "/etc/kubernetes/node-feature-discovery/source.d/"
-  
-        - image: "{{ repo_info['registry'] + '/' + kubevirt_cpu_nfd_plugin_image + ':' + kubevirt_cpu_nfd_plugin_tag }}"
+
+        - name: kubevirt-cpu-nfd-plugin
+          image: {{ ssp_registry | default('quay.io/ksimon') }}/{{ kubevirt_cpu_nfd_plugin_image }}:{{ kubevirt_cpu_nfd_plugin_tag }}
           command: ["/bin/sh","-c"]
           args: ["cp /plugin/dest/kubevirt-cpu-nfd-plugin /etc/kubernetes/node-feature-discovery/source.d/; cp /config/cpu-plugin-configmap.yaml /etc/kubernetes/node-feature-discovery/source.d/cpu-plugin-configmap.yaml;"]
           imagePullPolicy: Always
-          name: kubevirt-cpu-nfd-plugin
           volumeMounts:
             - name: nfd-source
               mountPath: "/etc/kubernetes/node-feature-discovery/source.d/"
             - mountPath: /config
               name: cpu-config
 
-        - image: "{{ repo_info['registry'] + '/' + libvirt_image + ':' + libvirt_tag }}"
+        - name: libvirt
+          image: {{ ssp_registry | default('kubevirt') }}/{{ libvirt_image }}:{{ libvirt_tag }}
           command: ["/bin/sh","-c"]
           args: ["libvirtd -d; chmod o+rw /dev/kvm; virsh domcapabilities --machine q35 --arch x86_64 --virttype kvm > /etc/kubernetes/node-feature-discovery/source.d/virsh_domcapabilities.xml; cp -r /usr/share/libvirt/cpu_map /etc/kubernetes/node-feature-discovery/source.d/"]
           imagePullPolicy: Always
-          name: libvirt
           securityContext:
             privileged: true
           resources:
@@ -58,13 +58,13 @@ spec:
           volumeMounts:
             - name: nfd-source
               mountPath: "/etc/kubernetes/node-feature-discovery/source.d/"
-        - env:
+        - name: kubevirt-node-labeller
+          env:
           - name: NODE_NAME
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
-          image: "{{ repo_info['registry'] + '/' + kubevirt_node_labeller_image + ':' + kubevirt_node_labeller_tag }}"
-          name: kubevirt-node-labeller
+          image: {{ ssp_registry | default('quay.io/ksimon') }}/{{ kubevirt_node_labeller_image }}:{{ kubevirt_node_labeller_tag }}
           securityContext:
             privileged: true
           resources:

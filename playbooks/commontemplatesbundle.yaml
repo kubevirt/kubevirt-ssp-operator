@@ -1,9 +1,5 @@
 - hosts: localhost
   gather_facts: no
-  tasks:
-  - name: Gather informations about the repository
-    import_role:
-      name: "KubevirtRepoInfo"
-  - name: Deploy the Common Templates
-    import_role:
-      name: "KubevirtCommonTemplatesBundle"
+  roles:
+  - KubevirtRepoInfo
+  - KubevirtCommonTemplatesBundle

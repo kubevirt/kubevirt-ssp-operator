@@ -58,7 +58,7 @@ spec:
       serviceAccountName: template-validator
       containers:
         - name: webhook
-          image: "{{ repo_info['registry'] + '/' + validator_image + ':' + version }}"
+          image: {{ ssp_registry | default("kubevirt") }}/{{ validator_image }}:{{ version }}
           imagePullPolicy: Always
           resources:
             limits:
