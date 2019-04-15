@@ -6,8 +6,13 @@ BUNDLE_DIR="manifests/olm/bundle"
 
 # TODO: tested with operator-sdk 0.7.0: should we require it?
 which operator-sdk &> /dev/null || {
-	echo "operator-sdk not found"
+	echo "operator-sdk not found (see https://github.com/operator-framework/operator-sdk)"
 	exit 1
+}
+
+which operator-courier &> /dev/null || {
+	echo "operator-courier not found (see https://github.com/operator-framework/operator-courier)"
+	exit 2
 }
 
 mkdir -p ${BUNDLE_DIR}
