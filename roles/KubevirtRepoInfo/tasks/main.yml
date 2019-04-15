@@ -7,13 +7,9 @@
     label_selectors:
       - name = kubevirt-ssp-operator
   register: operator_pod
-- name: Extract the POD registry
+- name: Extract the registry facts
   set_fact:
     operator_image_name: "{{ operator_pod['spec']['containers'][0]['image'] }}"
-- name: parse image info
-  set_fact:
     repo_info: "{{ dict(['registry', 'image'] | zip(operator_image_name.rsplit('/', 1))) }}"
-- name: extract the repo into a variable
-  # since it is by far the most used bit of information, we make this easier to consume
-  set_fact:
     ssp_registry: "{{ repo_info['registry'] }}"
+    cacheable: true
