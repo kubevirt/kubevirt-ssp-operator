@@ -1,4 +1,4 @@
-FROM quay.io/water-hole/ansible-operator
+FROM quay.io/operator-framework/ansible-operator
 
 COPY roles/ ${HOME}/roles/
 COPY playbooks/ ${HOME}/
