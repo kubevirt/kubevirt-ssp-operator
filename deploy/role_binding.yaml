@@ -1,16 +1,3 @@
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: kubevirt-ssp-operator
-subjects:
-- kind: ServiceAccount
-  name: kubevirt-ssp-operator
-roleRef:
-  kind: Role
-  name: kubevirt-ssp-operator
-  apiGroup: rbac.authorization.k8s.io
-
----
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
