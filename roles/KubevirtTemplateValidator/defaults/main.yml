@@ -3,4 +3,4 @@
 validator_namespace: kubevirt
 validator_image: kubevirt-template-validator
 # this comes from the CR, we must diverge from validator_$SOMETHING standard naming
-version: v0.3.0
+version: "{{ validator_tag |default('v0.3.0') }}"
