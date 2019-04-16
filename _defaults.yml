@@ -7,5 +7,7 @@
 # Example:
 #
 # validator_namespace: myproject
-# validator_image: registry.example.com/mine/kubevirt-template-validator:v0.3.0
+# validator_image: registry.example.com/mine/kubevirt-template-validator
+# validator_tag: v0.3.0
+# templates_version: v0.6.0
 ---
