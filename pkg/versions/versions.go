@@ -14,3 +14,8 @@ const (
 func TagForVersion(ver string) string {
 	return fmt.Sprintf("v%s", ver)
 }
+
+// FullVersionString converts the given version in a semantic version identifier
+func FullVersionString(ver string) string {
+	return fmt.Sprintf("v%s", ver)
+}
