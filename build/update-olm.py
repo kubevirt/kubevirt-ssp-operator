@@ -23,7 +23,7 @@ _SPEC = {
     }],
     'keywords': [
         'KubeVirt', 'Virtualization', 'Template', 'Performance',
-        'VirtualMachine'
+        'VirtualMachine', 'Node', 'Labels',
     ],
     # TODO: icon?
     'links': [{
@@ -69,6 +69,20 @@ _CRD_INFOS = {
         'specDescriptors': [{
             'description': \
                 'The version of the KubeVirt Templates to deploy',
+            'displayName': 'Version',
+            'path': 'version',
+            'x-descriptors': [
+                'urn:alm:descriptor:io.kubernetes.ssp:version',
+            ],
+        }],
+    },
+    'kubevirtnodelabellerbundles.kubevirt.io': {
+        'displayName': 'KubeVirt Node labeller',
+        'description': \
+                'Represents a deployment of Node labeller component',
+        'specDescriptors': [{
+            'description': \
+                'The version of the node labeller to deploy',
             'displayName': 'Version',
             'path': 'version',
             'x-descriptors': [
