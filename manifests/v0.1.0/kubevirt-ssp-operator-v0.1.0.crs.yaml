@@ -1,0 +1,21 @@
+---
+apiVersion: kubevirt.io/v1
+kind: KubevirtCommonTemplatesBundle
+metadata:
+  name: kubevirt-common-template-bundle
+spec:
+  version: v0.4.1
+---
+apiVersion: kubevirt.io/v1
+kind: KubevirtNodeLabellerBundle
+metadata:
+  name: kubevirt-node-labeller-bundle
+spec:
+  version: v0.0.5
+---
+apiVersion: kubevirt.io/v1
+kind: KubevirtTemplateValidator
+metadata:
+  name: kubevirt-template-validator
+spec:
+  version: v0.3.0
