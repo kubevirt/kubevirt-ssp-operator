@@ -16,8 +16,8 @@ spec:
       serviceAccountName: kubevirt-ssp-operator
       containers:
         - name: kubevirt-ssp-operator
-          #FIXME Replace this with the built image name
-          image: REPLACE_IMAGE
+          # this image should be used for testing purposes only
+          image: quay.io/fromani/kubevirt-ssp-operator-container:v0.1.0
           ports:
           - containerPort: 60000
             name: metrics
