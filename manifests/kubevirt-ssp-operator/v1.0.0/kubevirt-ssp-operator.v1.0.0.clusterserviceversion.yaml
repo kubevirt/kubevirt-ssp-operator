@@ -2,11 +2,11 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: ClusterServiceVersion
 metadata:
   annotations:
-    alm-examples: '[{"apiVersion":"kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.4.1"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtNodeLabellerBundle","metadata":{"name":"kubevirt-node-labeller-bundle"},"spec":{"version":"v0.0.5"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator"},"spec":{"version":"v0.1.1"}}]'
+    alm-examples: '[{"apiVersion":"kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.4.1"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtNodeLabellerBundle","metadata":{"name":"kubevirt-node-labeller-bundle"},"spec":{"version":"v0.0.5"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator"},"spec":{"version":"v0.3.0"}}]'
     capabilities: Basic Install
     categories: Virtualization
     description: Manages KubeVirt addons for Scheduling, Scale, Performance
-  name: kubevirt-ssp-operator.v0.16.0
+  name: kubevirt-ssp-operator.v1.0.0
   namespace: kubevirt
 spec:
   apiservicedefinitions: {}
@@ -23,8 +23,16 @@ spec:
         x-descriptors:
         - urn:alm:descriptor:io.kubernetes.ssp:version
       version: v1
-    - kind: KubevirtNodeLabellerBundle
+    - description: Represents a deployment of Node labeller component
+      displayName: KubeVirt Node labeller
+      kind: KubevirtNodeLabellerBundle
       name: kubevirtnodelabellerbundles.kubevirt.io
+      specDescriptors:
+      - description: The version of the node labeller to deploy
+        displayName: Version
+        path: version
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.ssp:version
       version: v1
     - description: Represents a deployment of admission control webhook to validate
         the KubeVirt templates
@@ -66,7 +74,6 @@ spec:
           - clusterrolebindings
           verbs:
           - create
-          - bind
           - get
           - list
           - watch
@@ -236,9 +243,11 @@ spec:
   - Template
   - Performance
   - VirtualMachine
+  - Node
+  - Labels
   labels:
-    alm-owner-kubevirt: kubevirtsspoperator
-    operated-by: kubevirtsspoperator
+    alm-owner-kubevirt: kubevirt-ssp-operator
+    operated-by: kubevirt-ssp-operator
   links:
   - name: KubeVirt
     url: https://kubevirt.io
@@ -252,6 +261,6 @@ spec:
     name: KubeVirt project
   selector:
     matchLabels:
-      alm-owner-kubevirt: kubevirtsspoperator
-      operated-by: kubevirtsspoperator
-  version: 0.16.0
+      alm-owner-kubevirt: kubevirt-ssp-operator
+      operated-by: kubevirt-ssp-operator
+  version: 1.0.0
