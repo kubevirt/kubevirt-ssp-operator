@@ -35,14 +35,14 @@ _SPEC = {
     }],
     # TODO: unsure about this, following what others do
     'labels': {
-        'alm-owner-kubevirt': 'kubevirtsspoperator',
-        'operated-by': 'kubevirtsspoperator',
+        'alm-owner-kubevirt': 'kubevirt-ssp-operator',
+        'operated-by': 'kubevirt-ssp-operator',
     },
     # TODO: unsure about this, following what others do
     'selector': {
         'matchLabels': {
-            'alm-owner-kubevirt': 'kubevirtsspoperator',
-            'operated-by': 'kubevirtsspoperator',
+            'alm-owner-kubevirt': 'kubevirt-ssp-operator',
+            'operated-by': 'kubevirt-ssp-operator',
         },
     },
 }
