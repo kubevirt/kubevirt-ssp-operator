@@ -86,7 +86,6 @@ rules:
   - clusterrolebindings
   verbs:
   - create
-  - bind
   - get
   - list
   - watch
