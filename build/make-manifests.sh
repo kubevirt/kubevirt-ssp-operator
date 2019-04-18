@@ -1,6 +1,8 @@
 #!/bin/bash
 
+# intentionally "impossible"/obviously wrong version
 VERSION="${1:-0.0.0}"
+CHANNEL="beta"
 CLUSTER_VERSIONED_DIR="cluster/${VERSION}"
 MANIFESTS_DIR="manifests/kubevirt-ssp-operator"
 MANIFESTS_VERSIONED_DIR="${MANIFESTS_DIR}/v${VERSION}"
@@ -42,13 +44,15 @@ for MF in deploy/service_account.yaml deploy/role.yaml deploy/role_binding.yaml 
 done
 ) > ${CLUSTER_VERSIONED_DIR}/kubevirt-ssp-operator.yaml
 
+# TODO: we should use --from-version
+# note: this creates under deploy/olm-catalog ...
 operator-sdk olm-catalog gen-csv --csv-version ${VERSION}
 
 ./build/update-olm.py \
 	deploy/olm-catalog/kubevirt-ssp-operator/${VERSION}/kubevirt-ssp-operator.v${VERSION}.clusterserviceversion.yaml > \
 	${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.v${VERSION}.clusterserviceversion.yaml
 
-# caution: operator-courier (as in 5a4852c) whants *one* entity per yaml file (e.g. it does NOT use safe_load_all)
+# caution: operator-courier (as in 5a4852c) wants *one* entity per yaml file (e.g. it does NOT use safe_load_all)
 for CRD in $( ls deploy/crds/kubevirt_*crd.yaml ); do
 	cp ${CRD} ${MANIFESTS_VERSIONED_DIR}
 done
@@ -56,13 +60,15 @@ done
 cat << EOF > ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.package.yaml
 packageName: kubevirt-ssp-operator
 channels:
-- name: beta
+- name: ${CHANNEL}
   currentCSV: kubevirt-ssp-operator.v${VERSION}
 EOF
 
-## needed to build the registry
+# needed to make operator-courier happy
 cp ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.package.yaml ${MANIFESTS_DIR}
 
 operator-courier verify ${MANIFESTS_VERSIONED_DIR} && echo "OLM verify passed" || echo "OLM verify failed"
 
+## otherwise the image registry won't build
+# TODO: who's at fault here? the registry build procedure? the courier? something else?
 rm ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.package.yaml
