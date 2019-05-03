@@ -1,5 +1,6 @@
-#! python
+#!/usr/bin/env python
 
+import fnmatch
 import yaml
 import sys
 import os
@@ -8,6 +9,43 @@ import logging
 
 class MissingPatch(Exception):
     pass
+
+
+class MatchRuleKV:
+    def __init__(self, key, value):
+        self._key = key
+        self._value = value
+
+    def matches(self, labels):
+          return labels.get(key) == value
+
+    def __str__(self):
+        return "%s: %s" % (key, value)
+
+    __repr__ = __str__
+
+
+class MatchRulePattern:
+    def __init__(self, pattern):
+        self._pattern = pattern
+
+    def matches(self, labels):
+        for lab in labels:
+            if fnmatch.fnmatch(lab, self._pattern):
+                return True
+        return False
+
+    def __str__(self):
+        return self._pattern
+
+    __repr__ = __str__
+
+
+def parse_rule(rule):
+    if '*' in rule:
+        return MatchRulePattern(rule)
+    key, value = rule.split(": ")
+    return MatchRuleKV(key, value)
 
 
 def load_rules(path):
@@ -21,12 +59,12 @@ def load_rules(path):
       rules = patch.get("rules")
       if rules.get("addAnnotation") != None:
         for rule in rules.get("addAnnotation"):
-          rule["matchLabel"] = rule.get("matchLabel").split(": ")
+          rule["matchLabel"] = parse_rule(rule.get("matchLabel"))
           rule["addAnnotation"] = rule.get("addAnnotation").split(": ")
 
       if rules.get("patchField") != None:
         for rule in rules.get("patchField"):
-          rule["matchLabel"] = rule.get("matchLabel").split(": ")
+          rule["matchLabel"] = parse_rule(rule.get("matchLabel"))
           rule["specField"] = rule.get("specField").split(".")
 
       return rules
@@ -54,9 +92,7 @@ def process_rules(commonTemplates, rules):
       addAnnotationRules = rules.get("addAnnotation")
       if addAnnotationRules != None:
         for rule in addAnnotationRules:
-          key = rule.get("matchLabel")[0]
-          value = rule.get("matchLabel")[1]
-          if labels.get(key) == value:
+          if rule.get("matchLabel").matches(labels):
             annotationKey = rule.get("addAnnotation")[0]
             annotationValue = rule.get("addAnnotation")[1]
             annotations[annotationKey] = annotationValue
@@ -66,9 +102,8 @@ def process_rules(commonTemplates, rules):
       patchFieldRules = rules.get("patchField")
       if patchFieldRules != None:
         for rule in patchFieldRules:
-          key = rule.get("matchLabel")[0]
-          value = rule.get("matchLabel")[1]
-          if labels.get(key) == value:
+          logging.info("%s: %s", rule, rule.get("matchLabel").matches(labels))
+          if rule.get("matchLabel").matches(labels):
             obj = template
             specFieldPath = rule.get("specField")
             lastPathPiece = ""
@@ -80,8 +115,10 @@ def process_rules(commonTemplates, rules):
                 obj = obj[int(path)]
               else:
                 obj = obj.setdefault(path, {})
+            oldValue = obj[lastPathPiece]
             obj[lastPathPiece] = rule.get("value")
-            fieldsUpdated.append("field " + ".".join(specFieldPath) + " updated with value: " + str(rule.get("value")))
+            fieldsUpdated.append("field %r updated: %r -> %r" % (
+                ".".join(specFieldPath), oldValue, rule.get("value")))
 
       if len(annotationsAdded) > 0 or len(fieldsUpdated) > 0:
         logging.info("Updating "+ metadata.get("name")+ " template")
@@ -89,6 +126,7 @@ def process_rules(commonTemplates, rules):
           logging.info(msg)
 
   return commonTemplates
+
 
 def process_common_templates(commonTemplatesPath, rules):
   files = [f for f in os.listdir(commonTemplatesPath) if os.path.isfile(os.path.join(commonTemplatesPath, f))]
@@ -102,7 +140,8 @@ def process_common_templates(commonTemplatesPath, rules):
       continue
 
     logging.info("------------------------------------------------------")
-    logging.info("Running script for file: " + fileName)
+    logging.info("Running script for file: %s (%i templates)",
+                 fileName, len(commonTemplates))
     logging.info("------------------------------------------------------")
 
     updatedCommonTemplates = process_rules(commonTemplates, rules)

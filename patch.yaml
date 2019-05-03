@@ -1,22 +1,40 @@
+## examples
 #rules:
 #  addAnnotation:
-#    - matchLabel: "os.template.cnv.io/centos7.0: true"
+#    - matchLabel: "os.template.kubevirt.io/centos7.0: true"
 #      addAnnotation: "myAwesomeAnnotation: true"
 #
 #  patchField rules replace value in specField attribute
 #  it can replace e.g. bool value, string, int, structures, ...
 #  patchField: 
-#    - matchLabel: "os.template.cnv.io/centos7.0: true" 
+#    - matchLabel: "os.template.kubevirt.io/centos7.0: true"
 #      specField: "objects.0.spec.template.spec.domain.cpu"
 #      value: 
 #        sockets: 1
 #        threads: 1
 #        cpu: 2
 #
-#    - matchLabel: "os.template.cnv.io/centos7.0: true" 
+#    - matchLabel: "os.template.kubevirt.io/centos7.0: true"
 #      specField: "objects.0.spec.template.spec.domain.cpu.sockets"
 #      value: 3
 #
-#    - matchLabel: "os.template.cnv.io/centos7.0: true" 
+#    - matchLabel: "os.template.kubevirt.io/centos7.0: true"
 #      specField: "objects.0.spec.running"
 #      value: true
+rules:
+    # needed because https://github.com/operator-framework/operator-sdk/issues/1380
+    # due to yet-unrevealed bug in the ansible-operator image, "kind: Template"
+    # is mappend on two objects, thus the playbook fails:
+    # """
+    # Templates are one of the few resources (maybe only?) that the module (ansible k8s)
+    # doesn't currently support, because the GVK actually maps to two resources.
+    # That being said I might have a hack that can make it work. If you specify the
+    # kind as `templates` or `processedtemplates` (depending on which one you need)
+    # rather than `Template` it will try to match the name when it fails to find a
+    # matching kind
+    # """
+    # Worth nothing the playbook seems to work fine on ansible 2.7.9 run on command line.
+    patchField:
+      - matchLabelPattern: "os.template.kubevirt.io/*"
+        specField: "kind"
+        value: "templates"
