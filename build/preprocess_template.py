@@ -11,6 +11,10 @@ class MissingPatch(Exception):
     pass
 
 
+class MalformedMatchRule(Exception):
+    pass
+
+
 class MatchRuleKV:
     def __init__(self, key, value):
         self._key = key
@@ -41,11 +45,13 @@ class MatchRulePattern:
     __repr__ = __str__
 
 
-def parse_rule(rule):
-    if '*' in rule:
-        return MatchRulePattern(rule)
-    key, value = rule.split(": ")
-    return MatchRuleKV(key, value)
+def parse_rule_matcher(rule):
+    if 'matchLabelPattern' in rule:
+        return MatchRulePattern(rule['matchLabelPattern'])
+    if 'matchLabel' in rule:
+        key, value = rule['matchLabel'].split(": ")
+        return MatchRuleKV(key, value)
+    raise MalformedMatcheRule(rule)
 
 
 def load_rules(path):
@@ -59,12 +65,12 @@ def load_rules(path):
       rules = patch.get("rules")
       if rules.get("addAnnotation") != None:
         for rule in rules.get("addAnnotation"):
-          rule["matchLabel"] = parse_rule(rule.get("matchLabel"))
+          rule["matcher"] = parse_rule_matcher(rule)
           rule["addAnnotation"] = rule.get("addAnnotation").split(": ")
 
       if rules.get("patchField") != None:
         for rule in rules.get("patchField"):
-          rule["matchLabel"] = parse_rule(rule.get("matchLabel"))
+          rule["matcher"] = parse_rule_matcher(rule)
           rule["specField"] = rule.get("specField").split(".")
 
       return rules
@@ -92,7 +98,7 @@ def process_rules(commonTemplates, rules):
       addAnnotationRules = rules.get("addAnnotation")
       if addAnnotationRules != None:
         for rule in addAnnotationRules:
-          if rule.get("matchLabel").matches(labels):
+          if rule.get("matcher").matches(labels):
             annotationKey = rule.get("addAnnotation")[0]
             annotationValue = rule.get("addAnnotation")[1]
             annotations[annotationKey] = annotationValue
@@ -102,8 +108,7 @@ def process_rules(commonTemplates, rules):
       patchFieldRules = rules.get("patchField")
       if patchFieldRules != None:
         for rule in patchFieldRules:
-          logging.info("%s: %s", rule, rule.get("matchLabel").matches(labels))
-          if rule.get("matchLabel").matches(labels):
+          if rule.get("matcher").matches(labels):
             obj = template
             specFieldPath = rule.get("specField")
             lastPathPiece = ""
