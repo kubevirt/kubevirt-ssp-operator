@@ -21,12 +21,15 @@ class MatchRuleKV:
         self._value = value
 
     def matches(self, labels):
-          return labels.get(key) == value
+          return labels.get(self._key) == self._value
 
     def __str__(self):
-        return "%s: %s" % (key, value)
+        return "%s: %s" % (self._key, self._value)
 
     __repr__ = __str__
+
+    def __eq__(self, mr):
+        return self._key == mr._key and self._value == mr._value
 
 
 class MatchRulePattern:
@@ -44,12 +47,15 @@ class MatchRulePattern:
 
     __repr__ = __str__
 
+    def __eq__(self, mr):
+        return self._pattern == mr._pattern
+
 
 def parse_rule_matcher(rule):
     if 'matchLabelPattern' in rule:
-        return MatchRulePattern(rule['matchLabelPattern'])
+        return MatchRulePattern(rule.pop('matchLabelPattern'))
     if 'matchLabel' in rule:
-        key, value = rule['matchLabel'].split(": ")
+        key, value = rule.pop('matchLabel').split(": ")
         return MatchRuleKV(key, value)
     raise MalformedMatcheRule(rule)
 
@@ -65,12 +71,12 @@ def load_rules(path):
       rules = patch.get("rules")
       if rules.get("addAnnotation") != None:
         for rule in rules.get("addAnnotation"):
-          rule["matcher"] = parse_rule_matcher(rule)
+          rule["matchLabel"] = parse_rule_matcher(rule)
           rule["addAnnotation"] = rule.get("addAnnotation").split(": ")
 
       if rules.get("patchField") != None:
         for rule in rules.get("patchField"):
-          rule["matcher"] = parse_rule_matcher(rule)
+          rule["matchLabel"] = parse_rule_matcher(rule)
           rule["specField"] = rule.get("specField").split(".")
 
       return rules
@@ -98,7 +104,7 @@ def process_rules(commonTemplates, rules):
       addAnnotationRules = rules.get("addAnnotation")
       if addAnnotationRules != None:
         for rule in addAnnotationRules:
-          if rule.get("matcher").matches(labels):
+          if rule.get("matchLabel").matches(labels):
             annotationKey = rule.get("addAnnotation")[0]
             annotationValue = rule.get("addAnnotation")[1]
             annotations[annotationKey] = annotationValue
@@ -108,7 +114,7 @@ def process_rules(commonTemplates, rules):
       patchFieldRules = rules.get("patchField")
       if patchFieldRules != None:
         for rule in patchFieldRules:
-          if rule.get("matcher").matches(labels):
+          if rule.get("matchLabel").matches(labels):
             obj = template
             specFieldPath = rule.get("specField")
             lastPathPiece = ""
@@ -120,7 +126,7 @@ def process_rules(commonTemplates, rules):
                 obj = obj[int(path)]
               else:
                 obj = obj.setdefault(path, {})
-            oldValue = obj[lastPathPiece]
+            oldValue = obj.get(lastPathPiece, None)
             obj[lastPathPiece] = rule.get("value")
             fieldsUpdated.append("field %r updated: %r -> %r" % (
                 ".".join(specFieldPath), oldValue, rule.get("value")))

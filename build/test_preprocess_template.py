@@ -1,4 +1,4 @@
-import preprocess_template
+import preprocess_template as ppt  # shortcut
 import yaml
 import os
 import shutil
@@ -28,16 +28,16 @@ testCases = [
             "other_label2": "true"
           }
         }
-      }],        
+      }],
     "rulesParsed": {
       "addAnnotation": [{
-          "matchLabel":["common_templates1", "true"],
+          "matchLabel":ppt.MatchRuleKV("common_templates1", "true"),
           "addAnnotation": ["new_annotation", "true"]
         }
       ],
       "patchField": [
         {
-          "matchLabel": ["common_templates1", "true"], 
+          "matchLabel": ppt.MatchRuleKV("common_templates1", "true"),
           "specField": ["objects", "0", "spec", "template", "spec", "domain", "cpu", "sockets"],
           "value": 3
         }
@@ -53,7 +53,7 @@ testCases = [
         ],
         "patchField": [
           {
-            "matchLabel": "common_templates1: true", 
+            "matchLabel": "common_templates1: true",
             "specField": "objects.0.spec.template.spec.domain.cpu.sockets",
             "value": 3
           }
@@ -66,7 +66,7 @@ testCases = [
     },
     {
       "my_annotation2": "true"
-    }] 
+    }]
   }, {
     #one rule, match both templates
     "commonTemplates": [{
@@ -91,16 +91,16 @@ testCases = [
             "match_label": "true"
           }
         }
-      }],        
+      }],
     "rulesParsed": {
       "addAnnotation": [{
-          "matchLabel":["match_label", "true"],
+          "matchLabel":ppt.MatchRuleKV("match_label", "true"),
           "addAnnotation": ["new_annotation", "true"]
         }
       ],
       "patchField": [
         {
-          "matchLabel": ["match_label", "true"], 
+          "matchLabel": ppt.MatchRuleKV("match_label", "true"),
           "specField": ["a", "b", "c"],
           "value": "a"
         }
@@ -116,7 +116,7 @@ testCases = [
         ],
         "patchField": [
           {
-            "matchLabel": "match_label: true", 
+            "matchLabel": "match_label: true",
             "specField": "a.b.c",
             "value": "a"
           }
@@ -130,7 +130,7 @@ testCases = [
     {
       "my_annotation2": "true",
       "new_annotation": "true"
-    }] 
+    }]
   }, {
     #multiple rules, match only one template
     "commonTemplates": [{
@@ -170,26 +170,26 @@ testCases = [
         ],
         "patchField": [
           {
-            "matchLabel": "match_label: true", 
+            "matchLabel": "match_label: true",
             "specField": "a.1.b.c",
             "value": 3
           }
         ]
       }
-    },    
+    },
     "rulesParsed": {
       "addAnnotation": [
         {
-          "matchLabel":["match_label", "true"],
+          "matchLabel":ppt.MatchRuleKV("match_label", "true"),
           "addAnnotation": ["new_annotation1", "true"]
         }, {
-          "matchLabel":["common_templates1", "true"],
+          "matchLabel":ppt.MatchRuleKV("common_templates1", "true"),
           "addAnnotation": ["new_annotation2", "true"]
         }
       ],
       "patchField": [
         {
-          "matchLabel": ["match_label", "true"], 
+          "matchLabel": ppt.MatchRuleKV("match_label", "true"),
           "specField": ["a", "1", "b", "c"],
           "value": 3
         }
@@ -204,7 +204,7 @@ testCases = [
       {
         "my_annotation2": "true"
       }
-    ] 
+    ]
   }, {
     #multiple rules, match both templates
     "commonTemplates": [{
@@ -229,23 +229,23 @@ testCases = [
             "match_label": "true"
           }
         }
-      }],        
+      }],
     "rulesParsed": {
       "addAnnotation": [{
-          "matchLabel":["match_label", "true"],
+          "matchLabel":ppt.MatchRuleKV("match_label", "true"),
           "addAnnotation": ["new_annotation1", "true"]
         }, {
-          "matchLabel":["common_templates", "true"],
+          "matchLabel":ppt.MatchRuleKV("common_templates", "true"),
           "addAnnotation": ["new_annotation2", "true"]
         }
       ],
       "patchField": [
         {
-          "matchLabel": ["match_label", "true"], 
+          "matchLabel": ppt.MatchRuleKV("match_label", "true"),
           "specField": ["a", "0", "b", "c"],
           "value": 1
         }, {
-            "matchLabel": ["match_label", "true"], 
+            "matchLabel": ppt.MatchRuleKV("match_label", "true"),
             "specField": ["a", "0", "d", "e", "f", "g"],
             "value": 1
           }
@@ -264,11 +264,11 @@ testCases = [
         ],
         "patchField": [
           {
-            "matchLabel": "match_label: true", 
+            "matchLabel": "match_label: true",
             "specField": "a.0.b.c",
             "value": 1
           }, {
-            "matchLabel": "match_label: true", 
+            "matchLabel": "match_label: true",
             "specField": "a.0.d.e.f.g",
             "value": 1
           }
@@ -284,7 +284,7 @@ testCases = [
       "my_annotation2": "true",
       "new_annotation1": "true",
       "new_annotation2": "true"
-    }] 
+    }]
   }, {
     #multiple rules, match none template
     "commonTemplates": [{
@@ -309,19 +309,19 @@ testCases = [
             "match_label": "true"
           }
         }
-      }],        
+      }],
     "rulesParsed": {
       "addAnnotation": [{
-          "matchLabel":["some_nonsense1", "true"],
+          "matchLabel":ppt.MatchRuleKV("some_nonsense1", "true"),
           "addAnnotation": ["new_annotation1", "true"]
         }, {
-          "matchLabel":["some_nonsense2", "true"],
+          "matchLabel":ppt.MatchRuleKV("some_nonsense2", "true"),
           "addAnnotation": ["new_annotation2", "true"]
         }
       ],
       "patchField": [
         {
-          "matchLabel": ["some_nonsense2", "true"], 
+          "matchLabel": ppt.MatchRuleKV("some_nonsense2", "true"),
           "specField": ["a", "0", "b", "c"],
           "value": 1
         }
@@ -340,7 +340,7 @@ testCases = [
         ],
         "patchField": [
           {
-            "matchLabel": "some_nonsense2: true", 
+            "matchLabel": "some_nonsense2: true",
             "specField": "a.0.b.c",
             "value": 1
           }
@@ -352,7 +352,7 @@ testCases = [
     },
     {
       "my_annotation2": "true"
-    }] 
+    }]
   }
 ]
 
@@ -361,20 +361,20 @@ def test_process_rules():
   print("Running test_process_rules")
   for testCase in testCases:
     commonTemplates = testCase.get("commonTemplates")
-    updatesCommonTemplates = preprocess_template.process_rules(commonTemplates, testCase.get("rulesParsed"))
+    updatesCommonTemplates = ppt.process_rules(commonTemplates, testCase.get("rulesParsed"))
     for index, resultAnnotation in enumerate(testCase.get("resultAnnotations")):
       updatedAnnotations = updatesCommonTemplates[index].get("metadata").get("annotations")
       for key in resultAnnotation.keys():
         #compare if updated common templates have correct annotations
         assert updatedAnnotations.get(key) == resultAnnotation.get(key), "annotations should equal"
-    
+
     patchRules = testCase.get("rulesParsed").get("patchField")
     for patchRule in patchRules:
       matchLabel = patchRule.get("matchLabel")
       for updatedTemplate in updatesCommonTemplates:
         metadata = updatedTemplate.get("metadata")
         # test rule, only if updated template contains match label
-        if metadata.get("labels").get(matchLabel[0]) == matchLabel[1]:
+        if matchLabel.matches(metadata.get("labels")):
           path = patchRule.get("specField")
           obj = updatedTemplate
           for field in path:
@@ -383,7 +383,7 @@ def test_process_rules():
             else:
               obj = obj.get(field)
           assert obj == patchRule.get("value"), "values should equal"
-    
+
 
 def test_load_rules():
   print("Running test_load_rules")
@@ -398,15 +398,14 @@ def test_load_rules():
       raise e
     try:
       #load parsed annotations rules
-      rules = preprocess_template.load_rules(patchPath)
+      rules = ppt.load_rules(patchPath)
       addAnnotationrules = rules.get("addAnnotation")
       addAnnotationRulesResult = testCase.get("rulesParsed").get("addAnnotation")
       for index, rule in enumerate(addAnnotationrules):
         #compare if load and parsed rules are the same as result rules
         matchLabel = rule.get("matchLabel")
         matchLabelResult = addAnnotationRulesResult[index].get("matchLabel")
-        assert matchLabel[0] == matchLabelResult[0], "matchLabel key should equal, "
-        assert matchLabel[1] == matchLabelResult[1], "matchLabel value should equal"
+        assert matchLabel == matchLabelResult, "matchLabel should be equal, "
 
         addAnnotation = rule.get("addAnnotation")
         addAnnotationResult = addAnnotationRulesResult[index].get("addAnnotation")
@@ -420,21 +419,21 @@ def test_load_rules():
         matchLabel = rule.get("matchLabel")
         matchLabelResult = patchFieldRulesResult[index].get("matchLabel")
 
-        assert matchLabel[0] == matchLabelResult[0], "patchField matchLabel key should equal"
-        assert matchLabel[1] == matchLabelResult[1], "patchField matchLabel value should equal"
+        assert matchLabel == matchLabelResult, \
+            "patchField matchLabel should be equal"
 
         specFields = rule.get("specField")
         specFieldsResult = patchFieldRulesResult[index].get("specField")
         for i, field in enumerate(specFields):
           assert field == specFieldsResult[i], "path parts should equal"
-        
+
         valueResult = patchFieldRulesResult[index].get("value")
         ruleValue = rule.get("value")
         assert valueResult == ruleValue, "values should equal"
 
     except Exception as e:
       raise e
-  
+
   os.remove(patchPath)
 
 def test_process_common_templates():
@@ -456,7 +455,7 @@ def test_process_common_templates():
     rules = testCase.get("rulesParsed")
     try:
       #update common templates
-      preprocess_template.process_common_templates(commonTemplatesPath, rules)
+      ppt.process_common_templates(commonTemplatesPath, rules)
       with open(commonTemplatesPath + "commonTemplate.yaml", 'r') as stream:
         #load updated common templates
         updatedCommonTemplates = list(yaml.safe_load_all(stream))
@@ -470,12 +469,12 @@ def test_process_common_templates():
           for key in resultAnnotations:
             #compare if result annotations are the same as updated annotations
             assert annotations.get(key) == resultAnnotations.get(key), "annotations should equal"
-          
+
           patchRules = testCase.get("rulesParsed").get("patchField")
           for patchRule in patchRules:
             matchLabel = patchRule.get("matchLabel")
             # test rule, only if updated template contains match label
-            if metadata.get("labels").get(matchLabel[0]) == matchLabel[1]:
+            if matchLabel.matches(metadata.get("labels")):
               path = patchRule.get("specField")
               obj = updatedTemplate
               for field in path:
@@ -487,7 +486,7 @@ def test_process_common_templates():
 
 
     except Exception as e:
-      raise e 
+      raise e
   #delete temporary folder
   shutil.rmtree(commonTemplatesPath, ignore_errors=True)
 
