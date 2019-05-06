@@ -353,6 +353,54 @@ testCases = [
     {
       "my_annotation2": "true"
     }]
+  }, {
+    #one rule, match both templates
+    "commonTemplates": [{
+        "metadata": {
+          "name": "template1",
+          "annotations": {
+            "my_annotation1": "true"
+          },
+          "labels": {
+            "common_templates1": "true",
+          }
+        }
+      },{
+        "metadata": {
+          "name": "template2",
+          "annotations": {
+            "my_annotation2": "true"
+          },
+          "labels": {
+            "common_templates2": "true",
+          }
+        }
+      }],
+    "rulesParsed": {
+      "addAnnotation": [{
+          "matchLabel":ppt.MatchRulePattern("common_templates*"),
+          "addAnnotation": ["new_annotation", "true"]
+        }
+      ],
+    },
+    "rulesRaw": {
+      "rules": {
+        "addAnnotation": [
+          {
+            "matchLabel":"match_label: true",
+            "addAnnotation": "new_annotation: true"
+          }
+        ]
+      }
+    },
+    "resultAnnotations":[{
+      "my_annotation1": "true",
+      "new_annotation": "true"
+    },
+    {
+      "my_annotation2": "true",
+      "new_annotation": "true"
+    }]
   }
 ]
 
@@ -368,7 +416,7 @@ def test_process_rules():
         #compare if updated common templates have correct annotations
         assert updatedAnnotations.get(key) == resultAnnotation.get(key), "annotations should equal"
 
-    patchRules = testCase.get("rulesParsed").get("patchField")
+    patchRules = testCase.get("rulesParsed").get("patchField", [])
     for patchRule in patchRules:
       matchLabel = patchRule.get("matchLabel")
       for updatedTemplate in updatesCommonTemplates:
@@ -405,15 +453,17 @@ def test_load_rules():
         #compare if load and parsed rules are the same as result rules
         matchLabel = rule.get("matchLabel")
         matchLabelResult = addAnnotationRulesResult[index].get("matchLabel")
-        assert matchLabel == matchLabelResult, "matchLabel should be equal, "
+        if (matchLabel.__class__.__name__ ==
+            matchLabelResult.__class__.__name__):
+            assert matchLabel == matchLabelResult, "matchLabel should be equal, "
 
         addAnnotation = rule.get("addAnnotation")
         addAnnotationResult = addAnnotationRulesResult[index].get("addAnnotation")
         assert addAnnotation[0] == addAnnotationResult[0], "addAnnotation key should equal"
         assert addAnnotation[1] == addAnnotationResult[1], "addAnnotation value should equal"
 
-      patchFieldrules = rules.get("patchField")
-      patchFieldRulesResult = testCase.get("rulesParsed").get("patchField")
+      patchFieldrules = rules.get("patchField", [])
+      patchFieldRulesResult = testCase.get("rulesParsed").get("patchField", [])
       for index, rule in enumerate(patchFieldrules):
         #compare if load and parsed rules are the same as result rules
         matchLabel = rule.get("matchLabel")
@@ -430,11 +480,8 @@ def test_load_rules():
         valueResult = patchFieldRulesResult[index].get("value")
         ruleValue = rule.get("value")
         assert valueResult == ruleValue, "values should equal"
-
-    except Exception as e:
-      raise e
-
-  os.remove(patchPath)
+    finally:
+        os.remove(patchPath)
 
 def test_process_common_templates():
   print("Running process_common_templates")
@@ -470,7 +517,7 @@ def test_process_common_templates():
             #compare if result annotations are the same as updated annotations
             assert annotations.get(key) == resultAnnotations.get(key), "annotations should equal"
 
-          patchRules = testCase.get("rulesParsed").get("patchField")
+          patchRules = testCase.get("rulesParsed").get("patchField", [])
           for patchRule in patchRules:
             matchLabel = patchRule.get("matchLabel")
             # test rule, only if updated template contains match label

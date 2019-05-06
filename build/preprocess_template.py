@@ -95,6 +95,14 @@ def load_common_templates(path):
   except yaml.YAMLError as exc:
     raise exc 
 
+
+def match_rule(rule, labels):
+  try:
+    return rule["matchLabelPattern"].matches(labels)
+  except KeyError:
+    return rule["matchLabel"].matches(labels)
+
+
 def process_rules(commonTemplates, rules):
   for template in commonTemplates:
       metadata = template.get("metadata", {})
@@ -104,7 +112,7 @@ def process_rules(commonTemplates, rules):
       addAnnotationRules = rules.get("addAnnotation")
       if addAnnotationRules != None:
         for rule in addAnnotationRules:
-          if rule.get("matchLabel").matches(labels):
+          if match_rule(rule, labels):
             annotationKey = rule.get("addAnnotation")[0]
             annotationValue = rule.get("addAnnotation")[1]
             annotations[annotationKey] = annotationValue
@@ -114,7 +122,7 @@ def process_rules(commonTemplates, rules):
       patchFieldRules = rules.get("patchField")
       if patchFieldRules != None:
         for rule in patchFieldRules:
-          if rule.get("matchLabel").matches(labels):
+          if match_rule(rule, labels):
             obj = template
             specFieldPath = rule.get("specField")
             lastPathPiece = ""
