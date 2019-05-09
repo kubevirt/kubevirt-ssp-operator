@@ -24,7 +24,7 @@ rules:
   - securitycontextconstraints
   verbs:
   - use
-  resourceName:
+  resourceNames:
   - privileged
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -46,7 +46,7 @@ metadata:
   name: kubevirt-cpu-plugin-configmap
   namespace: {{ meta.namespace }}
 data:
-  cpu-plugin-configmap.yaml: |- 
+  cpu-plugin-configmap.yaml: |-
     obsoleteCPUs:
       - "486"
       - "pentium"
