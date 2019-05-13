@@ -5,7 +5,7 @@ package versions
 import "fmt"
 
 const (
-	KubevirtCommonTemplates   string = "0.4.1"
+	KubevirtCommonTemplates   string = "0.6.0"
 	KubevirtNodeLabeller      string = "0.0.5"
 	KubevirtTemplateValidator string = "0.3.0"
 )
