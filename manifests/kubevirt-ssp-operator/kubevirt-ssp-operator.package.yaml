@@ -1,4 +1,4 @@
 packageName: kubevirt-ssp-operator
 channels:
 - name: beta
-  currentCSV: kubevirt-ssp-operator.v1.0.0
+  currentCSV: kubevirt-ssp-operator.v1.0.1
