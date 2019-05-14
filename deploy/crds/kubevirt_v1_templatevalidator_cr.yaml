@@ -4,4 +4,4 @@ metadata:
   name: kubevirt-template-validator
   namespace: kubevirt
 spec:
-  version: v0.3.0
+  version: v0.4.8
