@@ -3,7 +3,7 @@ kind: ServiceAccount
 apiVersion: v1
 metadata:
   name: template-validator
-  namespace: "{{ meta.namespace | default(validator_namespace) }}"
+  namespace: "{{ meta.namespace }}"
   labels:
     kubevirt.io: virt-template-validator
 ---
@@ -11,7 +11,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: template-validator
-  namespace: "{{ meta.namespace | default(validator_namespace) }}"
+  namespace: "{{ meta.namespace }}"
   labels:
     kubevirt.io: virt-template-validator
 roleRef:
@@ -21,13 +21,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: template-validator
-    namespace: "{{ meta.namespace | default(validator_namespace) }}"
+    namespace: "{{ meta.namespace }}"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: virt-template-validator
-  namespace: "{{ meta.namespace | default(validator_namespace) }}"
+  namespace: "{{ meta.namespace }}"
   labels:
     kubevirt.io: virt-template-validator
   annotations:
@@ -44,7 +44,7 @@ apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: virt-template-validator
-  namespace: "{{ meta.namespace | default(validator_namespace) }}"
+  namespace: "{{ meta.namespace }}"
   labels:
     name: virt-template-validator
 spec:
