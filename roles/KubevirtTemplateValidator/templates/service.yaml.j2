@@ -58,7 +58,8 @@ spec:
       serviceAccountName: template-validator
       containers:
         - name: webhook
-          image: {{ ssp_registry | default("quay.io/fromani") }}/{{ validator_image }}:{{ version }}
+          # `version` comes from the CR, while `validator_version` is our computed default
+          image: {{ ssp_registry | default("quay.io/fromani") }}/{{ validator_image }}:{{ (version == "automatic") | ternary(validator_version, version) }}
           imagePullPolicy: Always
           resources:
             limits:
