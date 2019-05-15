@@ -2,13 +2,13 @@
 - name: Create the node labeller roles
   k8s:
     state: present
-    definition: "{{ lookup('template', '/opt/ansible/roles/KubevirtNodeLabeller/templates/kubevirt-node-labeller-roles-' + version + '.yaml') }}"
+    definition: "{{ lookup('template', '/opt/ansible/roles/KubevirtNodeLabeller/templates/kubevirt-node-labeller-roles.yaml.j2') }}"
 
 
 - name: Create the node labeller daemon set
   k8s:
     state: present
-    definition: "{{ lookup('template', '/opt/ansible/roles/KubevirtNodeLabeller/templates/kubevirt-node-labeller-ds-' + version + '.yaml') }}"
+    definition: "{{ lookup('template', '/opt/ansible/roles/KubevirtNodeLabeller/templates/kubevirt-node-labeller-ds.yaml.j2') }}"
   register: nl
 
 - name: "Wait for the node-labeller to start"
