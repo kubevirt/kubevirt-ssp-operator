@@ -4,7 +4,6 @@ SCRIPTPATH=$( dirname $(readlink -f $0) )
 source ${SCRIPTPATH}/testlib.sh
 
 [ -z ${SSP_OP_POD_NAMESPACE} ] && exit 127
-[ -z ${SSP_OP_POD_NAME} ] && exit 127
 
 RET=1
 TEST_NS="${SSP_OP_POD_NAMESPACE}"
