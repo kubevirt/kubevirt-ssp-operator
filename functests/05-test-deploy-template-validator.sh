@@ -8,20 +8,11 @@ TEST_NS="${KV_NAMESPACE}"
 
 oc create -n ${TEST_NS} -f "${SCRIPTPATH}/template-validator-unversioned-cr.yaml" || exit 2
 # TODO: SSP-operator needs to improve its feedback mechanism
-sleep 10s
-for idx in $( seq 1 30); do
-	VALIDATOR_JSON=$( oc get pods -n ${TEST_NS} -l "kubevirt.io=virt-template-validator" -o json )
-	NUM=$( echo ${VALIDATOR_JSON} | jq '.items | length' )
-	if [ "${NUM}" == "1" ]; then
-		VALIDATOR_POD_JSON="$( echo ${VALIDATOR_JSON} | jq '.items[0]' )"
-		VALIDATOR_READY=$( echo ${VALIDATOR_POD_JSON} | jq .status.containerStatuses[0].ready )
-		if [ "${VALIDATOR_READY}" == "true" ]; then
-			RET=0
-			break
-		fi
-	fi
-	sleep 2s
-done
+wait_template_validator_running ${TEST_NS} 5 60
+
+if is_template_validator_running ${TEST_NS}; then
+	RET=0
+fi
 oc delete -n ${TEST_NS} -f "${SCRIPTPATH}/template-validator-unversioned-cr.yaml" || exit 2
 
 exit $RET

@@ -10,7 +10,10 @@ TEST_NS="${KV_NAMESPACE}"
 
 oc create -n ${TEST_NS} -f "${SCRIPTPATH}/node-labeller-unversioned-cr.yaml" || exit 2
 # TODO: SSP-operator needs to improve its feedback mechanism
-sleep 10s
+# fetching node-labeller images may take a while
+
+wait_node_labeller_running ${TEST_NS} 5 60
+
 for idx in $( seq 1 30); do
 	ANNOTATIONS=$( oc get nodes -o json | jq '.items[0].metadata.annotations | keys' )
 	# any random CPU model annotation that *must* be present if everything's OK
