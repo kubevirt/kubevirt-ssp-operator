@@ -14,11 +14,10 @@ which operator-sdk &> /dev/null || {
 	exit 1
 }
 
-which operator-courier &> /dev/null || {
-	echo "operator-courier not found (see https://github.com/operator-framework/operator-courier)"
-	exit 2
-}
-
+HAVE_COURIER=0
+if which operator-courier &> /dev/null; then
+	HAVE_COURIER=1
+fi
 
 mkdir -p ${CLUSTER_VERSIONED_DIR}
 mkdir -p ${MANIFESTS_VERSIONED_DIR}
@@ -67,7 +66,9 @@ EOF
 # needed to make operator-courier happy
 cp ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.package.yaml ${MANIFESTS_DIR}
 
-operator-courier verify ${MANIFESTS_VERSIONED_DIR} && echo "OLM verify passed" || echo "OLM verify failed"
+if [ "${HAVE_COURIER}" == "1" ]; then
+	operator-courier verify ${MANIFESTS_VERSIONED_DIR} && echo "OLM verify passed" || echo "OLM verify failed"
+fi
 
 ## otherwise the image registry won't build
 # TODO: who's at fault here? the registry build procedure? the courier? something else?
