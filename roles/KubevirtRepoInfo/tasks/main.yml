@@ -1,15 +1,11 @@
 ---
 # tasks file for KubevirtRepoInfo
 - name: Extract the operator POD info
-  k8s_facts:
-    api_version: v1
-    kind: Pod
-    label_selectors:
-      - name = kubevirt-ssp-operator
-  register: operator_pod
+  set_fact:
+    operator_pod: "{{ lookup('k8s', api_version='v1', kind='Pod', label_selector='name=kubevirt-ssp-operator') | from_yaml }}"
 - name: Extract the image name
   set_fact:
-    operator_image_name: "{{ operator_pod['resources'][0]['spec']['containers'][0]['image'] }}"
+    operator_image_name: "{{ operator_pod['spec']['containers'][0]['image'] }}"
 - name: Extract the SSP registry
   set_fact:
     ssp_registry: "{{ operator_image_name.rsplit('/', 1)[0] }}"
