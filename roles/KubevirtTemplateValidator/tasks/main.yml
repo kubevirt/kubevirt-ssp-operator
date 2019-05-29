@@ -3,11 +3,12 @@
 - name: Set template:view role
   k8s:
     state: present
-    definition: "{{ lookup('template', 'template-view-role.yaml.j2') }}"
+    definition: "{{ lookup('template', 'template-view-role.yaml.j2') | from_yaml }}"
 - name: Create the service
   k8s:
     state: present
-    definition: "{{ lookup('template', 'service.yaml.j2') }}"
+    definition: "{{ item | from_yaml }}"
+  with_items: "{{ lookup('template', 'service.yaml.j2').split('\n---\n') | select('search', '(^|\n)[^#]') | list }}"
 # per https://docs.okd.io/latest/dev_guide/secrets.html#service-serving-certificate-secrets
 # *every* pod in the cluster has access to the service-ca.crt, so we can safely use
 # the one inside the operator POD
@@ -17,4 +18,4 @@
 - name: Register the webhook
   k8s:
     state: present
-    definition: "{{ lookup('template', 'webhook.yaml.j2') }}"
+    definition: "{{ lookup('template', 'webhook.yaml.j2') | from_yaml }}"
