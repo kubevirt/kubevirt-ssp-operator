@@ -8,6 +8,5 @@ kvm_info_nfd_plugin_image: "kvm-info-nfd-plugin"
 kvm_info_nfd_plugin_tag: "v0.4.0"
 kubevirt_cpu_nfd_plugin_image: "kubevirt-cpu-nfd-plugin"
 kubevirt_cpu_nfd_plugin_tag: "v0.0.4"
-libvirt_image: "virt-launcher"
-libvirt_tag: "v0.16.0"
-
+virt_launcher_image: "virt-launcher"
+virt_launcher_tag: "v0.17.0"
