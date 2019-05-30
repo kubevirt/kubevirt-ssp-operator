@@ -2,15 +2,13 @@
 - name: Create the node labeller roles
   k8s:
     state: present
-    definition: "{{ lookup('template', 'kubevirt-node-labeller-roles.yaml.j2') }}"
-
-
+    definition: "{{ item | from_yaml }}"
+  with_items: "{{ lookup('template', 'kubevirt-node-labeller-roles.yaml.j2').split('\n---\n') | select('search', '(^|\n)[^#]') | list }}"
 - name: Create the node labeller daemon set
   k8s:
     state: present
-    definition: "{{ lookup('template', 'kubevirt-node-labeller-ds.yaml.j2') }}"
+    definition: "{{ lookup('template', 'kubevirt-node-labeller-ds.yaml.j2') | from_yaml }}"
   register: nl
-
 - name: "Wait for the node-labeller to start"
   set_fact:
     nl_status: "{{ lookup('k8s', kind=nl.result.kind, namespace=nl.result.metadata.namespace, resource_name=nl.result.metadata.name) | from_yaml }}"
