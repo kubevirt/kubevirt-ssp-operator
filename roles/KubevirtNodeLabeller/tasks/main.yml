@@ -12,15 +12,9 @@
   register: nl
 
 - name: "Wait for the node-labeller to start"
-  k8s_facts:
-    kind: "{{ nl.result.kind }}"
-    namespace: "{{ nl.result.metadata.namespace }}"
-    api_version: "{{ nl.result.apiVersion }}"
-    name: "{{ nl.result.metadata.name }}"
-  register: nl_status
+  set_fact:
+    nl_status: "{{ lookup('k8s', kind=nl.result.kind, namespace=nl.result.metadata.namespace, resource_name=nl.result.metadata.name) | from_yaml }}"
   retries: 300
   delay: 10
-  until:  nl_status.resources[0].status.currentNumberScheduled == nl_status.resources[0].status.numberReady |default(false)
+  until: nl_status.status.currentNumberScheduled == nl_status.status.numberReady |default(false)
   when: not wait
-
-
