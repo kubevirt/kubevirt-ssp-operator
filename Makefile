@@ -20,3 +20,8 @@ container-push-operator:
 
 container-push-registry:
 	docker push $(IMAGE_REGISTRY)/$(REGISTRY_IMAGE):$(IMAGE_TAG)
+
+functests:
+	cd functests && ./test-runner.sh
+
+.PHONY: functests
