@@ -42,3 +42,9 @@ oc create -n ${NAMESPACE} -f deploy/role.yaml
 oc create -n ${NAMESPACE} -f deploy/role_binding.yaml
 oc create -n ${NAMESPACE} -f deploy/operator.yaml
 ```
+
+The `hack/install-operator.sh` automates the above steps for you. Run it from the operator source tree root.
+Usage:
+```bash
+hack/install-operor.sh $NAMESPACE
+```

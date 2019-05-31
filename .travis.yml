@@ -1,0 +1,39 @@
+sudo: required
+dist: xenial
+language: go
+go: "1.11"
+
+branches:
+  only:
+  - master
+  - /^v[0-9]/
+
+services:
+- docker
+
+jobs:
+  include:
+  - stage: Tests
+    name: "minishift"
+    env: CPLATFORM=minishift TARGET=functests KUBECTL=oc OC=oc V=5 CI_CONFIG_FEATURE_GATES=DataVolumes,LiveMigration,CPUManager
+
+cache:
+  directories:
+  - cache
+  - "~/.minishift/cache"
+
+before_script:
+## FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
+### And https://github.com/LiliC/travis-minikube/blob/e0f26f7b388057f51a0e2558afd5f990e07b6c49/.travis.yml#L11
+- sudo mount --make-rshared /
+
+- bash -x ci/prepare-host $CPLATFORM
+- bash -x ci/prepare-host virtctl
+- bash -x ci/start-cluster $CPLATFORM $CVER
+- bash -x ci/deploy-kubevirt $CPLATFORM
+
+- bash -x hack/build-operator.sh
+- bash -x hack/install-operator.sh
+
+script:
+- bash -x test.sh
