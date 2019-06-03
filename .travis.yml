@@ -17,6 +17,25 @@ jobs:
     name: "minishift"
     env: CPLATFORM=minishift TARGET=functests KUBECTL=oc OC=oc V=5 CI_CONFIG_FEATURE_GATES=DataVolumes,LiveMigration,CPUManager
 
+  - stage: Build and Deploy
+    name: Build and Deploy to GitHub
+    if: tag IS present
+    before_script: skip
+    script: make release "IMAGE_TAG=$TRAVIS_TAG"
+    deploy:
+      provider: releases
+      api_key: "$GITHUB_TOKEN"
+      skip_cleanup: true
+      overwrite: true
+      file_glob: true
+      file:
+      - _out/*
+      name: $TRAVIS_TAG
+      on:
+        tags: true
+        branch: master
+        repo: MarSik/kubevirt-ssp-operator
+
 cache:
   directories:
   - cache

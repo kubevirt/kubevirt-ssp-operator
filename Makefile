@@ -1,5 +1,6 @@
 # Always keep the future version here, so we won't overwrite latest released manifests
 
+OPERATOR_SDK_VERSION ?= v0.8.0
 IMAGE_REGISTRY ?= quay.io/fromani
 IMAGE_TAG ?= latest
 OPERATOR_IMAGE ?= kubevirt-ssp-operator-container
@@ -21,7 +22,20 @@ container-push-operator:
 container-push-registry:
 	docker push $(IMAGE_REGISTRY)/$(REGISTRY_IMAGE):$(IMAGE_TAG)
 
+operator-sdk:
+	curl -JL https://github.com/operator-framework/operator-sdk/releases/download/$(OPERATOR_SDK_VERSION)/operator-sdk-$(OPERATOR_SDK_VERSION)-x86_64-linux-gnu -o operator-sdk
+	chmod 0755 operator-sdk
+
+_out:
+	mkdir -p _out
+
+manifests: _out operator-sdk
+	./build/make-manifests.sh ${IMAGE_TAG}
+	./hack/release-manifests.sh ${IMAGE_TAG}
+
+release: container-push manifests
+
 functests:
 	cd functests && ./test-runner.sh
 
-.PHONY: functests
+.PHONY: functests release manifests container-push container-build

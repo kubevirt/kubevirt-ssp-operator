@@ -1,18 +1,28 @@
 #!/bin/bash
 
+set -ex
+
+SELF=$( realpath $0 )
+BASEPATH=$( dirname $SELF )
+
 # intentionally "impossible"/obviously wrong version
 VERSION="${1:-0.0.0}"
+VERSION=$( ${BASEPATH}/version-from-tag.py ${VERSION} )
 CHANNEL="beta"
 CLUSTER_VERSIONED_DIR="cluster/${VERSION}"
 MANIFESTS_DIR="manifests/kubevirt-ssp-operator"
 MANIFESTS_VERSIONED_DIR="${MANIFESTS_DIR}/v${VERSION}"
 IMAGE_PATH="quay.io/fromani/kubevirt-ssp-operator-container:latest"
 
-# TODO: tested with operator-sdk 0.7.0: should we require it?
-which operator-sdk &> /dev/null || {
-	echo "operator-sdk not found (see https://github.com/operator-framework/operator-sdk)"
-	exit 1
-}
+if [ -x ${BASEPATH}/../operator-sdk]; then
+       OPERATOR_SDK="${BASEPATH}/../operator-sdk"
+else       
+	which operator-sdk &> /dev/null || {
+		echo "operator-sdk not found (see https://github.com/operator-framework/operator-sdk)"
+		exit 1
+	}
+	OPERATOR_SDK="operator-sdk"
+fi
 
 HAVE_COURIER=0
 if which operator-courier &> /dev/null; then
@@ -45,7 +55,7 @@ done
 
 # TODO: we should use --from-version
 # note: this creates under deploy/olm-catalog ...
-operator-sdk olm-catalog gen-csv --csv-version ${VERSION}
+${OPERATOR_SDK} olm-catalog gen-csv --csv-version ${VERSION}
 
 ./build/update-olm.py \
 	deploy/olm-catalog/kubevirt-ssp-operator/${VERSION}/kubevirt-ssp-operator.v${VERSION}.clusterserviceversion.yaml > \
