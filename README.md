@@ -48,3 +48,29 @@ Usage:
 ```bash
 hack/install-operor.sh $NAMESPACE
 ```
+
+## Generate the YAML manifests
+
+The generation process requires the [operator SDK](https://github.com/operator-framework/operator-sdk) binary.
+If present in your path, the process will use that, otherwise it will be downloaded from the release channel.
+To regenerate the manifests, do in your repo:
+```bash
+make manifests
+```
+Find the manifests in the `_out` directory once done.
+
+## Functional tests
+
+We use [traviskube](https://gitihub.com/fromanirh/traviskube) to integrate the functional tests on travis.
+Make sure you initialize the submodules. In your repo:
+```bash
+git submodule init
+```
+
+To run the functional tests, you will need access to a OKD cluster. The travis script set up from scratch
+a minishift environment to run the tests into.
+
+Once the environment is set up, you can run the tests by doing, in your repo:
+```bash
+make functests
+```
