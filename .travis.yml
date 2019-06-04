@@ -34,7 +34,7 @@ jobs:
       on:
         tags: true
         branch: master
-        repo: MarSik/kubevirt-ssp-operator
+        repo: $TRAVIS_REPO_SLUG
 
 cache:
   directories:
