@@ -6,12 +6,12 @@ SELF=$( realpath $0 )
 BASEPATH=$( dirname $SELF )
 
 # intentionally "impossible"/obviously wrong version
-VERSION="${1:-0.0.0}"
-VERSION=$( ${BASEPATH}/version-from-tag.py ${VERSION} )
+TAG="${1:-v0.0.0}"
+VERSION=${TAG#v}  # prune initial 'v', which should be present
 CHANNEL="beta"
 CLUSTER_VERSIONED_DIR="cluster/${VERSION}"
 MANIFESTS_DIR="manifests/kubevirt-ssp-operator"
-MANIFESTS_VERSIONED_DIR="${MANIFESTS_DIR}/v${VERSION}"
+MANIFESTS_VERSIONED_DIR="${MANIFESTS_DIR}/${TAG}"
 IMAGE_PATH="quay.io/fromani/kubevirt-ssp-operator-container:latest"
 
 if [ -x ${BASEPATH}/../operator-sdk]; then
@@ -58,8 +58,8 @@ done
 ${OPERATOR_SDK} olm-catalog gen-csv --csv-version ${VERSION}
 
 ./build/update-olm.py \
-	deploy/olm-catalog/kubevirt-ssp-operator/${VERSION}/kubevirt-ssp-operator.v${VERSION}.clusterserviceversion.yaml > \
-	${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.v${VERSION}.clusterserviceversion.yaml
+	deploy/olm-catalog/kubevirt-ssp-operator/${VERSION}/kubevirt-ssp-operator.${TAG}.clusterserviceversion.yaml > \
+	${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.${TAG}.clusterserviceversion.yaml
 
 # caution: operator-courier (as in 5a4852c) wants *one* entity per yaml file (e.g. it does NOT use safe_load_all)
 for CRD in $( ls deploy/crds/kubevirt_*crd.yaml ); do
@@ -70,7 +70,7 @@ cat << EOF > ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.package.yaml
 packageName: kubevirt-ssp-operator
 channels:
 - name: ${CHANNEL}
-  currentCSV: kubevirt-ssp-operator.v${VERSION}
+  currentCSV: kubevirt-ssp-operator.${TAG}
 EOF
 
 # needed to make operator-courier happy
