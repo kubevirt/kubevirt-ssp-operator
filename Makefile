@@ -22,6 +22,9 @@ container-push-operator:
 container-push-registry:
 	docker push $(IMAGE_REGISTRY)/$(REGISTRY_IMAGE):$(IMAGE_TAG)
 
+container-release:
+	./hack/docker-push.sh $(IMAGE_REGISTRY)/$(OPERATOR_IMAGE):$(IMAGE_TAG) $(IMAGE_REGISTRY)/$(REGISTRY_IMAGE):$(IMAGE_TAG)
+
 operator-sdk:
 	curl -JL https://github.com/operator-framework/operator-sdk/releases/download/$(OPERATOR_SDK_VERSION)/operator-sdk-$(OPERATOR_SDK_VERSION)-x86_64-linux-gnu -o operator-sdk
 	chmod 0755 operator-sdk
@@ -36,9 +39,9 @@ manifests: manifests-cleanup manifests-prepare operator-sdk
 	./build/make-manifests.sh ${IMAGE_TAG}
 	./hack/release-manifests.sh ${IMAGE_TAG}
 
-release: manifests container-build container-push
+release: manifests container-build container-release
 
 functests:
 	cd functests && ./test-runner.sh
 
-.PHONY: functests release manifests manifests-prepare manifests-cleanup container-push container-build
+.PHONY: functests release manifests manifests-prepare manifests-cleanup container-push container-build container-release
