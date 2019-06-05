@@ -26,16 +26,19 @@ operator-sdk:
 	curl -JL https://github.com/operator-framework/operator-sdk/releases/download/$(OPERATOR_SDK_VERSION)/operator-sdk-$(OPERATOR_SDK_VERSION)-x86_64-linux-gnu -o operator-sdk
 	chmod 0755 operator-sdk
 
-_out:
+manifests-prepare:
 	mkdir -p _out
 
-manifests: _out operator-sdk
+manifests-cleanup:
+	rm -rf _out
+
+manifests: manifests-cleanup manifests-prepare operator-sdk
 	./build/make-manifests.sh ${IMAGE_TAG}
 	./hack/release-manifests.sh ${IMAGE_TAG}
 
-release: container-push manifests
+release: manifests container-build container-push
 
 functests:
 	cd functests && ./test-runner.sh
 
-.PHONY: functests release manifests container-push container-build
+.PHONY: functests release manifests manifests-prepare manifests-cleanup container-push container-build
