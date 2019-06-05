@@ -14,7 +14,7 @@ MANIFESTS_DIR="manifests/kubevirt-ssp-operator"
 MANIFESTS_VERSIONED_DIR="${MANIFESTS_DIR}/${TAG}"
 IMAGE_PATH="quay.io/fromani/kubevirt-ssp-operator-container:latest"
 
-if [ -x ${BASEPATH}/../operator-sdk]; then
+if [ -x "${BASEPATH}/../operator-sdk" ]; then
        OPERATOR_SDK="${BASEPATH}/../operator-sdk"
 else       
 	which operator-sdk &> /dev/null || {
