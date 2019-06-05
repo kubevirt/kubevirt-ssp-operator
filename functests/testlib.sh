@@ -26,8 +26,10 @@ is_template_validator_running() {
 	if [ -n "$1" ]; then
 		NS="-n ${1}"
 	fi
-	local validator_phase=$( oc get pods --selector "kubevirt.io=virt-template-validator" ${NS} -o json | jq -r '.items[0].status.phase' )
-	(( ${V} >= 1 )) && echo "validator phase : ${validator_phase}"
+	local validator_pod=$( oc get pods --selector "kubevirt.io=virt-template-validator" ${NS} -o json )
+	local validator_status=$( echo ${validator_pod} | jq -r '.items[0].status' )
+	local validator_phase=$( echo ${validator_pod} | jq -r '.items[0].status.phase' )
+	(( ${V} >= 1 )) && echo "validator status: ${validator_status}"
 	if [ "${validator_phase}" == "Running" ]; then
 		return 0
 	fi
@@ -39,8 +41,10 @@ is_node_labeller_running() {
 	if [ -n "$1" ]; then
 		NS="-n ${1}"
 	fi
-	local labeller_phase=$( oc get pods --selector='app=kubevirt-node-labeller' ${NS} -o json | jq -r '.items[0].status.phase' )
-	(( ${V} >= 1 )) && echo "node-labeller phase: ${labeller_phase}"
+	local labeller_pod=$( oc get pods --selector='app=kubevirt-node-labeller' ${NS} -o json )
+	local labeller_status=$( echo ${labeller_pod} | jq -r '.items[0].status' )
+	local labeller_phase=$( echo ${labeller_pod} | jq -r '.items[0].status.phase' )
+	(( ${V} >= 1 )) && echo "node-labeller status: ${labeller_status}"
 	if [ "${labeller_phase}" == "Running" ]; then
 		return 0
 	fi

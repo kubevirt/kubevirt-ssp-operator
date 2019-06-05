@@ -20,8 +20,10 @@ for idx in $( seq 1 30); do
 	ANNOTATIONS=$( oc get nodes -o json | jq '.items[0].metadata.annotations | keys' )
 	# any random CPU model annotation that *must* be present if everything's OK
 	HAS_CPU=$( echo ${ANNOTATIONS} | jq 'map(endswith("cpu-model-kvm64")) | any' )
+	(( ${V} >= 1 )) && echo "node_labeller: HAS_CPU=${HAS_CPU}"
 	# any random KVM info annotation that *must* be present if everything's OK
 	HAS_KVM=$( echo ${ANNOTATIONS} | jq 'map(endswith("kvm-info-cap-hyperv-base")) | any' )
+	(( ${V} >= 1 )) && echo "node_labeller: HAS_KVM=${HAS_CPU}"
 	if [ "${HAS_CPU}" == "true" ] && [ "${HAS_KVM}" == "true" ]; then
 		RET=0
 		break
