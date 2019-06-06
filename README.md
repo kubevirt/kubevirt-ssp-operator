@@ -35,18 +35,10 @@ Select the namespace you want to install the operator into. If unsure, the `kube
 export NAMESPACE=kubevirt
 ```
 
-```bash
-oc create -n ${NAMESPACE} -f deploy/service_account.yaml
-oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:${NAMESPACE}:kubevirt-ssp-operator
-oc create -n ${NAMESPACE} -f deploy/role.yaml
-oc create -n ${NAMESPACE} -f deploy/role_binding.yaml
-oc create -n ${NAMESPACE} -f deploy/operator.yaml
-```
+Now, run in your repo:
 
-The `hack/install-operator.sh` automates the above steps for you. Run it from the operator source tree root.
-Usage:
 ```bash
-hack/install-operor.sh $NAMESPACE
+hack/install-operator.sh $NAMESPACE
 ```
 
 ## Generate the YAML manifests
