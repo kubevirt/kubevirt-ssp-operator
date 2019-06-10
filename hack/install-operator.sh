@@ -6,6 +6,16 @@ BASEPATH=$( dirname $SELF )
 
 NAMESPACE=${1:-kubevirt}
 
+_curl() {
+	# this dupes the baseline "curl" command line, but is simpler
+	# wrt shell quoting/expansion.
+	if [ -n "${GITHUB_TOKEN}" ]; then
+		curl -H "Authorization: token ${GITHUB_TOKEN}" $@
+	else
+		curl $@
+	fi
+}
+
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_commontemplatesbundle_crd.yaml
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_nodelabellerbundle_crd.yaml
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_templatevalidator_crd.yaml
@@ -13,7 +23,7 @@ oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_templatevalidator_crd.yaml
 LAST_TAG=""
 if [ "${CI}" != "true" ] || [ "${TRAVIS}" != "true" ]; then
 	# TODO: consume releases, not tags
-	LAST_TAG=$( curl -s https://api.github.com/repos/MarSik/kubevirt-ssp-operator/tags | jq -r '.[0].name' )
+	LAST_TAG=$( _curl -s https://api.github.com/repos/MarSik/kubevirt-ssp-operator/tags | jq -r '.[0].name' )
 fi
 
 oc create -n ${NAMESPACE} -f ${BASEPATH}/../deploy/service_account.yaml

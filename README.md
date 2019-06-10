@@ -35,6 +35,12 @@ Select the namespace you want to install the operator into. If unsure, the `kube
 export NAMESPACE=kubevirt
 ```
 
+To avoid incurring in the github API throttling, if you have a [github personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line),
+you should set it now, by doing something like
+```bash
+export GITHUB_TOKEN=...
+```
+
 Now, run in your repo:
 
 ```bash
