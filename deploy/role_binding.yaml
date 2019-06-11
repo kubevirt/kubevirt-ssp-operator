@@ -5,7 +5,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: kubevirt-ssp-operator
-  namespace: default 
+  namespace: kubevirt
 roleRef:
   kind: ClusterRole
   name: kubevirt-ssp-operator
