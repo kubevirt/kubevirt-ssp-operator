@@ -1,5 +1,12 @@
 FROM quay.io/operator-framework/ansible-operator:v0.7.0
 
+USER 0
+COPY repos/RPM-GPG-KEY-CentOS-SIG-PaaS /etc/pki/rpm-gpg
+COPY repos/centos-openshift-origin.repo /etc/yum.repos.d
+RUN yum install -y origin-clients
+RUN yum clean all
+USER 1001
+
 COPY roles/ ${HOME}/roles/
 COPY playbooks/ ${HOME}/
 COPY watches.yaml ${HOME}/watches.yaml

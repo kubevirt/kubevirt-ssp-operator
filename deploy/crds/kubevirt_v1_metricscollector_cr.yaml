@@ -1,0 +1,6 @@
+apiVersion: kubevirt.io/v1
+kind: KubevirtMetricsCollector
+metadata:
+  name: kubevirt-metrics-collector
+spec:
+  version: v1.0.1

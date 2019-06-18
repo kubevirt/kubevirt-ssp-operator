@@ -11,3 +11,8 @@
   group: kubevirt.io
   kind: KubevirtNodeLabellerBundle
   playbook: /opt/ansible/kubevirtnodelabeller.yaml
+
+- version: v1
+  group: kubevirt.io
+  kind: KubevirtMetricsCollector
+  playbook: /opt/ansible/metricscollector.yaml

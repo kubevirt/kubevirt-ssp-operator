@@ -1,0 +1,4 @@
+---
+# defaults file for KubevirtMetricsCollector
+namespace: openshift-monitoring
+collector_image: quay.io/fromani/kubevirt-metrics-collector:v1.0.1

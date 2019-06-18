@@ -1,0 +1,51 @@
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: kubevirt-metrics-collector
+  labels:
+    app: kubevirt-metrics-collector
+spec:
+  template:
+    metadata:
+      labels:
+        name: kubevirt-metrics-collector
+        openshift.io/cluster-monitoring: "true"
+        vmi.prometheus.kubevirt.io: ""
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "19091"
+    spec:
+      serviceAccountName: kubevirt-metrics-collector
+      hostPID: true
+      nodeSelector:
+        node-role.kubernetes.io/compute: "true"
+      containers:
+      - name: collector
+        ports:
+        - containerPort: 19091
+          protocol: "TCP"
+          name: "metrics-vmi"
+        image: "{{ collector_image }}"
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: kubevirt-metrics-config
+          mountPath: /etc/kubevirt-metrics-collector
+        - name: cri-runtime
+          mountPath: /var/run/dockershim.sock
+        env:
+        - name: KUBE_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+      volumes:
+      - name: kubevirt-metrics-config
+        configMap:
+          name: kubevirt-metrics-config
+          items:
+          - key: collector.conf
+            path: config.json
+      - name: cri-runtime
+        hostPath:
+          path: /var/run/dockershim.sock
+

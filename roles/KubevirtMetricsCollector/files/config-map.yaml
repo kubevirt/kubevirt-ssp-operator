@@ -1,0 +1,20 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: kubevirt-metrics-config
+data:
+  collector.conf: |-
+    {
+      "criendpoint": "unix:///var/run/dockershim.sock",
+      "listenaddress": ":19091",
+      "interval": "5s",
+      "targets": [{
+        "name": "libvirt",
+        "argv": ["/usr/sbin/libvirtd*"]
+      }, {
+        "name": "qemu",
+        "argv": ["/usr/*/qemu*"]
+      }]
+    }
+

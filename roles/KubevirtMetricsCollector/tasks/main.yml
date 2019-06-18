@@ -1,0 +1,26 @@
+---
+# tasks file for KubevirtMetricsCollector
+- name: Set the VMI service
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'vmi-service.yaml') }}"
+- name: Set the Config Map
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'config-map.yaml') }}"
+- name: Set the SecurityContextConstraints
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'okd-account-scc.yaml') }}"
+- name: Enable DirVolume plugin in the SCC
+  command: /usr/bin/oc patch scc scc-hostpath -p '{"allowHostDirVolumePlugin": true}'
+- name: Enable HostPID in the SCC
+  command: /usr/bin/oc patch scc scc-hostpath -p '{"allowHostPID": true}'
+- name: Deploy the Collector
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'okd-daemonset.yaml') }}"
+- name: Set the VMI service monitor
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'vmi-service-monitor.yaml') }}"
