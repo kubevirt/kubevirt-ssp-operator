@@ -11,3 +11,11 @@
 # validator_tag: v0.4.8
 # templates_version: v0.6.0
 ---
+#node-labeller
+kubevirt_node_labeller_tag: "{{ lookup('env','NODE_LABELLER_TAG')| default('v0.1.0', true) }}"
+kvm_info_nfd_plugin_tag: "{{ lookup('env','KVM_INFO_TAG')| default('v0.5.7', true) }}"
+kubevirt_cpu_nfd_plugin_tag: "{{ lookup('env','CPU_PLUGIN_TAG')| default('v0.1.0', true) }}"
+virt_launcher_tag: "{{ lookup('env','VIRT_LAUNCHER_TAG')| default('v0.18.0', true) }}"
+
+#validator
+validator_tag: "{{ lookup('env','VALIDATOR_TAG')| default('v0.6.1', true) }}"

@@ -28,7 +28,15 @@ spec:
                   fieldPath: metadata.name
             - name: WATCH_NAMESPACE
               value: ""
+            - name: KVM_INFO_TAG
+              value: ""
+            - name: VALIDATOR_TAG
+              value: ""
             - name: VIRT_LAUNCHER_TAG
-              value: "v0.17.0"
+              value: ""
+            - name: NODE_LABELLER_TAG
+              value: ""
+            - name: CPU_PLUGIN_TAG
+              value: ""
             - name: OPERATOR_NAME
               value: "kubevirt-ssp-operator"
