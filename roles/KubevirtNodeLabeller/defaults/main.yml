@@ -3,10 +3,10 @@
 wait: true
 
 kubevirt_node_labeller_image: "node-labeller"
-kubevirt_node_labeller_tag: "v0.1.0"
+kubevirt_node_labeller_tag: "latest"
 kvm_info_nfd_plugin_image: "kvm-info-nfd-plugin"
-kvm_info_nfd_plugin_tag: "v0.5.7"
+kvm_info_nfd_plugin_tag: "latest"
 kubevirt_cpu_nfd_plugin_image: "cpu-nfd-plugin"
-kubevirt_cpu_nfd_plugin_tag: "v0.1.0"
+kubevirt_cpu_nfd_plugin_tag: "latest"
 virt_launcher_image: "virt-launcher"
-virt_launcher_tag: "v0.18.0"
+virt_launcher_tag: "latest"
