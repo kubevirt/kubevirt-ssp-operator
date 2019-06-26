@@ -23,7 +23,8 @@ oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_templatevalidator_crd.yaml
 LAST_TAG=""
 if [ "${CI}" != "true" ] || [ "${TRAVIS}" != "true" ]; then
 	# TODO: consume releases, not tags
-	LAST_TAG=$( _curl -s https://api.github.com/repos/MarSik/kubevirt-ssp-operator/tags | jq -r '.[0].name' )
+	# TODO: check if the github APIs guarantee the ordering
+	LAST_TAG=$( _curl -s https://api.github.com/repos/MarSik/kubevirt-ssp-operator/tags | jq -r '.[].name' | sort -r | head -1 )
 fi
 
 oc create -n ${NAMESPACE} -f ${BASEPATH}/../deploy/service_account.yaml
