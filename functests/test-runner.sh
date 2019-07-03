@@ -6,6 +6,8 @@ fi
 # checking prereqs
 if [ -z "${OC}" ]; then
 	echo "please define the environment variable 'OC'"
+	echo "'OC' should contain the path of the 'oc' binary you want to use to talk with the testing cluster."
+	echo "If unsure, use 'OC=/usr/bin/oc'."
 	exit 2
 fi
 
