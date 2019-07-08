@@ -9,7 +9,9 @@ REGISTRY_IMAGE ?= kubevirt-ssp-operator-registry
 container-build: container-build-operator container-build-registry
 
 container-build-operator:
+	python -m compileall build/preprocess_template.py
 	docker build -f build/Dockerfile -t $(IMAGE_REGISTRY)/$(OPERATOR_IMAGE):$(IMAGE_TAG) .
+	rm -f build/preprocess_template.pyc
 
 container-build-registry:
 	docker build -f build/Dockerfile.registry -t $(IMAGE_REGISTRY)/$(REGISTRY_IMAGE):$(IMAGE_TAG) .

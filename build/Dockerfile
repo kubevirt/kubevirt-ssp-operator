@@ -5,6 +5,6 @@ COPY playbooks/ ${HOME}/
 COPY watches.yaml ${HOME}/watches.yaml
 COPY _defaults.yml ${HOME}/_defaults.yml
 
-COPY build/preprocess_template.py ${HOME}/
+COPY build/preprocess_template.pyc ${HOME}/
 COPY patch.yaml ${HOME}/
-RUN python ${HOME}/preprocess_template.py ${HOME}/patch.yaml ${HOME}/roles/KubevirtCommonTemplatesBundle/files/
+RUN python ${HOME}/preprocess_template.pyc ${HOME}/patch.yaml ${HOME}/roles/KubevirtCommonTemplatesBundle/files/
