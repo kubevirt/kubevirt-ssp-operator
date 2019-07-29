@@ -14,16 +14,6 @@ MANIFESTS_DIR="manifests/kubevirt-ssp-operator"
 MANIFESTS_VERSIONED_DIR="${MANIFESTS_DIR}/${TAG}"
 IMAGE_PATH="quay.io/fromani/kubevirt-ssp-operator-container:latest"
 
-if [ -x "${BASEPATH}/../operator-sdk" ]; then
-       OPERATOR_SDK="${BASEPATH}/../operator-sdk"
-else       
-	which operator-sdk &> /dev/null || {
-		echo "operator-sdk not found (see https://github.com/operator-framework/operator-sdk)"
-		exit 1
-	}
-	OPERATOR_SDK="operator-sdk"
-fi
-
 HAVE_COURIER=0
 if which operator-courier &> /dev/null; then
 	HAVE_COURIER=1
@@ -53,13 +43,7 @@ for MF in deploy/service_account.yaml deploy/role.yaml deploy/role_binding.yaml 
 done
 ) > ${CLUSTER_VERSIONED_DIR}/kubevirt-ssp-operator.yaml
 
-# TODO: we should use --from-version
-# note: this creates under deploy/olm-catalog ...
-${OPERATOR_SDK} olm-catalog gen-csv --csv-version ${VERSION}
-
-./build/update-olm.py \
-	deploy/olm-catalog/kubevirt-ssp-operator/${VERSION}/kubevirt-ssp-operator.${TAG}.clusterserviceversion.yaml > \
-	${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.${TAG}.clusterserviceversion.yaml
+./build/csv-generator.sh --csv-version=${VERSION} --namespace=placeholder --operator-image=REPLACE_IMAGE > ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.${TAG}.clusterserviceversion.yaml
 
 # caution: operator-courier (as in 5a4852c) wants *one* entity per yaml file (e.g. it does NOT use safe_load_all)
 for CRD in $( ls deploy/crds/kubevirt_*crd.yaml ); do
