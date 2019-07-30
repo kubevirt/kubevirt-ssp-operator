@@ -7,7 +7,7 @@ import "fmt"
 const (
 	KubevirtCommonTemplates   string = "0.6.0"
 	KubevirtNodeLabeller      string = "0.0.5"
-	KubevirtTemplateValidator string = "0.4.8"
+	KubevirtTemplateValidator string = "0.6.1"
 )
 
 // TagForVersion converts the given version in a suitable tag

@@ -8,7 +8,7 @@
 #
 # validator_namespace: myproject
 # validator_image: registry.example.com/mine/kubevirt-template-validator
-# validator_tag: v0.4.8
+# validator_tag: v0.6.1
 # templates_version: v0.6.0
 ---
 #node-labeller
