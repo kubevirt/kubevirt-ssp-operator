@@ -19,6 +19,7 @@ _curl() {
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_commontemplatesbundle_crd.yaml
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_nodelabellerbundle_crd.yaml
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_templatevalidator_crd.yaml
+oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_metricsaggregation_crd.yaml
 
 LAST_TAG=""
 if [ "${CI}" != "true" ] || [ "${TRAVIS}" != "true" ]; then
