@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: cnv-rules
+  name: prometheus-k8s-rules-cnv
+  namespace: "{{ meta.namespace }}"
+spec:
+  groups:
+  - name: cnv.rules
+    rules:
+    - expr: |
+        sum(kubevirt_vmi_phase_count{phase="running"}) by (node)
+      record: cnv:vmi_status_running:count

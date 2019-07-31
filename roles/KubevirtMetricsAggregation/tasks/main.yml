@@ -1,0 +1,9 @@
+---
+# tasks file for KubevirtMetricsAggregation
+- name: Install VMI count aggregation rule
+  k8s:
+    state: present
+    namespace: "{{ meta.namespace }}"
+    definition: "{{ item | from_yaml }}"
+  with_items: "{{ lookup('template', 'aggregation-rule-vmi-count.yaml.j2').split('\n---\n') | select('search', '(^|\n)[^#]') |list }}"
+
