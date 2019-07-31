@@ -22,7 +22,7 @@ done
 
 # we can run the real tests now
 RET=0
-for testscript in $( ls ??-test-*.sh); do
+for testscript in $( ls *-test-*.sh); do
 	testname=$(basename -- "$testscript")
 	testname="${testname%.*}"  # see http://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html
 
@@ -33,10 +33,11 @@ for testscript in $( ls ??-test-*.sh); do
 		printf "* TESTCASE [%-64s] START\n" $testscript
 		./$testscript
 	fi
-	if [ "$?" == "0" ]; then
+	RC="$?"
+	if [ "$RC" == "0" ]; then
 		result="OK"
 	else
-		if [ "$?" == "99" ] ; then
+		if [ "$RC" == "99" ] ; then
 			result="SKIP"
 		else
 			result="FAILED"
