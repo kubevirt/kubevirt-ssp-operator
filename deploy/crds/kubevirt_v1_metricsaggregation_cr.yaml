@@ -1,5 +1,5 @@
 apiVersion: kubevirt.io/v1
-kind: KubevirtMetricAggregation
+kind: KubevirtMetricsAggregation
 metadata:
   name: kubevirt-metrics-aggregation
 spec:
