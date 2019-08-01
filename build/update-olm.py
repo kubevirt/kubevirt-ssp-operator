@@ -90,6 +90,20 @@ _CRD_INFOS = {
             ],
         }],
     },
+    'kubevirtmetricsaggregations.kubevirt.io': {
+        'displayName': 'KubeVirt Metric Aggregation',
+        'description': \
+                'Provide aggregation rules for core kubevirt metrics',
+        'specDescriptors': [{
+            'description': \
+                'The version of the aggregation rules to deploy',
+            'displayName': 'Version',
+            'path': 'version',
+            'x-descriptors': [
+                'urn:alm:descriptor:io.kubernetes.ssp:version',
+            ],
+        }],
+    },
 }
 
 
