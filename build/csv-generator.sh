@@ -31,6 +31,7 @@ help_text() {
     echo "  --virt-launcher-tag: (OPTIONAL)"
     echo "  --node-labeller-tag: (OPTIONAL)"
     echo "  --cpu-plugin-tag:    (OPTIONAL)"
+    echo "  --dump-crds:         (OPTIONAL) Dumps CRD manifests with the CSV to stdout"
 }
 
 # REQUIRED ARGS
@@ -45,6 +46,7 @@ VALIDATOR_TAG=""
 VIRT_LAUNCHER_TAG=""
 NODE_LABELLER_TAG=""
 CPU_PLUGIN_TAG=""
+DUMP_CRDS=""
 
 while (( "$#" )); do
     ARG=`echo $1 | awk -F= '{print $1}'`
@@ -79,6 +81,9 @@ while (( "$#" )); do
     --cpu-plugin-tag)
         CPU_PLUGIN_TAG=$VAL
         ;;
+    --dump-crds)
+        DUMP_CRDS="true"
+        ;;
     --)
         break
         ;;
@@ -100,8 +105,8 @@ cp ${MANIFESTS_GENERATED_CSV} ${TMP_FILE}
 # replace placeholder version with a human readable variable name
 # that will be used later on by csv-generator
 sed -i "s/PLACEHOLDER_CSV_VERSION/${CSV_VERSION}/g" ${TMP_FILE}
-sed -i "s/namespace: placeholder/${NAMESPACE}/g" ${TMP_FILE}
-sed -i "s/REPLACE_IMAGE/${OPERATOR_IMAGE}/g" ${TMP_FILE}
+sed -i "s/namespace: placeholder/namespace: ${NAMESPACE}/g" ${TMP_FILE}
+sed -i "s|REPLACE_IMAGE|${OPERATOR_IMAGE}|g" ${TMP_FILE}
 
 replace_env_var "WATCH_NAMESPACE" $WATCH_NAMESPACE
 replace_env_var "KVM_INFO_TAG" $KVM_INFO_TAG
@@ -113,8 +118,10 @@ replace_env_var "CPU_PLUGIN_TAG" $CPU_PLUGIN_TAG
 # dump CSV and CRD manifests to stdout
 echo "---"
 cat ${TMP_FILE}
-for CRD in $( ls deploy/crds/kubevirt_*crd.yaml ); do
-	echo "---"
-	cat ${CRD}
-done
 rm ${TMP_FILE}
+if [ "$DUMP_CRDS" = "true" ]; then
+    for CRD in $( ls ${CRDS_DIR}/kubevirt_*crd.yaml ); do
+        echo "---"
+        cat ${CRD}
+    done
+fi

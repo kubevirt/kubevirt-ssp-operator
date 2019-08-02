@@ -1,5 +1,7 @@
 FROM quay.io/operator-framework/ansible-operator:v0.7.0
 
+LABEL org.kubevirt.hco.csv-generator.v1="/usr/bin/csv-generator"
+
 COPY roles/ ${HOME}/roles/
 COPY playbooks/ ${HOME}/
 COPY watches.yaml ${HOME}/watches.yaml
