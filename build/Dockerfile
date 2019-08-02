@@ -5,6 +5,7 @@ COPY playbooks/ ${HOME}/
 COPY watches.yaml ${HOME}/watches.yaml
 COPY _defaults.yml ${HOME}/_defaults.yml
 
+COPY deploy/crds ${HOME}/deploy/crds
 COPY manifests/generated ${HOME}/manifests/generated
 COPY build/csv-generator.sh /usr/bin/csv-generator
 

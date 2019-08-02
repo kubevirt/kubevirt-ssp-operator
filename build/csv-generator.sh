@@ -3,8 +3,10 @@
 set -e
 
 MANIFESTS_GENERATED_DIR="manifests/generated"
+CRDS_DIR="deploy/crds"
 if ! [ -d $MANIFESTS_GENERATED_DIR ]; then
     MANIFESTS_GENERATED_DIR="${HOME}/manifests/generated"
+    CRDS_DIR="${HOME}/deploy/crds"
 fi
 MANIFESTS_GENERATED_CSV=${MANIFESTS_GENERATED_DIR}/kubevirt-ssp-operator.vVERSION.clusterserviceversion.yaml
 TMP_FILE=$(mktemp)
@@ -108,5 +110,11 @@ replace_env_var "VIRT_LAUNCHER_TAG" $VIRT_LAUNCHER_TAG
 replace_env_var "NODE_LABELLER_TAG" $NODE_LABELLER_TAG
 replace_env_var "CPU_PLUGIN_TAG" $CPU_PLUGIN_TAG
 
+# dump CSV and CRD manifests to stdout
+echo "---"
 cat ${TMP_FILE}
+for CRD in $( ls deploy/crds/kubevirt_*crd.yaml ); do
+	echo "---"
+	cat ${CRD}
+done
 rm ${TMP_FILE}

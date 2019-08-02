@@ -2,7 +2,7 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: ClusterServiceVersion
 metadata:
   annotations:
-    alm-examples: '[{"apiVersion":"kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.6.0"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtNodeLabellerBundle","metadata":{"name":"kubevirt-node-labeller-bundle"},"spec":{"version":"v0.0.5"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator","namespace":"kubevirt"},"spec":{"version":"v0.4.8"}}]'
+    alm-examples: '[{"apiVersion":"kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.6.1"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtMetricsAggregation","metadata":{"name":"kubevirt-metrics-aggregation"},"spec":{"version":"v0.0.1"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtNodeLabellerBundle","metadata":{"name":"kubevirt-node-labeller-bundle"},"spec":{"version":"v0.0.5"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator","namespace":"kubevirt"},"spec":{"version":"v0.6.1"}}]'
     capabilities: Basic Install
     categories: Virtualization
     description: Manages KubeVirt addons for Scheduling, Scale, Performance
@@ -18,6 +18,17 @@ spec:
       name: kubevirtcommontemplatesbundles.kubevirt.io
       specDescriptors:
       - description: The version of the KubeVirt Templates to deploy
+        displayName: Version
+        path: version
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.ssp:version
+      version: v1
+    - description: Provide aggregation rules for core kubevirt metrics
+      displayName: KubeVirt Metric Aggregation
+      kind: KubevirtMetricsAggregation
+      name: kubevirtmetricsaggregations.kubevirt.io
+      specDescriptors:
+      - description: The version of the aggregation rules to deploy
         displayName: Version
         path: version
         x-descriptors:
@@ -63,6 +74,16 @@ spec:
           - list
           - patch
           - update
+          - watch
+        - apiGroups:
+          - monitoring.coreos.com
+          resources:
+          - prometheusrules
+          verbs:
+          - create
+          - get
+          - list
+          - patch
           - watch
         - apiGroups:
           - rbac.authorization.k8s.io
