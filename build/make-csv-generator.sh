@@ -1,6 +1,9 @@
 #!/bin/bash
 
-set -e
+set -ex
+
+SELF=$( realpath $0 )
+BASEPATH=$( dirname $SELF )
 
 if [ -x "${BASEPATH}/../operator-sdk" ]; then
        OPERATOR_SDK="${BASEPATH}/../operator-sdk"
