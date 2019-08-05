@@ -6,7 +6,7 @@ IMAGE_TAG ?= latest
 OPERATOR_IMAGE ?= kubevirt-ssp-operator-container
 REGISTRY_IMAGE ?= kubevirt-ssp-operator-registry
 
-container-build: container-build-operator container-build-registry
+container-build: csv-generator container-build-operator container-build-registry
 
 container-build-operator:
 	docker build -f build/Dockerfile -t $(IMAGE_REGISTRY)/$(OPERATOR_IMAGE):$(IMAGE_TAG) .
@@ -25,6 +25,9 @@ container-push-registry:
 container-release:
 	./hack/docker-push.sh $(IMAGE_REGISTRY)/$(OPERATOR_IMAGE):$(IMAGE_TAG) $(IMAGE_REGISTRY)/$(REGISTRY_IMAGE):$(IMAGE_TAG)
 
+csv-generator: operator-sdk
+	./build/make-csv-generator.sh
+
 operator-sdk:
 	curl -JL https://github.com/operator-framework/operator-sdk/releases/download/$(OPERATOR_SDK_VERSION)/operator-sdk-$(OPERATOR_SDK_VERSION)-x86_64-linux-gnu -o operator-sdk
 	chmod 0755 operator-sdk
@@ -35,7 +38,7 @@ manifests-prepare:
 manifests-cleanup:
 	rm -rf _out
 
-manifests: manifests-cleanup manifests-prepare operator-sdk
+manifests: csv-generator manifests-cleanup manifests-prepare operator-sdk
 	./build/make-manifests.sh ${IMAGE_TAG}
 	./hack/release-manifests.sh ${IMAGE_TAG}
 

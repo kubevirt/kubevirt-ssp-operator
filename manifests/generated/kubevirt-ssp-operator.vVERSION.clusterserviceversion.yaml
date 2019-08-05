@@ -1,0 +1,243 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: '[{"apiVersion":"kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.6.1"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtMetricsAggregation","metadata":{"name":"kubevirt-metrics-aggregation"},"spec":{"version":"v0.0.1"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtNodeLabellerBundle","metadata":{"name":"kubevirt-node-labeller-bundle"},"spec":{"version":"v0.0.5"}},{"apiVersion":"kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator","namespace":"kubevirt"},"spec":{"version":"v0.6.1"}}]'
+    capabilities: Basic Install
+    categories: Virtualization
+    description: Manages KubeVirt addons for Scheduling, Scale, Performance
+  name: kubevirt-ssp-operator.vPLACEHOLDER_CSV_VERSION
+  namespace: kubevirt
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: Represents a deployment of the predefined VM templates
+      displayName: KubeVirt common templates
+      kind: KubevirtCommonTemplatesBundle
+      name: kubevirtcommontemplatesbundles.kubevirt.io
+      specDescriptors:
+      - description: The version of the KubeVirt Templates to deploy
+        displayName: Version
+        path: version
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.ssp:version
+      version: v1
+    - description: Provide aggregation rules for core kubevirt metrics
+      displayName: KubeVirt Metric Aggregation
+      kind: KubevirtMetricsAggregation
+      name: kubevirtmetricsaggregations.kubevirt.io
+      specDescriptors:
+      - description: The version of the aggregation rules to deploy
+        displayName: Version
+        path: version
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.ssp:version
+      version: v1
+    - description: Represents a deployment of Node labeller component
+      displayName: KubeVirt Node labeller
+      kind: KubevirtNodeLabellerBundle
+      name: kubevirtnodelabellerbundles.kubevirt.io
+      specDescriptors:
+      - description: The version of the node labeller to deploy
+        displayName: Version
+        path: version
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.ssp:version
+      version: v1
+    - description: Represents a deployment of admission control webhook to validate
+        the KubeVirt templates
+      displayName: KubeVirt Template Validator admission webhook
+      kind: KubevirtTemplateValidator
+      name: kubevirttemplatevalidators.kubevirt.io
+      specDescriptors:
+      - description: The version of the KubeVirt Template Validator to deploy
+        displayName: Version
+        path: version
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.ssp:version
+      version: v1
+  description: KubeVirt Schedule, Scale and Performance Operator
+  displayName: Kubevirt Ssp Operator
+  install:
+    spec:
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - kubevirt.io
+          - template.openshift.io
+          resources:
+          - '*'
+          verbs:
+          - create
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - monitoring.coreos.com
+          resources:
+          - prometheusrules
+          verbs:
+          - create
+          - get
+          - list
+          - patch
+          - watch
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - clusterroles
+          verbs:
+          - create
+          - watch
+          - patch
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - clusterrolebindings
+          verbs:
+          - create
+          - get
+          - list
+          - watch
+          - patch
+        - apiGroups:
+          - extensions
+          - apps
+          resources:
+          - deployments
+          - replicasets
+          - daemonsets
+          verbs:
+          - create
+          - get
+          - list
+          - patch
+          - watch
+        - apiGroups:
+          - ''
+          resources:
+          - serviceaccounts
+          - configmaps
+          - services
+          verbs:
+          - create
+          - get
+          - patch
+          - list
+          - watch
+        - apiGroups:
+          - ''
+          resources:
+          - nodes
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - ''
+          resources:
+          - pods
+          verbs:
+          - get
+        - apiGroups:
+          - ''
+          resources:
+          - namespaces
+          verbs:
+          - get
+          - list
+          - watch
+        - apiGroups:
+          - admissionregistration.k8s.io
+          resources:
+          - validatingwebhookconfigurations
+          verbs:
+          - create
+          - get
+          - list
+          - patch
+          - watch
+        - apiGroups:
+          - security.openshift.io
+          resourceNames:
+          - privileged
+          resources:
+          - securitycontextconstraints
+          verbs:
+          - use
+        serviceAccountName: kubevirt-ssp-operator
+      deployments:
+      - name: kubevirt-ssp-operator
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              name: kubevirt-ssp-operator
+          strategy: {}
+          template:
+            metadata:
+              labels:
+                name: kubevirt-ssp-operator
+            spec:
+              containers:
+              - env:
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: WATCH_NAMESPACE
+                - name: KVM_INFO_TAG
+                - name: VALIDATOR_TAG
+                - name: VIRT_LAUNCHER_TAG
+                - name: NODE_LABELLER_TAG
+                - name: CPU_PLUGIN_TAG
+                - name: OPERATOR_NAME
+                  value: kubevirt-ssp-operator
+                image: REPLACE_IMAGE
+                imagePullPolicy: Always
+                name: kubevirt-ssp-operator
+                ports:
+                - containerPort: 60000
+                  name: metrics
+                resources: {}
+              serviceAccountName: kubevirt-ssp-operator
+    strategy: deployment
+  installModes:
+  - supported: true
+    type: OwnNamespace
+  - supported: true
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - KubeVirt
+  - Virtualization
+  - Template
+  - Performance
+  - VirtualMachine
+  - Node
+  - Labels
+  labels:
+    alm-owner-kubevirt: kubevirt-ssp-operator
+    operated-by: kubevirt-ssp-operator
+  links:
+  - name: KubeVirt
+    url: https://kubevirt.io
+  - name: Source Code
+    url: https://github.com/kubevirt/kubevirt
+  maintainers:
+  - email: kubevirt-dev@googlegroups.com
+    name: KubeVirt project
+  maturity: alpha
+  provider:
+    name: KubeVirt project
+  selector:
+    matchLabels:
+      alm-owner-kubevirt: kubevirt-ssp-operator
+      operated-by: kubevirt-ssp-operator
+  version: PLACEHOLDER_CSV_VERSION
