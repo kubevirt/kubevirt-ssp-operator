@@ -1,3 +1,8 @@
+# WARNING! this manifest is not meant for direct consumption.
+# you are supposed to deploy the operator either
+# - through the HyperConverged Operator
+# - using the released manifests, see github
+# - using hack/install-operator.sh
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,7 +20,6 @@ spec:
       serviceAccountName: kubevirt-ssp-operator
       containers:
         - name: kubevirt-ssp-operator
-          #FIXME Replace this with the built image name
           image: REPLACE_IMAGE
           ports:
           - containerPort: 60000

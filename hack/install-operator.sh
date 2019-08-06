@@ -6,21 +6,14 @@ BASEPATH=$( dirname $SELF )
 
 NAMESPACE=${1:-kubevirt}
 
-_curl() {
-	# this dupes the baseline "curl" command line, but is simpler
-	# wrt shell quoting/expansion.
-	if [ -n "${GITHUB_TOKEN}" ]; then
-		curl -H "Authorization: token ${GITHUB_TOKEN}" $@
-	else
-		curl $@
-	fi
-}
+source ${BASEPATH}/_common.sh
 
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_commontemplatesbundle_crd.yaml
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_nodelabellerbundle_crd.yaml
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_templatevalidator_crd.yaml
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_metricsaggregation_crd.yaml
 
+# we need to do this before to deploy any manifest, so if this fails we bail out as soon as possible.
 LAST_TAG=""
 if [ "${CI}" != "true" ] || [ "${TRAVIS}" != "true" ]; then
 	# TODO: consume releases, not tags
