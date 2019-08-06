@@ -4,15 +4,98 @@
     state: present
     definition: "{{ item | from_yaml }}"
   with_items: "{{ lookup('template', 'kubevirt-node-labeller-roles.yaml.j2').split('\n---\n') | select('search', '(^|\n)[^#]') | list }}"
+
 - name: Create the node labeller daemon set
   k8s:
     state: present
     definition: "{{ lookup('template', 'kubevirt-node-labeller-ds.yaml.j2') | from_yaml }}"
   register: nl
-- name: "Wait for the node-labeller to start"
+
+- name: "refresh node-labeller var"
+  k8s:
+    state: present
+    definition: "{{ lookup('k8s', kind=nl.result.kind, namespace=nl.result.metadata.namespace, resource_name=nl.result.metadata.name) | from_yaml }}"
+  register: nl_status
+
+- name: "get node-labeller-cr"
+  k8s:
+    state: present
+    definition: "{{ lookup('k8s', kind='KubevirtNodeLabellerBundle', namespace=meta.namespace, resource_name='kubevirt-node-labeller-bundle') | from_yaml }}"
+  register: nl_cr
+
+- name: "get latest progressive condition"
+  vars:
+    query: "result.status.conditions[?type=='Progressing'].{status: status, lastTransitionTime: lastTransitionTime}"
+    progressing_statuses: "{{nl_cr|json_query(query)}}"
   set_fact:
-    nl_status: "{{ lookup('k8s', kind=nl.result.kind, namespace=nl.result.metadata.namespace, resource_name=nl.result.metadata.name) | from_yaml }}"
-  retries: 300
-  delay: 10
-  until: nl_status.status.currentNumberScheduled == nl_status.status.numberReady |default(false)
-  when: not wait
+    last_progressing_status: "{{false if progressing_statuses|length == 0 else progressing_statuses|sort(attribute='lastTransitionTime')|reverse|map(attribute='status')|first}}"
+
+
+- name: Set progressing condition
+  when: (not last_progressing_status) and (nl_status.result.status.currentNumberScheduled != nl_status.result.status.numberReady)
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtNodeLabellerBundle
+    name: kubevirt-node-labeller-bundle
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Progressing
+      status: "True"
+      reason: "deploying"
+      message: "deploying node-labeller"
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+- name: Unset progressing condition
+  when: last_progressing_status and nl_status.result.status.currentNumberScheduled == nl_status.result.status.numberReady
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtNodeLabellerBundle
+    name: kubevirt-node-labeller-bundle
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Progressing
+      status: "False"
+      reason: "deploying"
+      message: "node-labeller has successfully progressed."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+- name: "get node-labeller-cr"
+  k8s:
+    state: present
+    definition: "{{ lookup('k8s', kind='KubevirtNodeLabellerBundle', namespace=meta.namespace, resource_name='kubevirt-node-labeller-bundle') | from_yaml }}"
+  register: nl_cr
+
+- name: "get latest available condition"
+  vars:
+    query: "result.status.conditions[?type=='Available'].{status: status, lastTransitionTime: lastTransitionTime}"
+    available_statuses: "{{nl_cr|json_query(query)}}"
+  set_fact:
+    last_available_status: "{{false if available_statuses|length == 0 else available_statuses|sort(attribute='lastTransitionTime')|reverse|map(attribute='status')|first}}"
+
+- name: Set available condition
+  when: (not last_available_status) and (nl_status.result.status.currentNumberScheduled == nl_status.result.status.numberReady)
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtNodeLabellerBundle
+    name: kubevirt-node-labeller-bundle
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Available
+      status: "True"
+      reason: "running"
+      message: "node-labeller has required number of pods"
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+- name: Unset available condition
+  when: last_available_status and (nl_status.result.status.currentNumberScheduled != nl_status.result.status.numberReady)
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtNodeLabellerBundle
+    name: kubevirt-node-labeller-bundle
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Available
+      status: "False"
+      reason: "running"
+      message: "node-labeller hasn't got required number of pods"
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
