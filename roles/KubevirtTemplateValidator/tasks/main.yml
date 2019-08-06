@@ -20,10 +20,90 @@
   k8s:
     state: present
     definition: "{{ lookup('template', 'webhook.yaml.j2') | from_yaml }}"
-- name: Wait for the template-validator to start
+  
+- name: Refresh template-validator var
   set_fact:
-    tv_status: "{{ lookup('k8s', kind=tv.result.kind, namespace=tv.result.metadata.namespace, resource_name=tv.result.metadata.name) | from_yaml }}"
-  retries: 300
-  delay: 10
-  until: tv_status.status.currentNumberScheduled == tv_status.status.numberReady |default(false)
-  when: not wait
+    tv_status: "{{ lookup('k8s', kind=tv.results[3].result.kind, namespace=tv.results[3].result.metadata.namespace, resource_name=tv.results[3].result.metadata.name) | from_yaml }}"
+
+
+- name: "get template-validator-cr"
+  k8s:
+    state: present
+    definition: "{{ lookup('k8s', kind='KubevirtTemplateValidator', namespace= 'kubevirt', resource_name='kubevirt-template-validator') | from_yaml }}"
+  register: tv_cr
+
+- name: "get latest progressive condition"
+  vars:
+    query: "result.status.conditions[?type=='Progressing'].{status: status, lastTransitionTime: lastTransitionTime}"
+    progressing_statuses: "{{tv_cr|json_query(query)}}"
+  set_fact:
+    tv_last_progressing_status: "{{false if progressing_statuses|length == 0 else progressing_statuses|sort(attribute='lastTransitionTime')|reverse|map(attribute='status')|first}}"
+
+- name: Set progressing condition
+  when: (not tv_last_progressing_status) and (tv_status.status.availableReplicas|default(0)  != tv_status.status.readyReplicas|default(2))
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtTemplateValidator
+    name: kubevirt-template-validator
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Progressing
+      status: "True"
+      reason: "deploying"
+      message: "Template-validator is progressing."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+- name: Unset progressing condition
+  when: tv_last_progressing_status and (tv_status.status.availableReplicas|default(0) == tv_status.status.readyReplicas|default(2))
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtTemplateValidator
+    name: kubevirt-template-validator
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Progressing
+      status: "False"
+      reason: "deploying"
+      message: "Template-validator has successfully progressed."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+- name: "get node-labeller-cr"
+  k8s:
+    state: present
+    definition: "{{ lookup('k8s', kind='KubevirtTemplateValidator', namespace= 'kubevirt', resource_name='kubevirt-template-validator') | from_yaml }}"
+  register: tv_cr
+
+- name: "get latest available condition"
+  vars:
+    query: "result.status.conditions[?type=='Available'].{status: status, lastTransitionTime: lastTransitionTime}"
+    available_statuses: "{{tv_cr|json_query(query)}}"
+  set_fact:
+    tv_last_available_status: "{{false if available_statuses|length == 0 else available_statuses|sort(attribute='lastTransitionTime')|reverse|map(attribute='status')|first}}"
+
+- name: Set available condition
+  when: (not tv_last_available_status) and (tv_status.status.availableReplicas|default(0) == tv_status.status.readyReplicas|default(2))
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtTemplateValidator
+    name: kubevirt-template-validator
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Available
+      status: "True"
+      reason: "running"
+      message: "Template-validator is running."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+- name: Unset available condition
+  when: tv_last_available_status and (tv_status.status.availableReplicas|default(0) != tv_status.status.readyReplicas|default(2))
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtTemplateValidator
+    name: kubevirt-template-validator
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Available
+      status: "False"
+      reason: "running"
+      message: "Template-validator hasn't got required number of pods."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
