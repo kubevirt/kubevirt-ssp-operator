@@ -19,4 +19,4 @@ kubevirt_cpu_nfd_plugin_tag: "{{ lookup('env','CPU_PLUGIN_TAG')| default('v0.1.1
 virt_launcher_tag: "{{ lookup('env','VIRT_LAUNCHER_TAG')| default('v0.19.0', true) }}"
 
 #validator
-validator_tag: "{{ lookup('env','VALIDATOR_TAG')| default('v0.6.1', true) }}"
+validator_tag: "{{ lookup('env','VALIDATOR_TAG')| default('v0.6.2', true) }}"
