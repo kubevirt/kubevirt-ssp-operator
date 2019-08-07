@@ -11,19 +11,19 @@
     definition: "{{ lookup('template', 'kubevirt-node-labeller-ds.yaml.j2') | from_yaml }}"
   register: nl
 
-- name: "refresh node-labeller var"
+- name: "Refresh node-labeller var"
   k8s:
     state: present
     definition: "{{ lookup('k8s', kind=nl.result.kind, namespace=nl.result.metadata.namespace, resource_name=nl.result.metadata.name) | from_yaml }}"
   register: nl_status
 
-- name: "get node-labeller-cr"
+- name: "Get node-labeller-cr"
   k8s:
     state: present
     definition: "{{ lookup('k8s', kind='KubevirtNodeLabellerBundle', namespace=meta.namespace, resource_name='kubevirt-node-labeller-bundle') | from_yaml }}"
   register: nl_cr
 
-- name: "get latest progressive condition"
+- name: "Get latest progressive condition"
   vars:
     query: "result.status.conditions[?type=='Progressing'].{status: status, lastTransitionTime: lastTransitionTime}"
     progressing_statuses: "{{nl_cr|json_query(query)}}"
@@ -42,7 +42,7 @@
     - type: Progressing
       status: "True"
       reason: "deploying"
-      message: "deploying node-labeller"
+      message: "Deploying node-labeller."
       lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
 
 - name: Unset progressing condition
@@ -56,16 +56,16 @@
     - type: Progressing
       status: "False"
       reason: "deploying"
-      message: "node-labeller has successfully progressed."
+      message: "Node-labeller has successfully progressed."
       lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
 
-- name: "get node-labeller-cr"
+- name: "Get node-labeller-cr"
   k8s:
     state: present
     definition: "{{ lookup('k8s', kind='KubevirtNodeLabellerBundle', namespace=meta.namespace, resource_name='kubevirt-node-labeller-bundle') | from_yaml }}"
   register: nl_cr
 
-- name: "get latest available condition"
+- name: "Get latest available condition"
   vars:
     query: "result.status.conditions[?type=='Available'].{status: status, lastTransitionTime: lastTransitionTime}"
     available_statuses: "{{nl_cr|json_query(query)}}"
@@ -83,7 +83,7 @@
     - type: Available
       status: "True"
       reason: "running"
-      message: "node-labeller has required number of pods"
+      message: "Node-labeller has required number of pods."
       lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
 
 - name: Unset available condition
@@ -96,6 +96,56 @@
     conditions:
     - type: Available
       status: "False"
-      reason: "running"
-      message: "node-labeller hasn't got required number of pods"
+      reason: "failed"
+      message: "Node-labeller hasn't got required number of pods."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+- name: "Get node-labeller-cr"
+  k8s:
+    state: present
+    definition: "{{ lookup('k8s', kind='KubevirtNodeLabellerBundle', namespace=meta.namespace, resource_name='kubevirt-node-labeller-bundle') | from_yaml }}"
+  register: nl_cr
+
+- name: "Get any available condition"
+  vars:
+    query: "result.status.conditions[?type=='Available'].{status: status, lastTransitionTime: lastTransitionTime}"
+    available_statuses: "{{nl_cr|json_query(query)}}"
+  set_fact:
+    has_available_status: "{{false if available_statuses|length == 0 else true}}"
+
+# degraded condition will be set only if, nl was sometime available (it doesn't matter if condition was True or False), 
+# but now doesn't have enough pods
+- name: Set degraded condition
+  when: has_available_status and (nl_status.result.status.currentNumberScheduled != nl_status.result.status.numberReady)
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtNodeLabellerBundle
+    name: kubevirt-node-labeller-bundle
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Degraded
+      status: "True"
+      reason: "degraded"
+      message: "Node-labeller is degraded."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+- name: "Get latest degraded condition"
+  vars:
+    query: "result.status.conditions[?type=='Degraded'].{status: status, lastTransitionTime: lastTransitionTime}"
+    degraded_statuses: "{{nl_cr|json_query(query)}}"
+  set_fact:
+    last_degraded_status: "{{false if degraded_statuses|length == 0 else degraded_statuses|sort(attribute='lastTransitionTime')|reverse|map(attribute='status')|first}}"
+
+- name: Unset degraded condition
+  when: last_degraded_status and (nl_status.result.status.currentNumberScheduled == nl_status.result.status.numberReady)
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtNodeLabellerBundle
+    name: kubevirt-node-labeller-bundle
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Degraded
+      status: "False"
+      reason: "degraded"
+      message: "Node-labeller has required number of pods."
       lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
