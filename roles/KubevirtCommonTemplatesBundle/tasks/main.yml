@@ -1,9 +1,150 @@
 ---
 # tasks file for KubevirtCommonTemplatesBundle
+- name: "Get all templates"
+  set_fact:
+    deployed_templates_before: "{{ lookup('k8s', api_version='template.openshift.io/v1', kind='template') }}"
+
 - name: Install VM templates
   k8s:
     state: present
     namespace: "{{ meta.namespace }}"
     definition: "{{ item | from_yaml }}"
   with_items: "{{ lookup('file', 'common-templates-'+ version +'.yaml').split('\n---\n') | select('search', '(^|\n)[^#]') |list }}"
+  register: ct_status
 
+- name: "Get all templates"
+  set_fact:
+    deployed_templates_after: "{{ lookup('k8s', api_version=ct_status.results[0].result.apiVersion, kind='template') }}"
+
+- name: "Get common-templates-cr"
+  k8s:
+    state: present
+    definition: "{{ lookup('k8s', kind='KubevirtCommonTemplatesBundle', namespace=meta.namespace, resource_name='kubevirt-common-template-bundle') | from_yaml }}"
+  register: ct_cr
+
+- name: "Get latest progressive condition"
+  vars:
+    query: "result.status.conditions[?type=='Progressing'].{status: status, lastTransitionTime: lastTransitionTime}"
+    progressing_statuses: "{{ct_cr|json_query(query)}}"
+  set_fact:
+    last_progressing_status: "{{false if progressing_statuses|length == 0 else progressing_statuses|sort(attribute='lastTransitionTime')|reverse|map(attribute='status')|first}}"
+
+- name: Set progressing condition
+  when: (not last_progressing_status) and (deployed_templates_before|length != deployed_templates_after|length)
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtCommonTemplatesBundle
+    name: kubevirt-common-template-bundle
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Progressing
+      status: "True"
+      reason: "deploying"
+      message: "Deploying templates."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+- name: Unset progressing condition
+  when: last_progressing_status and (deployed_templates_before|length == deployed_templates_after|length)
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtCommonTemplatesBundle
+    name: kubevirt-common-template-bundle
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Progressing
+      status: "False"
+      reason: "deploying"
+      message: "Common templates deployed."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+- name: "Get common-templates-cr"
+  k8s:
+    state: present
+    definition: "{{ lookup('k8s', kind='KubevirtCommonTemplatesBundle', namespace=meta.namespace, resource_name='kubevirt-common-template-bundle') | from_yaml }}"
+  register: ct_cr
+
+- name: "Get latest available condition"
+  vars:
+    query: "result.status.conditions[?type=='Available'].{status: status, lastTransitionTime: lastTransitionTime}"
+    available_statuses: "{{ct_cr|json_query(query)}}"
+  set_fact:
+    last_available_status: "{{false if available_statuses|length == 0 else available_statuses|sort(attribute='lastTransitionTime')|reverse|map(attribute='status')|first}}"
+
+- name: Set available condition
+  when: (not last_available_status) and (deployed_templates_before|length == deployed_templates_after|length)
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtCommonTemplatesBundle
+    name: kubevirt-common-template-bundle
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Available
+      status: "True"
+      reason: "deployed"
+      message: "Common templates deployed."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+- name: Unset available condition
+  when: last_available_status and (deployed_templates_before|length != deployed_templates_after|length)
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtCommonTemplatesBundle
+    name: kubevirt-common-template-bundle
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Available
+      status: "False"
+      reason: "deployed"
+      message: "Common templates are missing some templates."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+
+- name: "Get common-templates-cr"
+  k8s:
+    state: present
+    definition: "{{ lookup('k8s', kind='KubevirtCommonTemplatesBundle', namespace=meta.namespace, resource_name='kubevirt-common-template-bundle') | from_yaml }}"
+  register: ct_cr
+
+- name: "Get any available condition"
+  vars:
+    query: "result.status.conditions[?type=='Available'].{status: status, lastTransitionTime: lastTransitionTime}"
+    available_statuses: "{{ct_cr|json_query(query)}}"
+  set_fact:
+    has_available_status: "{{false if available_statuses|length == 0 else true}}"
+
+# degraded condition will be set only if, nl was sometime available (it doesn't matter if condition was True or False), 
+# but now doesn't have enough pods
+- name: Set degraded condition
+  when: has_available_status and (deployed_templates_before|length != deployed_templates_after|length)
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtCommonTemplatesBundle
+    name: kubevirt-common-template-bundle
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Degraded
+      status: "True"
+      reason: "degraded"
+      message: "Common templates are degraded."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+
+- name: "Get latest degraded condition"
+  vars:
+    query: "result.status.conditions[?type=='Degraded'].{status: status, lastTransitionTime: lastTransitionTime}"
+    degraded_statuses: "{{ct_cr|json_query(query)}}"
+  set_fact:
+    last_degraded_status: "{{false if degraded_statuses|length == 0 else degraded_statuses|sort(attribute='lastTransitionTime')|reverse|map(attribute='status')|first}}"
+
+- name: Set degraded condition
+  when: last_degraded_status and (deployed_templates_before|length == deployed_templates_after|length)
+  k8s_status:
+    api_version: kubevirt.io/v1
+    kind: KubevirtCommonTemplatesBundle
+    name: kubevirt-common-template-bundle
+    namespace: "{{ meta.namespace }}"
+    conditions:
+    - type: Degraded
+      status: "False"
+      reason: "degraded"
+      message: "Common templates deployed."
+      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
