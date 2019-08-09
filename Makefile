@@ -39,7 +39,7 @@ manifests-cleanup:
 	rm -rf _out
 
 manifests: csv-generator manifests-cleanup manifests-prepare operator-sdk
-	./build/make-manifests.sh ${IMAGE_TAG}
+	./hack/make-manifests.sh ${IMAGE_TAG}
 	./hack/release-manifests.sh ${IMAGE_TAG}
 
 release: manifests container-build container-release
