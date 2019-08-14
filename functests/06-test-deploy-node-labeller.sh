@@ -8,23 +8,22 @@ source ${SCRIPTPATH}/testlib.sh
 RET=1
 TEST_NS="${KV_NAMESPACE}"
 
-exit 0
-
-oc create -n ${TEST_NS} -f "${SCRIPTPATH}/node-labeller-unversioned-cr.yaml" || exit 2
+oc apply -n ${TEST_NS} -f "${SCRIPTPATH}/node-labeller-unversioned-cr.yaml" || exit 2
 # TODO: SSP-operator needs to improve its feedback mechanism
 # fetching node-labeller images may take a while
 
 wait_node_labeller_running ${TEST_NS} 5 60
 
 for idx in $( seq 1 30); do
-	ANNOTATIONS=$( oc get nodes -o json | jq '.items[0].metadata.annotations | keys' )
-	# any random CPU model annotation that *must* be present if everything's OK
-	HAS_CPU=$( echo ${ANNOTATIONS} | jq 'map(endswith("cpu-model-kvm64")) | any' )
-	(( ${V} >= 1 )) && echo "node_labeller: HAS_CPU=${HAS_CPU}"
-	# any random KVM info annotation that *must* be present if everything's OK
-	HAS_KVM=$( echo ${ANNOTATIONS} | jq 'map(endswith("kvm-info-cap-hyperv-base")) | any' )
-	(( ${V} >= 1 )) && echo "node_labeller: HAS_KVM=${HAS_CPU}"
-	if [ "${HAS_CPU}" == "true" ] && [ "${HAS_KVM}" == "true" ]; then
+	echo "Waiting for node-labeller to label nodes"
+
+	number_of_cpu=$( oc get nodes -o json | jq '.items[0].metadata.labels | keys | map(select(startswith("feature.node.kubernetes.io/cpu-model-"))) | length')
+	number_of_cpu_features=$( oc get nodes -o json | jq '.items[0].metadata.labels | keys | map(select(startswith("feature.node.kubernetes.io/cpu-feature-"))) | length')
+
+	echo "Number of CPU labels: $number_of_cpu"
+	echo "Number of CPU features: $number_of_cpu_features"
+
+	if [ $number_of_cpu -gt 0 ] && [ $number_of_cpu_features -gt 0 ]; then
 		RET=0
 		break
 	fi

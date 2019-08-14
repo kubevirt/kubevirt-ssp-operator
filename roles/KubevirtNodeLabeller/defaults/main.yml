@@ -1,6 +1,7 @@
 ---
 # defaults file for KubevirtNodeLabeller
 wait: true
+use_kvm: true
 
 kubevirt_node_labeller_image: "node-labeller"
 kubevirt_node_labeller_tag: "latest"
