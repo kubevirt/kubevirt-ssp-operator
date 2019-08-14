@@ -25,23 +25,9 @@
   set_fact:
     tv_status: "{{ lookup('k8s', kind=tv.results[3].result.kind, namespace=tv.results[3].result.metadata.namespace, resource_name=tv.results[3].result.metadata.name) | from_yaml }}"
 
-- name: "Get template-validator-cr"
-  k8s:
-    state: present
-    definition: "{{ lookup('k8s', kind='KubevirtTemplateValidator', namespace=meta.namespace, resource_name='kubevirt-template-validator') | from_yaml }}"
-  register: tv_cr
-
-- name: "Get latest progressive condition"
-  vars:
-    query: "result.status.conditions[?type=='Progressing'].{status: status, lastTransitionTime: lastTransitionTime}"
-    progressing_statuses: "{{tv_cr|json_query(query)}}"
-  set_fact:
-    tv_last_progressing_status: "{{false if progressing_statuses|length == 0 else progressing_statuses|sort(attribute='lastTransitionTime')|reverse|map(attribute='status')|first}}"
-
 # defaults in this ansible code are here because at the start of deployment, there is a chance 
 # there will be no attributes like availableReplicas and readyReplicas
 - name: Set progressing condition
-  when: (not tv_last_progressing_status) and (tv_status.status.availableReplicas|default(0) != tv_status.status.readyReplicas|default(2))
   k8s_status:
     api_version: kubevirt.io/v1
     kind: KubevirtTemplateValidator
@@ -49,40 +35,23 @@
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: Progressing
-      status: "True"
-      reason: "deploying"
+      status: "{{ 'True' if tv_status.status.availableReplicas|default(0) != tv_status.status.readyReplicas|default(2) else 'False' }}"
+      reason: "progressing"
       message: "Template-validator is progressing."
-      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
 
-- name: Unset progressing condition
-  when: tv_last_progressing_status and (tv_status.status.availableReplicas|default(0) == tv_status.status.readyReplicas|default(2))
-  k8s_status:
-    api_version: kubevirt.io/v1
-    kind: KubevirtTemplateValidator
-    name: kubevirt-template-validator
-    namespace: "{{ meta.namespace }}"
-    conditions:
-    - type: Progressing
-      status: "False"
-      reason: "deploying"
-      message: "Template-validator has successfully progressed."
-      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+- name:  "Wait for the template-validator to start"
+  k8s_facts:
+    api_version: v1
+    kind: "{{ tv_status.kind }}"
+    name: "{{ tv_status.metadata.name }}"
+    namespace: "{{ tv_status.metadata.namespace }}"
+  register: tv_status
+  delay: 10
+  retries: 300
+  until: tv_status.resources[0].status.availableReplicas|default(0) == tv_status.resources[0].status.readyReplicas|default(2) | default(false)
 
-- name: "Get template-validator-cr"
-  k8s:
-    state: present
-    definition: "{{ lookup('k8s', kind='KubevirtTemplateValidator', namespace=meta.namespace, resource_name='kubevirt-template-validator') | from_yaml }}"
-  register: tv_cr
-
-- name: "Get latest available condition"
-  vars:
-    query: "result.status.conditions[?type=='Available'].{status: status, lastTransitionTime: lastTransitionTime}"
-    available_statuses: "{{tv_cr|json_query(query)}}"
-  set_fact:
-    tv_last_available_status: "{{false if available_statuses|length == 0 else available_statuses|sort(attribute='lastTransitionTime')|reverse|map(attribute='status')|first}}"
 
 - name: Set available condition
-  when: (not tv_last_available_status) and (tv_status.status.availableReplicas|default(0) == tv_status.status.readyReplicas|default(2))
   k8s_status:
     api_version: kubevirt.io/v1
     kind: KubevirtTemplateValidator
@@ -90,42 +59,11 @@
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: Available
-      status: "True"
-      reason: "running"
-      message: "Template-validator is running."
-      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
+      status: "{{ 'True' if tv_status.resources[0].status.availableReplicas|default(0) == tv_status.resources[0].status.readyReplicas|default(2) else 'False' }}"
+      reason: "available"
+      message: "Template-validator is available."
 
-- name: Unset available condition
-  when: tv_last_available_status and (tv_status.status.availableReplicas|default(0) != tv_status.status.readyReplicas|default(2))
-  k8s_status:
-    api_version: kubevirt.io/v1
-    kind: KubevirtTemplateValidator
-    name: kubevirt-template-validator
-    namespace: "{{ meta.namespace }}"
-    conditions:
-    - type: Available
-      status: "False"
-      reason: "running"
-      message: "Template-validator hasn't got required number of pods."
-      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
-
-- name: "Get template-validator-cr"
-  k8s:
-    state: present
-    definition: "{{ lookup('k8s', kind='KubevirtTemplateValidator', namespace=meta.namespace, resource_name='kubevirt-template-validator') | from_yaml }}"
-  register: tv_cr
-
-- name: "Get any available condition"
-  vars:
-    query: "result.status.conditions[?type=='Available'].{status: status, lastTransitionTime: lastTransitionTime}"
-    available_statuses: "{{tv_cr|json_query(query)}}"
-  set_fact:
-    has_available_status: "{{false if available_statuses|length == 0 else true}}"
-
-# degraded condition will be set only if, tv was sometime available (it doesn't matter if condition was True or False), 
-# but now doesn't have enough pods
 - name: Set degraded condition
-  when: has_available_status and (tv_status.status.availableReplicas|default(0) != tv_status.status.readyReplicas|default(2))
   k8s_status:
     api_version: kubevirt.io/v1
     kind: KubevirtTemplateValidator
@@ -133,28 +71,7 @@
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: Degraded
-      status: "True"
+      status: "{{ 'True' if tv_status.resources[0].status.availableReplicas|default(0) != tv_status.resources[0].status.readyReplicas|default(2) else 'False' }}"
       reason: "degraded"
       message: "Template-validator is degraded."
-      lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
-
-- name: "Get latest degraded condition"
-  vars:
-    query: "result.status.conditions[?type=='Degraded'].{status: status, lastTransitionTime: lastTransitionTime}"
-    degraded_statuses: "{{tv_cr|json_query(query)}}"
-  set_fact:
-    last_degraded_status: "{{false if degraded_statuses|length == 0 else degraded_statuses|sort(attribute='lastTransitionTime')|reverse|map(attribute='status')|first}}"
-
-- name: Unset degraded condition
-  when: last_degraded_status and (tv_status.status.availableReplicas|default(0) == tv_status.status.readyReplicas|default(2))
-  k8s_status:
-    api_version: kubevirt.io/v1
-    kind: KubevirtTemplateValidator
-    name: kubevirt-template-validator
-    namespace: "{{ meta.namespace }}"
-    conditions:
-    - type: Degraded
-      status: "False"
-      reason: "degraded"
-      message: "Template-validator has required number of pods."
       lastTransitionTime: "{{ ansible_date_time.iso8601 }}"
