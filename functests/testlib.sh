@@ -72,3 +72,37 @@ wait_node_labeller_running() {
 		is_node_labeller_running $1 && break
 	done
 }
+
+wait_node_labeller_deleted() {
+	NS="--all-namespaces"
+	if [ -n "$1" ]; then
+		NS="-n ${1}"
+	fi
+	local wait_secs=${2:-2}
+	local max_tries=${3:-15}
+	for num in $( seq 1 ${max_tries} ); do
+		if [ "$(oc get pods ${NS} | grep "kubevirt-node-labeller.*" | wc -l)" -eq 0 ]; then 
+		  return 0
+		fi
+	done
+}
+
+wait_for_condition() {
+	NS="--all-namespaces"
+	if [ -n "$1" ]; then
+		NS="-n ${1}"
+	fi
+	local wait_secs=${2:-2}
+	local max_tries=${3:-15}
+	local kind=$4
+	local type=$5
+	local status=$6
+	for num in $( seq 1 ${max_tries} ); do
+		(( ${V} >= 1 )) && echo "waiting for $type condition availability: ${num}/${max_tries}"
+		if [ $(oc get ${kind} -o json ${NS} | jq '.items[0].status.conditions[] | select((.type=="'${type}'") and (.status="'${status}'"))' | wc -l) -gt 0 ]; then
+		  exit 0
+		fi
+		sleep ${wait_secs}s
+	done
+	exit 1
+}
