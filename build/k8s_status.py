@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 
 #################################################################################
-# This file is here, because original k8s_status contains bug, which prevents ssp
-# operator to properly sets CR conditions. PR with fix is already posted 
+# This file is here, because original k8s_status contains bugs, which prevents ssp
+# operator to properly sets CR conditions. PRs with fixes are already posted 
 # https://github.com/operator-framework/operator-sdk/pull/1820
-# We have to wait until it will be merged and new version with fix released.
+# https://github.com/operator-framework/operator-sdk/pull/1845
+# We have to wait until they will be merged and new version with fixes released.
 #################################################################################
 
 from __future__ import absolute_import, division, print_function
@@ -302,8 +303,36 @@ class KubernetesAnsibleStatusModule(KubernetesAnsibleModule):
             'changed': True
         }
 
+    def clean_last_transition_time(self, status):
+        '''clean_last_transition_time removes lastTransitionTime attribute from each status.conditions[*] (from old conditions). 
+        It returns copy of status with updated conditions. Copy of status is returned, because if new conditions 
+        are subset of old conditions, then module would return conditions without lastTransitionTime. Updated status 
+        should be used only for check in object_contains function, not for next updates, because otherwise it can create 
+        a mess with lastTransitionTime attribute.
+
+        If new conditions don't contain lastTransitionTime and they are different from old conditions 
+        (e.g. they have different status), conditions are updated and kubernetes should sets lastTransitionTime 
+        field during update. If new conditions contain lastTransitionTime, then conditions are updated.
+       
+        Parameters:
+          status (dict): dictionary, which contains conditions list
+        
+        Returns:
+          dict: copy of status with updated conditions
+        '''
+        updated_old_status = copy.deepcopy(status)
+
+        for item in updated_old_status.get('conditions', []):
+            if 'lastTransitionTime' in item:
+                del item['lastTransitionTime']
+
+        return updated_old_status
+
     def patch(self, resource, instance):
-        if self.object_contains(instance['status'], self.status):
+        # Remove lastTransitionTime from status.conditions[*] and use updated_old_status only for check in object_contains function.
+        # Updates of conditions should be done only with original data not with updated_old_status.
+        updated_old_status = self.clean_last_transition_time(instance['status'])
+        if self.object_contains(updated_old_status, self.status):
             return {'result': instance, 'changed': False}
         instance['status'] = self.merge_status(instance['status'], self.status)
         try:
