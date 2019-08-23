@@ -43,7 +43,7 @@ for MF in deploy/service_account.yaml deploy/role.yaml deploy/role_binding.yaml 
 done
 ) > ${CLUSTER_VERSIONED_DIR}/kubevirt-ssp-operator.yaml
 
-${BASEPATH}/..build/csv-generator.sh --csv-version=${VERSION} --namespace=placeholder --operator-image=REPLACE_IMAGE > ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.${TAG}.clusterserviceversion.yaml
+${BASEPATH}/../build/csv-generator.sh --csv-version=${VERSION} --namespace=placeholder --operator-image=REPLACE_IMAGE > ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.${TAG}.clusterserviceversion.yaml
 
 # caution: operator-courier (as in 5a4852c) wants *one* entity per yaml file (e.g. it does NOT use safe_load_all)
 for CRD in $( ls deploy/crds/kubevirt_*crd.yaml ); do
