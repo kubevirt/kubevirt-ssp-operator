@@ -197,6 +197,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:e14e663d07e5df1829de8d67e87be6dcc48b3148829489e5bdaf698da98481a1"
+  name = "github.com/openshift/custom-resource-status"
+  packages = ["conditions/v1"]
+  pruneopts = "NT"
+  revision = "e62f2f3b79f33792b153e767811f420c1d457b31"
+
+[[projects]]
+  branch = "master"
   digest = "1:ca71dc35a821dd1d5cef16dab21648793f0c675297bfda31eaa0175d0eafd26f"
   name = "github.com/petar/GoLLRB"
   packages = ["llrb"]
@@ -526,6 +534,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/openshift/custom-resource-status/conditions/v1",
     "k8s.io/apimachinery/pkg/api/errors",
     "k8s.io/apimachinery/pkg/apis/meta/v1",
     "k8s.io/apimachinery/pkg/labels",
