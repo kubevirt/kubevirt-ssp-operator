@@ -5,9 +5,40 @@
 package lsp
 
 import (
+	"context"
+
 	"golang.org/x/tools/internal/lsp/protocol"
+	"golang.org/x/tools/internal/lsp/source"
 	"golang.org/x/tools/internal/span"
+	"golang.org/x/tools/internal/telemetry/log"
+	"golang.org/x/tools/internal/telemetry/tag"
 )
+
+func (s *Server) documentHighlight(ctx context.Context, params *protocol.TextDocumentPositionParams) ([]protocol.DocumentHighlight, error) {
+	uri := span.NewURI(params.TextDocument.URI)
+	view := s.session.ViewOf(uri)
+	f, err := getGoFile(ctx, view, uri)
+	if err != nil {
+		return nil, err
+	}
+	m, err := getMapper(ctx, f)
+	if err != nil {
+		return nil, err
+	}
+	spn, err := m.PointSpan(params.Position)
+	if err != nil {
+		return nil, err
+	}
+	rng, err := spn.Range(m.Converter)
+	if err != nil {
+		return nil, err
+	}
+	spans, err := source.Highlight(ctx, f, rng.Start)
+	if err != nil {
+		log.Error(ctx, "no highlight", err, tag.Of("Span", spn))
+	}
+	return toProtocolHighlight(m, spans), nil
+}
 
 func toProtocolHighlight(m *protocol.ColumnMapper, spans []span.Span) []protocol.DocumentHighlight {
 	result := make([]protocol.DocumentHighlight, 0, len(spans))

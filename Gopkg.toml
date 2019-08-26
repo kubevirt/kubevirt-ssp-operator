@@ -30,6 +30,10 @@ required = [
   # revision for tag "kubernetes-1.11.2"
   revision = "103fd098999dc9c0c88536f5c9ad2e5da39373ae"
 
+[[override]]
+  name = "github.com/openshift/custom-resource-status"
+  branch = "master"
+
 [prune]
   go-tests = true
   non-go = true
