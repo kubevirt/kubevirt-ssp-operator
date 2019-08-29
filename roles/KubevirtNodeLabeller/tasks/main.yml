@@ -48,7 +48,7 @@
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: Available
-      status: "{{ 'True' if nl_status.resources[0].status.currentNumberScheduled == nl_status.resources[0].status.numberReady else 'False' }}"
+      status: "{{ 'True' if nl_status.resources[0].status.currentNumberScheduled > 0 and nl_status.resources[0].status.currentNumberScheduled == nl_status.resources[0].status.numberReady else 'False' }}"
       reason: "available"
       message: "Node-labeller is available."
 
@@ -60,6 +60,6 @@
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: Degraded
-      status: "{{ 'True' if nl_status.resources[0].status.currentNumberScheduled != nl_status.resources[0].status.numberReady else 'False' }}"
+      status: "{{ 'True' if nl_status.resources[0].status.currentNumberScheduled == 0 or nl_status.resources[0].status.currentNumberScheduled != nl_status.resources[0].status.numberReady else 'False' }}"
       reason: "degraded"
       message: "Node-labeller is degraded."
