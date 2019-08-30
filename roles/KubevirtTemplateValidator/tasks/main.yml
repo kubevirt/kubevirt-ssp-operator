@@ -31,7 +31,7 @@
   k8s_status:
     api_version: kubevirt.io/v1
     kind: KubevirtTemplateValidator
-    name: kubevirt-template-validator
+    name: "{{ meta.name }}"
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: Progressing
@@ -55,7 +55,7 @@
   k8s_status:
     api_version: kubevirt.io/v1
     kind: KubevirtTemplateValidator
-    name: kubevirt-template-validator
+    name: "{{ meta.name }}"
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: Available
@@ -67,7 +67,7 @@
   k8s_status:
     api_version: kubevirt.io/v1
     kind: KubevirtTemplateValidator
-    name: kubevirt-template-validator
+    name: "{{ meta.name }}"
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: Degraded

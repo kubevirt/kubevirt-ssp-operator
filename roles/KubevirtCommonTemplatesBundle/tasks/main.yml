@@ -20,7 +20,7 @@
   k8s_status:
     api_version: kubevirt.io/v1
     kind: KubevirtCommonTemplatesBundle
-    name: kubevirt-common-template-bundle
+    name: "{{ meta.name }}"
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: Progressing
@@ -32,7 +32,7 @@
   k8s_status:
     api_version: kubevirt.io/v1
     kind: KubevirtCommonTemplatesBundle
-    name: kubevirt-common-template-bundle
+    name: "{{ meta.name }}"
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: Available
