@@ -2,7 +2,7 @@
 # tasks file for KubevirtCommonTemplatesBundle
 - name: "Get all templates"
   set_fact:
-    deployed_templates_before: "{{ lookup('k8s', api_version='template.openshift.io/v1', kind='template') }}"
+    deployed_templates_before: "{{ lookup('k8s', api_version='template.openshift.io/v1', kind='template')|length }}"
 
 - name: Install VM templates
   k8s:
@@ -14,7 +14,7 @@
 
 - name: "Get all templates"
   set_fact:
-    deployed_templates_after: "{{ lookup('k8s', api_version=ct_status.results[0].result.apiVersion, kind='template') }}"
+    deployed_templates_after: "{{ lookup('k8s', api_version=ct_status.results[0].result.apiVersion, kind='template')|length }}"
 
 - name: Set progressing condition
   k8s_status:
@@ -24,7 +24,7 @@
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: Progressing
-      status: "{{ 'True' if deployed_templates_before|length != deployed_templates_after|length else 'False' }}"
+      status: "{{ 'True' if deployed_templates_before < deployed_templates_after else 'False' }}"
       reason: "progressing"
       message: "Templates progressing."
 
@@ -36,6 +36,6 @@
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: Available
-      status: "{{ 'True' if deployed_templates_before|length == deployed_templates_after|length else 'False' }}"
+      status: "{{ 'True' if deployed_templates_before == deployed_templates_after else 'False' }}"
       reason: "available"
       message: "Common templates available."
