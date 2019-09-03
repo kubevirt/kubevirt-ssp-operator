@@ -72,7 +72,7 @@ type VersionSpec struct {
 type KubevirtCommonTemplatesBundleList struct {
 	metav1.TypeMeta `json:",inline"`
 	// +optional
-	metav1.ListMeta `son:"metadata,omitempty"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 
 	Items []KubevirtCommonTemplatesBundle `json:"items"`
 }
@@ -81,7 +81,7 @@ type KubevirtCommonTemplatesBundleList struct {
 type KubevirtNodeLabellerBundleList struct {
 	metav1.TypeMeta `json:",inline"`
 	// +optional
-	metav1.ListMeta `son:"metadata,omitempty"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 
 	Items []KubevirtNodeLabellerBundle `json:"items"`
 }
@@ -90,7 +90,7 @@ type KubevirtNodeLabellerBundleList struct {
 type KubevirtTemplateValidatorList struct {
 	metav1.TypeMeta `json:",inline"`
 	// +optional
-	metav1.ListMeta `son:"metadata,omitempty"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 
 	Items []KubevirtTemplateValidator `json:"items"`
 }
@@ -99,7 +99,7 @@ type KubevirtTemplateValidatorList struct {
 type KubevirtMetricsAggregationList struct {
 	metav1.TypeMeta `json:",inline"`
 	// +optional
-	metav1.ListMeta `son:"metadata,omitempty"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 
 	Items []KubevirtMetricsAggregation `json:"items"`
 }
