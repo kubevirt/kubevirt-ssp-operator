@@ -39,8 +39,8 @@ type KubevirtNodeLabellerBundle struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   VersionSpec  `json:"spec,omitempty"`
-	Status ConfigStatus `json:"status,omitempty"`
+	Spec   ComponentSpec `json:"spec,omitempty"`
+	Status ConfigStatus  `json:"status,omitempty"`
 }
 
 // +genclient
@@ -63,9 +63,14 @@ type KubevirtMetricsAggregation struct {
 	Status ConfigStatus `json:"status,omitempty"`
 }
 
-// custom spec
+// minimal spec: only the version
 type VersionSpec struct {
 	Version string `json:"version,omitempty"`
+}
+
+type ComponentSpec struct {
+	Version string `json:"version,omitempty"`
+	UseKVM  bool   `json:"use_kvm,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
