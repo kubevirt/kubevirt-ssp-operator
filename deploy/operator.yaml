@@ -25,6 +25,9 @@ spec:
           - containerPort: 60000
             name: metrics
           imagePullPolicy: Always
+          resources:
+            requests:
+              ephemeral-storage: "1Gi"
           env:
             - name: POD_NAME
               valueFrom:
