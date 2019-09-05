@@ -18,6 +18,8 @@ spec:
         name: kubevirt-ssp-operator
     spec:
       serviceAccountName: kubevirt-ssp-operator
+      strategy:
+        type: Recreate
       containers:
         - name: kubevirt-ssp-operator
           image: REPLACE_IMAGE
