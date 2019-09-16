@@ -2,21 +2,12 @@
 # role values. This is useful for "downstream"
 # packaging and opinionated releases.
 #
-# If in doubt, leave the file empty.
-#
-# Example:
-#
-# validator_namespace: myproject
-# validator_image: registry.example.com/mine/kubevirt-template-validator
-# validator_tag: v0.6.1
-# templates_version: v0.6.2
+# this file should contain only the tags (~= versions) of the containers to install.
+# every other package/role specific value should sit in `roles/*/defaults/main.yml`.
 
----
-#node-labeller
 kubevirt_node_labeller_tag: "{{ lookup('env','NODE_LABELLER_TAG')| default('v0.1.1', true) }}"
 kvm_info_nfd_plugin_tag: "{{ lookup('env','KVM_INFO_TAG')| default('v0.5.8', true) }}"
 kubevirt_cpu_nfd_plugin_tag: "{{ lookup('env','CPU_PLUGIN_TAG')| default('v0.1.1', true) }}"
-virt_launcher_tag: "{{ lookup('env','VIRT_LAUNCHER_TAG')| default('v0.19.0', true) }}"
-
-#validator
+virt_launcher_tag: "{{ lookup('env','VIRT_LAUNCHER_TAG')| default('v0.21.0', true) }}"
 validator_tag: "{{ lookup('env','VALIDATOR_TAG')| default('v0.6.2', true) }}"
+templates_version: v0.7.0

@@ -2,5 +2,3 @@
 # defaults file for KubevirtTemplateValidator
 wait: true
 validator_image: kubevirt-template-validator
-# this comes from the CR, we must diverge from validator_$SOMETHING standard naming
-version: "{{ validator_tag |default('v0.6.2') }}"
