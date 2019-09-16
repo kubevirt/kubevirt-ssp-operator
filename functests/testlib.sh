@@ -99,10 +99,30 @@ wait_for_condition() {
 	local status=$6
 	for num in $( seq 1 ${max_tries} ); do
 		(( ${V} >= 1 )) && echo "waiting for $type condition availability: ${num}/${max_tries}"
-		if [ $(oc get ${kind} -o json ${NS} | jq '.items[0].status.conditions[] | select((.type=="'${type}'") and (.status="'${status}'"))' | wc -l) -gt 0 ]; then
-		  exit 0
+		if [ $(oc get ${kind} -o json ${NS} | jq '.items[0].status.conditions[] // [] | select((.type=="'${type}'") and (.status="'${status}'"))' | wc -l) -gt 0 ]; then
+		  return 0
 		fi
 		sleep ${wait_secs}s
 	done
-	exit 1
+	return 1
+}
+
+wait_for_deployment_ready() {
+	NS="--all-namespaces"
+	if [ -n "$1" ]; then
+		NS="-n ${1}"
+	fi
+	local wait_secs=${2:-2}
+	local max_tries=${3:-15}
+	local kind=$4
+	local type=$5
+	local reason=$6
+	for num in $( seq 1 ${max_tries} ); do
+		(( ${V} >= 1 )) && echo "waiting for deployment to be ready: ${num}/${max_tries}"
+		if [ $(oc get ${kind} -o json ${NS} | jq '.items[0].status.conditions[] // [] | select((.type=="'${type}'") and (.reason="'${reason}'"))' | wc -l) -gt 0 ]; then
+		  return 0
+		fi
+		sleep ${wait_secs}s
+	done
+	return 1
 }
