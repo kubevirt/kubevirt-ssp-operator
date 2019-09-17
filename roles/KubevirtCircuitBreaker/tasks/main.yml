@@ -1,0 +1,14 @@
+---
+# tasks file for KubevirtCircuitBreaker
+# 
+#
+- name: Extract the operator POD info
+  set_fact:
+    operator_pod: "{{ lookup('k8s', api_version='v1', kind='Pod', label_selector='name=kubevirt-ssp-operator') | from_yaml }}"
+- name: Extract the disable info
+  set_fact:
+    current_breaker: "{{ operator_pod['metadata'].get('annotations', {})['kubevirt.io/emergency-disable'] | default('[]', true) | from_json }}"
+    current_cr: "{{ meta.namespace }}/{{ meta.name }}"
+- name: Emergency disable check
+  meta: end_play
+  when: current_cr in current_breaker
