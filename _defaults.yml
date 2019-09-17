@@ -9,6 +9,13 @@
 #
 # A notable exception are common templates, on which we use a two-steps approach to allow the
 # users to easily override the installed version. Templates need to be special.
+#
+# When possible, the 'version' value in the CRs should take precedence over the defaults value.
+# The authoritative sources are, in decreasing priority order
+# 1. spec.version in the CRs (set by users)
+# 2. the *_TAG environment veriable (set by HCO)
+# 3. the builtin defaults (set by devs/operator)
+# Any version, or default, should not be set more than once in a place in the source tree.
 
 kubevirt_node_labeller_tag: "{{ lookup('env','NODE_LABELLER_TAG')| default('v0.1.1', true) }}"
 kvm_info_nfd_plugin_tag: "{{ lookup('env','KVM_INFO_TAG')| default('v0.5.8', true) }}"

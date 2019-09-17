@@ -1,5 +1,8 @@
 ---
 # tasks file for KubevirtTemplateValidator
+- name: Figure out validator version
+  set_fact:
+    validator_version: "{{ version | default(validator_tag, true) }}"
 - name: Set template:view role
   k8s:
     state: present
