@@ -2,3 +2,4 @@
 # defaults file for KubevirtTemplateValidator
 wait: true
 validator_image: kubevirt-template-validator
+validator_version: "{{ version | default(validator_tag, true) }}"
