@@ -2,7 +2,9 @@
 # role values. This is useful for "downstream"
 # packaging and opinionated releases.
 #
-# this file should contain only the tags (~= versions) of the containers to install.
+# This file can be left empty to use the latest and greatest versions of all containers.
+# Or it can contain the tags (~= versions) of the containers to install if there is a known combination you want.
+# In case you really know what you are doing it is also possible to override the container names here.
 # every other package/role specific value should sit in `roles/*/defaults/main.yml`.
 
 kubevirt_node_labeller_tag: "{{ lookup('env','NODE_LABELLER_TAG')| default('v0.1.1', true) }}"
