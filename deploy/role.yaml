@@ -48,10 +48,12 @@ rules:
   - apps
   resources:
   - deployments
+  - deployments/finalizers
   - replicasets
   - daemonsets
   verbs:
   - create
+  - update
   - get
   - list
   - patch
