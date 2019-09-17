@@ -6,6 +6,9 @@
 # Or it can contain the tags (~= versions) of the containers to install if there is a known combination you want.
 # In case you really know what you are doing it is also possible to override the container names here.
 # every other package/role specific value should sit in `roles/*/defaults/main.yml`.
+#
+# A notable exception are common templates, on which we use a two-steps approach to allow the
+# users to easily override the installed version. Templates need to be special.
 
 kubevirt_node_labeller_tag: "{{ lookup('env','NODE_LABELLER_TAG')| default('v0.1.1', true) }}"
 kvm_info_nfd_plugin_tag: "{{ lookup('env','KVM_INFO_TAG')| default('v0.5.8', true) }}"
