@@ -1,4 +1,4 @@
 ---
 # defaults file for KubevirtCommonTemplatesBundle
-version: "{{ templates_version |default('v0.6.2') }}"
+version: "{{ templates_version |default('v0.7.0') }}"
 
