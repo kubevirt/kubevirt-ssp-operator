@@ -1,0 +1,11 @@
+---
+# tasks file for KubevirtCircuitBreaker
+- name: Extract the CR info
+  set_fact:
+    cr_info: "{{ lookup('k8s', api_version='v1', kind=cr_kind, namespace=meta.namespace, resource_name=meta.name) | from_yaml }}"
+- name: Extract the disable info
+  set_fact:
+    is_paused: "{{ cr_info['metadata'].get('annotations', {})['kubevirt.io/operator.paused'] | default('false', true) | from_json }}"
+- name: Emergency disable check
+  meta: end_play
+  when: is_paused
