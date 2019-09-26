@@ -2,6 +2,9 @@
   vars_files:
     - _defaults.yml
   roles:
+  - role: KubevirtCircuitBreaker
+    vars:
+    - cr_kind: KubevirtCommonTemplatesBundle
 # we want to prepare everything to pull containers from the same repo
 # as the operator, but we are not there just yet, so we disable the role
 # and we rely on backward compatible defaults.

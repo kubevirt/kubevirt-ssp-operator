@@ -3,4 +3,7 @@
   vars_files:
     - _defaults.yml
   roles:
+  - role: KubevirtCircuitBreaker
+    vars:
+    - cr_kind: KubevirtMetricsAggregation
   - KubevirtMetricsAggregation
