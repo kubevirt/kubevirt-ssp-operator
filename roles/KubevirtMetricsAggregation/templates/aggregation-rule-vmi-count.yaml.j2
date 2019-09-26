@@ -3,7 +3,7 @@ kind: PrometheusRule
 metadata:
   labels:
     prometheus: k8s
-    role: cnv-rules
+    role: alert-rules
   name: prometheus-k8s-rules-cnv
   namespace: "{{ meta.namespace }}"
 spec:
