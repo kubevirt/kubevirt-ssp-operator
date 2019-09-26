@@ -15,6 +15,9 @@
 # 1. spec.version in the CRs (set by users)
 # 2. the *_TAG environment veriable (set by HCO)
 # 3. the builtin defaults (set by devs/operator)
+# 4. the per-role defaults, which is the last-resort value. Use a low-maintenance, usually working,
+#    easy to spot value. 'latest' is a good value here - probably the only case where we should use it.
+#
 # Any version, or default, should not be set more than once in a place in the source tree.
 
 kubevirt_node_labeller_tag: "{{ lookup('env','NODE_LABELLER_TAG')| default('v0.1.1', true) }}"
