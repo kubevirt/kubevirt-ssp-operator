@@ -12,7 +12,7 @@ oc create -n ${TEST_NS} -f "${SCRIPTPATH}/aggregation-rules-unversioned-cr.yaml"
 # TODO: SSP-operator needs to improve its feedback mechanism
 sleep 21s
 for idx in $( seq 1 30); do
-	NUM=$(oc get prometheusrules -n ${TEST_NS} -l "role=cnv-rules" -o json | jq ".items | length")
+	NUM=$(oc get prometheusrules -n ${TEST_NS} -l "kubevirt.io=" -o json | jq ".items | length")
 	(( ${V} >= 1 )) && echo "prometheus rules found in ${TEST_NS}: ${NUM}"
 	if (( "${NUM}" > 0 )); then
 		(( ${V} >= 1 )) && echo "enough prometheus rules found in ${TEST_NS}"
