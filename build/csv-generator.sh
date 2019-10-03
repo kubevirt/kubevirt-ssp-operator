@@ -31,6 +31,7 @@ help_text() {
     echo "  --virt-launcher-tag: (OPTIONAL)"
     echo "  --node-labeller-tag: (OPTIONAL)"
     echo "  --cpu-plugin-tag:    (OPTIONAL)"
+    echo "  --image-name-prefix: (OPTIONAL)"
     echo "  --dump-crds:         (OPTIONAL) Dumps CRD manifests with the CSV to stdout"
 }
 
@@ -46,6 +47,7 @@ VALIDATOR_TAG=""
 VIRT_LAUNCHER_TAG=""
 NODE_LABELLER_TAG=""
 CPU_PLUGIN_TAG=""
+IMAGE_NAME_PREFIX=""
 DUMP_CRDS=""
 
 while (( "$#" )); do
@@ -81,6 +83,9 @@ while (( "$#" )); do
     --cpu-plugin-tag)
         CPU_PLUGIN_TAG=$VAL
         ;;
+    --image-name-prefix)
+        IMAGE_NAME_PREFIX=$VAL
+        ;;
     --dump-crds)
         DUMP_CRDS="true"
         ;;
@@ -114,6 +119,7 @@ replace_env_var "VALIDATOR_TAG" $VALIDATOR_TAG
 replace_env_var "VIRT_LAUNCHER_TAG" $VIRT_LAUNCHER_TAG
 replace_env_var "NODE_LABELLER_TAG" $NODE_LABELLER_TAG
 replace_env_var "CPU_PLUGIN_TAG" $CPU_PLUGIN_TAG
+replace_env_var "IMAGE_NAME_PREFIX" $IMAGE_NAME_PREFIX
 
 # dump CSV and CRD manifests to stdout
 echo "---"
