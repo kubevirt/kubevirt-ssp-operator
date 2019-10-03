@@ -197,6 +197,7 @@ spec:
                 - name: VIRT_LAUNCHER_TAG
                 - name: NODE_LABELLER_TAG
                 - name: CPU_PLUGIN_TAG
+                - name: IMAGE_NAME_PREFIX
                 - name: OPERATOR_NAME
                   value: kubevirt-ssp-operator
                 image: REPLACE_IMAGE

@@ -44,5 +44,7 @@ spec:
               value: ""
             - name: CPU_PLUGIN_TAG
               value: ""
+            - name: IMAGE_NAME_PREFIX
+              value: ""
             - name: OPERATOR_NAME
               value: "kubevirt-ssp-operator"
