@@ -58,7 +58,7 @@ spec:
       serviceAccountName: template-validator
       containers:
         - name: webhook
-          image: {{ ssp_registry | default("quay.io/fromani") }}/{{ validator_image }}:{{ version }}
+          image: {{ ssp_registry | default("quay.io/fromani") }}/{{ image_name_prefix }}{{ validator_image }}:{{ version }}
           imagePullPolicy: Always
           resources:
             limits:
