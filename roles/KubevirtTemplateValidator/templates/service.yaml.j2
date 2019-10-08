@@ -48,7 +48,7 @@ metadata:
   labels:
     name: virt-template-validator
 spec:
-  replicas: 1
+  replicas: {{ replicas }}
   template:
     metadata:
       name: virt-template-validator

@@ -49,8 +49,8 @@ type KubevirtTemplateValidator struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   VersionSpec  `json:"spec,omitempty"`
-	Status ConfigStatus `json:"status,omitempty"`
+	Spec   TemplateValidatorSpec `json:"spec,omitempty"`
+	Status ConfigStatus          `json:"status,omitempty"`
 }
 
 // +genclient
@@ -71,6 +71,11 @@ type VersionSpec struct {
 type ComponentSpec struct {
 	Version string `json:"version,omitempty"`
 	UseKVM  bool   `json:"use_kvm,omitempty"`
+}
+
+type TemplateValidatorSpec struct {
+	Version                   string `json:"version,omitempty"`
+	TemplateValidatorReplicas int    `json:"templateValidatorReplicas,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

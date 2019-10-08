@@ -5,3 +5,4 @@ metadata:
   namespace: kubevirt
 spec:
   version: v0.6.2
+  templateValidatorReplicas: 2
