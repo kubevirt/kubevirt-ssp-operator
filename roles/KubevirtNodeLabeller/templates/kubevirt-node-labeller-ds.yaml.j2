@@ -46,13 +46,13 @@ spec:
         - name: libvirt
           image: {{ ssp_registry | default('kubevirt') }}/{{ image_name_prefix }}{{ virt_launcher_image }}:{{ virt_launcher_tag }}
           command: ["/bin/sh","-c"]
-{% if use_kvm %}
+{% if useKVM %}
           args: ["libvirtd -d; chmod o+rw /dev/kvm; virsh domcapabilities --machine q35 --arch x86_64 --virttype kvm > /etc/kubernetes/node-feature-discovery/source.d/virsh_domcapabilities.xml; cp -r /usr/share/libvirt/cpu_map /etc/kubernetes/node-feature-discovery/source.d/"]
 {% else %}
           args: ["libvirtd -d; virsh domcapabilities --machine q35 --arch x86_64 --virttype qemu > /etc/kubernetes/node-feature-discovery/source.d/virsh_domcapabilities.xml; cp -r /usr/share/libvirt/cpu_map /etc/kubernetes/node-feature-discovery/source.d/"]
 {% endif %}
           imagePullPolicy: Always
-{% if use_kvm %}
+{% if useKVM %}
           securityContext:
             privileged: true
           resources:
@@ -71,7 +71,7 @@ spec:
               fieldRef:
                 fieldPath: spec.nodeName
           image: {{ ssp_registry | default('quay.io/kubevirt') }}/{{ image_name_prefix }}{{ kubevirt_node_labeller_image }}:{{ kubevirt_node_labeller_tag }}
-{% if use_kvm %}
+{% if useKVM %}
           securityContext:
             privileged: true
           resources:
