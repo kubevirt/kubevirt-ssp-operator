@@ -25,7 +25,7 @@
     namespace: "{{ meta.namespace }}"
     conditions:
     - type: KVMSupport
-      status: "{{ useKVM }}"
+      status: "{{ use_kvm }}"
       reason: "enabled"
       message: "KVM support is enabled."
 
