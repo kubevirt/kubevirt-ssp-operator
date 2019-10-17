@@ -2,7 +2,7 @@
 # tasks file for KubevirtRepoInfo
 - name: Extract the image name
   set_fact:
-    operator_image_name: "{{ lookup('env', 'IMAGE_NAME') | default('quay.io/kubevirt/kubevirt-ssp-operator-container:latest', true }}"
+    operator_image_name: "{{ lookup('env', 'IMAGE_REFERENCE') | default('quay.io/kubevirt/kubevirt-ssp-operator-container:latest', true) }}"
 - name: Extract the SSP registry
   set_fact:
     ssp_registry: "{{ operator_image_name.rsplit('/', 1)[0] }}"

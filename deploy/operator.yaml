@@ -32,7 +32,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: IMAGE_NAME
+            - name: IMAGE_REFERENCE
               value: REPLACE_IMAGE
             - name: WATCH_NAMESPACE
               value: ""
