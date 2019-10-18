@@ -32,6 +32,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: IMAGE_REFERENCE
+              value: REPLACE_IMAGE
             - name: WATCH_NAMESPACE
               value: ""
             - name: KVM_INFO_TAG
