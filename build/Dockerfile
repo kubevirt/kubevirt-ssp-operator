@@ -17,4 +17,4 @@ COPY build/k8s_status.py /usr/share/ansible/openshift
 
 COPY build/preprocess_template.py ${HOME}/
 COPY patch.yaml ${HOME}/
-RUN python ${HOME}/preprocess_template.py ${HOME}/patch.yaml ${HOME}/roles/KubevirtCommonTemplatesBundle/files/
+RUN python3 ${HOME}/preprocess_template.py ${HOME}/patch.yaml ${HOME}/roles/KubevirtCommonTemplatesBundle/files/
