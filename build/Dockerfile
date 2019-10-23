@@ -1,4 +1,4 @@
-FROM quay.io/operator-framework/ansible-operator:v0.7.0
+FROM quay.io/operator-framework/ansible-operator:v0.11.0
 
 LABEL org.kubevirt.hco.csv-generator.v1="/usr/bin/csv-generator"
 
@@ -17,4 +17,4 @@ COPY build/k8s_status.py /usr/share/ansible/openshift
 
 COPY build/preprocess_template.py ${HOME}/
 COPY patch.yaml ${HOME}/
-RUN python ${HOME}/preprocess_template.py ${HOME}/patch.yaml ${HOME}/roles/KubevirtCommonTemplatesBundle/files/
+RUN python3 ${HOME}/preprocess_template.py ${HOME}/patch.yaml ${HOME}/roles/KubevirtCommonTemplatesBundle/files/
