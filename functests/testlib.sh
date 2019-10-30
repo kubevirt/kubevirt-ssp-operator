@@ -116,6 +116,7 @@ wait_for_condition() {
 		fi
 		sleep ${wait_secs}s
 	done
+	oc get ${kind} -o json ${NS}
 	return 1
 }
 
