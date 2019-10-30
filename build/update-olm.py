@@ -6,7 +6,7 @@ import yaml
 
 
 _ANNOTATIONS = {
-    'categories': 'Virtualization',
+    'categories': 'Openshift Optional',
     'description': \
         'Manages KubeVirt addons for Scheduling, Scale, Performance',
     'containerImage': 'REPLACE_IMAGE',
