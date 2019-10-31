@@ -32,13 +32,16 @@ operator-sdk:
 	curl -JL https://github.com/operator-framework/operator-sdk/releases/download/$(OPERATOR_SDK_VERSION)/operator-sdk-$(OPERATOR_SDK_VERSION)-x86_64-linux-gnu -o operator-sdk
 	chmod 0755 operator-sdk
 
+operator-courier:
+	pip3 install operator-courier
+
 manifests-prepare:
 	mkdir -p _out
 
 manifests-cleanup:
 	rm -rf _out
 
-manifests: csv-generator manifests-cleanup manifests-prepare operator-sdk
+manifests: operator-courier csv-generator manifests-cleanup manifests-prepare operator-sdk
 	./hack/make-manifests.sh ${IMAGE_TAG}
 	./hack/release-manifests.sh ${IMAGE_TAG}
 
