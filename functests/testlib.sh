@@ -21,6 +21,14 @@ else
 	export KV_NAMESPACE="${KV_OP_POD_NAMESPACE}"
 fi
 
+dump_template_validator_state() {
+	NS="--all-namespaces"
+	if [ -n "$1" ]; then
+		NS="-n ${1}"
+	fi
+	oc get pods --selector "kubevirt.io=virt-template-validator" ${NS} -o json
+}
+
 is_template_validator_running() {
 	NS="--all-namespaces"
 	if [ -n "$1" ]; then
@@ -58,8 +66,12 @@ wait_template_validator_running() {
 	for num in $( seq 1 ${max_tries} ); do
 		(( ${V} >= 1 )) && echo "waiting for template-validator availability: ${num}/${max_tries}"
 		sleep ${wait_secs}s
-		is_template_validator_running $1 && break
+		if is_template_validator_running $1; then
+			return 0
+		fi
 	done
+	dump_template_validator_state
+	return 1
 }
 
 wait_node_labeller_running() {
@@ -104,6 +116,7 @@ wait_for_condition() {
 		fi
 		sleep ${wait_secs}s
 	done
+	oc get ${kind} -o json ${NS}
 	return 1
 }
 
