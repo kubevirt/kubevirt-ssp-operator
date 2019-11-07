@@ -21,6 +21,9 @@ done
 [ "${MISSING}" != "0" ] && exit 4
 
 # we can run the real tests now
+declare -a PASSED=()
+declare -a SKIPPED=()
+declare -a FAILED=()
 RET=0
 for testscript in $( ls *-test-*.sh); do
 	testname=$(basename -- "$testscript")
@@ -36,11 +39,14 @@ for testscript in $( ls *-test-*.sh); do
 	RC="$?"
 	if [ "$RC" == "0" ]; then
 		result="OK"
+		PASSED[${#PASSED[@]}]="$testscript"
 	else
 		if [ "$RC" == "99" ] ; then
 			result="SKIP"
+			SKIPPED[${#SKIPPED[@]}]="$testscript"
 		else
 			result="FAILED"
+			FAILED[${#FAILED[@]}]="$testscript"
 			RET=1
 		fi
 	fi
@@ -50,4 +56,9 @@ for testscript in $( ls *-test-*.sh); do
 		printf "  TESTCASE [%-64s] %s\n" $testscript $result
 	fi
 done
+
+printf "=============\n"
+printf "FAILED  : %s %s\n" "${#FAILED[@]}" "${FAILED[*]}"
+printf "SKIPPED : %s %s\n" "${#SKIPPED[@]}" "${SKIPPED[*]}"
+printf "PASSED  : %s %s\n" "${#PASSED[@]}" "${PASSED[*]}"
 exit $RET
