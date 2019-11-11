@@ -26,6 +26,7 @@ dump_template_validator_state() {
 	if [ -n "$1" ]; then
 		NS="-n ${1}"
 	fi
+	oc get pods ${NS} -o yaml
 	oc get pods --selector "kubevirt.io=virt-template-validator" ${NS} -o json
 }
 
@@ -35,6 +36,9 @@ is_template_validator_running() {
 		NS="-n ${1}"
 	fi
 	local validator_pod=$( oc get pods --selector "kubevirt.io=virt-template-validator" ${NS} -o json )
+	if [ -z "${validator_pod}" ]; then
+		return 1
+	fi
 	local validator_status=$( echo ${validator_pod} | jq -r '.items[0].status' )
 	local validator_phase=$( echo ${validator_pod} | jq -r '.items[0].status.phase' )
 	(( ${V} >= 1 )) && echo "validator status: ${validator_status}"
