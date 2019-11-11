@@ -4,7 +4,7 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos6-server-large-v0.8.0
+  name: centos6-server-large-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 6.0+ VM"
     description: >-
@@ -68,6 +68,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -138,7 +139,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos6-server-medium-v0.8.0
+  name: centos6-server-medium-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 6.0+ VM"
     description: >-
@@ -202,6 +203,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -272,7 +274,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos6-server-small-v0.8.0
+  name: centos6-server-small-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 6.0+ VM"
     description: >-
@@ -336,6 +338,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -406,7 +409,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos6-server-tiny-v0.8.0
+  name: centos6-server-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 6.0+ VM"
     description: >-
@@ -470,6 +473,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -540,7 +544,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos7-desktop-large-v0.8.0
+  name: centos7-desktop-large-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -585,6 +589,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -659,7 +664,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos7-desktop-medium-v0.8.0
+  name: centos7-desktop-medium-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -704,6 +709,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -778,7 +784,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos7-desktop-small-v0.8.0
+  name: centos7-desktop-small-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -823,6 +829,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -897,7 +904,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos7-desktop-tiny-v0.8.0
+  name: centos7-desktop-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -942,6 +949,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -1016,7 +1024,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos7-server-large-v0.8.0
+  name: centos7-server-large-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -1061,6 +1069,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -1131,7 +1140,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos7-server-medium-v0.8.0
+  name: centos7-server-medium-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -1176,6 +1185,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -1246,7 +1256,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos7-server-small-v0.8.0
+  name: centos7-server-small-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -1291,6 +1301,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -1361,7 +1372,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos7-server-tiny-v0.8.0
+  name: centos7-server-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -1406,6 +1417,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -1476,7 +1488,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos8-desktop-large-v0.8.0
+  name: centos8-desktop-large-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -1521,6 +1533,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -1595,7 +1608,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos8-desktop-medium-v0.8.0
+  name: centos8-desktop-medium-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -1640,6 +1653,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -1714,7 +1728,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos8-desktop-small-v0.8.0
+  name: centos8-desktop-small-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -1759,6 +1773,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -1833,7 +1848,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos8-desktop-tiny-v0.8.0
+  name: centos8-desktop-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -1878,6 +1893,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -1952,7 +1968,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos8-server-large-v0.8.0
+  name: centos8-server-large-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -1997,6 +2013,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -2067,7 +2084,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos8-server-medium-v0.8.0
+  name: centos8-server-medium-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -2112,6 +2129,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -2182,7 +2200,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos8-server-small-v0.8.0
+  name: centos8-server-small-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -2227,6 +2245,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -2297,7 +2316,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: centos8-server-tiny-v0.8.0
+  name: centos8-server-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "CentOS 7.0+ VM"
     description: >-
@@ -2342,6 +2361,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -2412,7 +2432,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: fedora-desktop-large-v0.8.0
+  name: fedora-desktop-large-v0.7.0
   annotations:
     openshift.io/display-name: "Fedora 23+ VM"
     description: >-
@@ -2468,6 +2488,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -2542,7 +2563,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: fedora-desktop-medium-v0.8.0
+  name: fedora-desktop-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Fedora 23+ VM"
     description: >-
@@ -2598,6 +2619,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -2672,7 +2694,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: fedora-desktop-small-v0.8.0
+  name: fedora-desktop-small-v0.7.0
   annotations:
     openshift.io/display-name: "Fedora 23+ VM"
     description: >-
@@ -2728,6 +2750,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -2802,7 +2825,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: fedora-desktop-tiny-v0.8.0
+  name: fedora-desktop-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "Fedora 23+ VM"
     description: >-
@@ -2858,6 +2881,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -2932,7 +2956,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: fedora-highperformance-large-v0.8.0
+  name: fedora-highperformance-large-v0.7.0
   annotations:
     openshift.io/display-name: "Fedora 23+ VM"
     description: >-
@@ -2988,6 +3012,7 @@ metadata:
     workload.template.kubevirt.io/highperformance: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -3059,7 +3084,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: fedora-highperformance-medium-v0.8.0
+  name: fedora-highperformance-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Fedora 23+ VM"
     description: >-
@@ -3115,6 +3140,7 @@ metadata:
     workload.template.kubevirt.io/highperformance: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -3186,7 +3212,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: fedora-highperformance-small-v0.8.0
+  name: fedora-highperformance-small-v0.7.0
   annotations:
     openshift.io/display-name: "Fedora 23+ VM"
     description: >-
@@ -3242,6 +3268,7 @@ metadata:
     workload.template.kubevirt.io/highperformance: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -3313,7 +3340,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: fedora-highperformance-tiny-v0.8.0
+  name: fedora-highperformance-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "Fedora 23+ VM"
     description: >-
@@ -3369,6 +3396,7 @@ metadata:
     workload.template.kubevirt.io/highperformance: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -3440,7 +3468,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: fedora-server-large-v0.8.0
+  name: fedora-server-large-v0.7.0
   annotations:
     openshift.io/display-name: "Fedora 23+ VM"
     description: >-
@@ -3496,6 +3524,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -3566,7 +3595,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: fedora-server-medium-v0.8.0
+  name: fedora-server-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Fedora 23+ VM"
     description: >-
@@ -3622,6 +3651,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -3692,7 +3722,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: fedora-server-small-v0.8.0
+  name: fedora-server-small-v0.7.0
   annotations:
     openshift.io/display-name: "Fedora 23+ VM"
     description: >-
@@ -3748,6 +3778,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -3818,7 +3849,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: fedora-server-tiny-v0.8.0
+  name: fedora-server-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "Fedora 23+ VM"
     description: >-
@@ -3874,6 +3905,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -3944,7 +3976,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: opensuse-server-large-v0.8.0
+  name: opensuse-server-large-v0.7.0
   annotations:
     openshift.io/display-name: "OpenSUSE Leap 15.0 VM"
     description: >-
@@ -3992,6 +4024,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -4061,7 +4094,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: opensuse-server-medium-v0.8.0
+  name: opensuse-server-medium-v0.7.0
   annotations:
     openshift.io/display-name: "OpenSUSE Leap 15.0 VM"
     description: >-
@@ -4109,6 +4142,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -4178,7 +4212,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: opensuse-server-small-v0.8.0
+  name: opensuse-server-small-v0.7.0
   annotations:
     openshift.io/display-name: "OpenSUSE Leap 15.0 VM"
     description: >-
@@ -4226,6 +4260,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -4295,7 +4330,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: opensuse-server-tiny-v0.8.0
+  name: opensuse-server-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "OpenSUSE Leap 15.0 VM"
     description: >-
@@ -4343,6 +4378,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -4412,7 +4448,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel6-desktop-large-v0.8.0
+  name: rhel6-desktop-large-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 6.0+ VM"
     description: >-
@@ -4476,6 +4512,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -4550,7 +4587,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel6-desktop-medium-v0.8.0
+  name: rhel6-desktop-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 6.0+ VM"
     description: >-
@@ -4614,6 +4651,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -4688,7 +4726,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel6-desktop-small-v0.8.0
+  name: rhel6-desktop-small-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 6.0+ VM"
     description: >-
@@ -4752,6 +4790,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -4826,7 +4865,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel6-desktop-tiny-v0.8.0
+  name: rhel6-desktop-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 6.0+ VM"
     description: >-
@@ -4890,6 +4929,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -4964,7 +5004,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel6-server-large-v0.8.0
+  name: rhel6-server-large-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 6.0+ VM"
     description: >-
@@ -5028,6 +5068,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -5098,7 +5139,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel6-server-medium-v0.8.0
+  name: rhel6-server-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 6.0+ VM"
     description: >-
@@ -5162,6 +5203,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -5232,7 +5274,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel6-server-small-v0.8.0
+  name: rhel6-server-small-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 6.0+ VM"
     description: >-
@@ -5296,6 +5338,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -5366,7 +5409,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel6-server-tiny-v0.8.0
+  name: rhel6-server-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 6.0+ VM"
     description: >-
@@ -5430,6 +5473,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -5500,7 +5544,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel7-desktop-large-v0.8.0
+  name: rhel7-desktop-large-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -5559,6 +5603,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -5633,7 +5678,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel7-desktop-medium-v0.8.0
+  name: rhel7-desktop-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -5692,6 +5737,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -5766,7 +5812,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel7-desktop-small-v0.8.0
+  name: rhel7-desktop-small-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -5825,6 +5871,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -5899,7 +5946,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel7-desktop-tiny-v0.8.0
+  name: rhel7-desktop-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -5958,6 +6005,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -6032,7 +6080,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel7-highperformance-large-v0.8.0
+  name: rhel7-highperformance-large-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -6091,6 +6139,7 @@ metadata:
     workload.template.kubevirt.io/highperformance: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -6162,7 +6211,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel7-highperformance-medium-v0.8.0
+  name: rhel7-highperformance-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -6221,6 +6270,7 @@ metadata:
     workload.template.kubevirt.io/highperformance: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -6292,7 +6342,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel7-highperformance-small-v0.8.0
+  name: rhel7-highperformance-small-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -6351,6 +6401,7 @@ metadata:
     workload.template.kubevirt.io/highperformance: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -6422,7 +6473,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel7-highperformance-tiny-v0.8.0
+  name: rhel7-highperformance-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -6481,6 +6532,7 @@ metadata:
     workload.template.kubevirt.io/highperformance: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -6552,7 +6604,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel7-server-large-v0.8.0
+  name: rhel7-server-large-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -6611,6 +6663,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -6681,7 +6734,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel7-server-medium-v0.8.0
+  name: rhel7-server-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -6740,6 +6793,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -6810,7 +6864,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel7-server-small-v0.8.0
+  name: rhel7-server-small-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -6869,6 +6923,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -6939,7 +6994,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel7-server-tiny-v0.8.0
+  name: rhel7-server-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -6998,6 +7053,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -7068,7 +7124,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel8-desktop-large-v0.8.0
+  name: rhel8-desktop-large-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -7115,6 +7171,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -7189,7 +7246,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel8-desktop-medium-v0.8.0
+  name: rhel8-desktop-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -7236,6 +7293,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -7310,7 +7368,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel8-desktop-small-v0.8.0
+  name: rhel8-desktop-small-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -7357,6 +7415,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -7431,7 +7490,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel8-desktop-tiny-v0.8.0
+  name: rhel8-desktop-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -7478,6 +7537,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -7552,7 +7612,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel8-highperformance-large-v0.8.0
+  name: rhel8-highperformance-large-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -7599,6 +7659,7 @@ metadata:
     workload.template.kubevirt.io/highperformance: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -7670,7 +7731,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel8-highperformance-medium-v0.8.0
+  name: rhel8-highperformance-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -7717,6 +7778,7 @@ metadata:
     workload.template.kubevirt.io/highperformance: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -7788,7 +7850,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel8-highperformance-small-v0.8.0
+  name: rhel8-highperformance-small-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -7835,6 +7897,7 @@ metadata:
     workload.template.kubevirt.io/highperformance: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -7906,7 +7969,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel8-highperformance-tiny-v0.8.0
+  name: rhel8-highperformance-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -7953,6 +8016,7 @@ metadata:
     workload.template.kubevirt.io/highperformance: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -8024,7 +8088,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel8-server-large-v0.8.0
+  name: rhel8-server-large-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -8071,6 +8135,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -8141,7 +8206,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel8-server-medium-v0.8.0
+  name: rhel8-server-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -8188,6 +8253,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -8258,7 +8324,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel8-server-small-v0.8.0
+  name: rhel8-server-small-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -8305,6 +8371,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -8375,7 +8442,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: rhel8-server-tiny-v0.8.0
+  name: rhel8-server-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "Red Hat Enterprise Linux 7.0+ VM"
     description: >-
@@ -8422,6 +8489,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -8492,7 +8560,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: ubuntu-desktop-large-v0.8.0
+  name: ubuntu-desktop-large-v0.7.0
   annotations:
     openshift.io/display-name: "Ubuntu 18.04 (Xenial Xerus) VM"
     description: >-
@@ -8540,6 +8608,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -8614,7 +8683,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: ubuntu-desktop-medium-v0.8.0
+  name: ubuntu-desktop-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Ubuntu 18.04 (Xenial Xerus) VM"
     description: >-
@@ -8662,6 +8731,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -8736,7 +8806,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: ubuntu-desktop-small-v0.8.0
+  name: ubuntu-desktop-small-v0.7.0
   annotations:
     openshift.io/display-name: "Ubuntu 18.04 (Xenial Xerus) VM"
     description: >-
@@ -8784,6 +8854,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/small: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -8858,7 +8929,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: ubuntu-desktop-tiny-v0.8.0
+  name: ubuntu-desktop-tiny-v0.7.0
   annotations:
     openshift.io/display-name: "Ubuntu 18.04 (Xenial Xerus) VM"
     description: >-
@@ -8906,6 +8977,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/tiny: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -8980,7 +9052,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: win2k12r2-desktop-large-v0.8.0
+  name: win2k12r2-desktop-large-v0.7.0
   annotations:
     openshift.io/display-name: "Microsoft Windows Server 2012 R2 VM"
     description: >-
@@ -9046,6 +9118,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -9126,7 +9199,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: win2k12r2-desktop-medium-v0.8.0
+  name: win2k12r2-desktop-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Microsoft Windows Server 2012 R2 VM"
     description: >-
@@ -9192,6 +9265,7 @@ metadata:
     workload.template.kubevirt.io/desktop: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -9272,7 +9346,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: win2k12r2-server-large-v0.8.0
+  name: win2k12r2-server-large-v0.7.0
   annotations:
     openshift.io/display-name: "Microsoft Windows Server 2012 R2 VM"
     description: >-
@@ -9338,6 +9412,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/large: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
@@ -9414,7 +9489,7 @@ parameters:
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: win2k12r2-server-medium-v0.8.0
+  name: win2k12r2-server-medium-v0.7.0
   annotations:
     openshift.io/display-name: "Microsoft Windows Server 2012 R2 VM"
     description: >-
@@ -9480,6 +9555,7 @@ metadata:
     workload.template.kubevirt.io/server: "true"
     flavor.template.kubevirt.io/medium: "true"
     template.kubevirt.io/type: "base"
+    template.kubevirt.io/version: "v0.8.0"
 
 objects:
 - apiVersion: kubevirt.io/v1alpha3
