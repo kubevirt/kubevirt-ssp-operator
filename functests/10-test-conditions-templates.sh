@@ -10,7 +10,7 @@ TEST_NS="${KV_NAMESPACE}"
 
 oc create -n ${KV_NAMESPACE} -f "${SCRIPTPATH}/common-templates-versioned-cr.yaml" || exit 2
 
-wait_for_deployment_ready ${TEST_NS} 5 50 "KubevirtCommonTemplatesBundle" "Running" "Successful"
+wait_for_deployment_ready ${TEST_NS} 5 90 "KubevirtCommonTemplatesBundle" "Running" "Successful"
 RET="$?"
 if [ $RET -eq 1 ]; then
     exit $RET
