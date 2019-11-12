@@ -21,12 +21,20 @@ else
 	export KV_NAMESPACE="${KV_OP_POD_NAMESPACE}"
 fi
 
-dump_template_validator_state() {
+dump_component_state() {
 	NS="--all-namespaces"
 	if [ -n "$1" ]; then
 		NS="-n ${1}"
 	fi
-	oc get pods --selector "kubevirt.io=virt-template-validator" ${NS} -o json
+	set -x
+	oc get deployments ${NS} -o yaml
+	oc get pods ${NS} -o yaml
+	if [ -n "$2" ]; then
+		oc get pods --selector ${2} ${NS} -o yaml
+	else
+		echo "no selector, no specific pods"
+	fi
+	set +x
 }
 
 is_template_validator_running() {
@@ -34,10 +42,17 @@ is_template_validator_running() {
 	if [ -n "$1" ]; then
 		NS="-n ${1}"
 	fi
+	VERB="${V}"
+	if [ -n "$2" ]; then
+		VERB="${2}"
+	fi
 	local validator_pod=$( oc get pods --selector "kubevirt.io=virt-template-validator" ${NS} -o json )
+	if [ -z "${validator_pod}" ]; then
+		return 1
+	fi
 	local validator_status=$( echo ${validator_pod} | jq -r '.items[0].status' )
 	local validator_phase=$( echo ${validator_pod} | jq -r '.items[0].status.phase' )
-	(( ${V} >= 1 )) && echo "validator status: ${validator_status}"
+	(( ${VERB} >= 1 )) && echo "validator status: ${validator_status}"
 	if [ "${validator_phase}" == "Running" ]; then
 		return 0
 	fi
@@ -49,10 +64,14 @@ is_node_labeller_running() {
 	if [ -n "$1" ]; then
 		NS="-n ${1}"
 	fi
+	VERB="${V}"
+	if [ -n "$2" ]; then
+		VERB="${2}"
+	fi
 	local labeller_pod=$( oc get pods --selector='app=kubevirt-node-labeller' ${NS} -o json )
 	local labeller_status=$( echo ${labeller_pod} | jq -r '.items[0].status' )
 	local labeller_phase=$( echo ${labeller_pod} | jq -r '.items[0].status.phase' )
-	(( ${V} >= 1 )) && echo "node-labeller status: ${labeller_status}"
+	(( ${VERB} >= 1 )) && echo "node-labeller status: ${labeller_status}"
 	if [ "${labeller_phase}" == "Running" ]; then
 		return 0
 	fi
@@ -66,11 +85,11 @@ wait_template_validator_running() {
 	for num in $( seq 1 ${max_tries} ); do
 		(( ${V} >= 1 )) && echo "waiting for template-validator availability: ${num}/${max_tries}"
 		sleep ${wait_secs}s
-		if is_template_validator_running $1; then
+		if is_template_validator_running $1 0; then
 			return 0
 		fi
 	done
-	dump_template_validator_state
+	dump_component_state "" "kubevirt.io=virt-template-validator"
 	return 1
 }
 
@@ -81,8 +100,12 @@ wait_node_labeller_running() {
 	for num in $( seq 1 ${max_tries} ); do
 		(( ${V} >= 1 )) && echo "waiting for node-labeller availability: ${num}/${max_tries}"
 		sleep ${wait_secs}s
-		is_node_labeller_running $1 && break
+		if is_node_labeller_running $1 0; then
+			return 0
+		fi
 	done
+	dump_component_state "" 'app=kubevirt-node-labeller'
+	return 1
 }
 
 wait_node_labeller_deleted() {

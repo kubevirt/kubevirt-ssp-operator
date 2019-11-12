@@ -12,10 +12,10 @@ TEST_NS="${KV_NAMESPACE}"
 
 oc create -n ${TEST_NS} -f "${SCRIPTPATH}/template-validator-unversioned-cr.yaml" || exit 2
 
-wait_template_validator_running ${TEST_NS} 5 60
+wait_template_validator_running ${TEST_NS} 5 90
 
 #wait for ssp operator to set proper conditions
-wait_for_condition ${TEST_NS} 5 20 "KubevirtTemplateValidator" "Available" "True"
+wait_for_condition ${TEST_NS} 5 40 "KubevirtTemplateValidator" "Available" "True"
 RET="$?"
 
 oc delete -n ${TEST_NS} -f "${SCRIPTPATH}/template-validator-unversioned-cr.yaml" || exit 2

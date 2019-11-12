@@ -9,7 +9,7 @@ TEST_NS="openshift"  # TODO: check this exists?
 oc create -n ${TEST_NS} -f "${SCRIPTPATH}/common-templates-versioned-cr.yaml" || exit 2
 # TODO: SSP-operator needs to improve its feedback mechanism
 sleep 21s
-for idx in $( seq 1 30); do
+for idx in $( seq 1 40); do
 	NUM=$(oc get templates -n ${TEST_NS} -l "template.kubevirt.io/type=base" -o json | jq ".items | length")
 	(( ${V} >= 1 )) && echo "templates found in ${TEST_NS}: ${NUM}"
 	if (( "${NUM}" > 0 )); then

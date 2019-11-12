@@ -25,7 +25,10 @@ declare -a PASSED=()
 declare -a SKIPPED=()
 declare -a FAILED=()
 RET=0
+
 for testscript in $( ls *-test-*.sh); do
+	OUTPUT=$( mktemp ssp-op-functest-XXXXXXXX )
+
 	testname=$(basename -- "$testscript")
 	testname="${testname%.*}"  # see http://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html
 
@@ -34,7 +37,7 @@ for testscript in $( ls *-test-*.sh); do
 		./$testscript &> /dev/null
 	else
 		printf "* TESTCASE [%-64s] START\n" $testscript
-		./$testscript
+		./$testscript &> ${OUTPUT}
 	fi
 	RC="$?"
 	if [ "$RC" == "0" ]; then
@@ -53,8 +56,13 @@ for testscript in $( ls *-test-*.sh); do
 	if [ "${V}" == "0" ]; then
 		printf "* [%-64s] %s\n" $testscript $result
 	else
+		if [ "${RET}" != "0" ]; then
+			cat ${OUTPUT}
+		fi
 		printf "  TESTCASE [%-64s] %s\n" $testscript $result
 	fi
+
+	rm -f ${OUTPUT}
 done
 
 printf "=============\n"
