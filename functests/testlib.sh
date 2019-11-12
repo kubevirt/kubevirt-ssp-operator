@@ -21,22 +21,20 @@ else
 	export KV_NAMESPACE="${KV_OP_POD_NAMESPACE}"
 fi
 
-dump_template_validator_state() {
+dump_component_state() {
 	NS="--all-namespaces"
 	if [ -n "$1" ]; then
 		NS="-n ${1}"
 	fi
+	set -x
+	oc get deployments ${NS} -o yaml
 	oc get pods ${NS} -o yaml
-	oc get pods --selector "kubevirt.io=virt-template-validator" ${NS} -o json
-}
-
-dunp_node_labeller_state() {
-	NS="--all-namespaces"
-	if [ -n "$1" ]; then
-		NS="-n ${1}"
+	if [ -n "$2" ]; then
+		oc get pods --selector ${2} ${NS} -o yaml
+	else
+		echo "no selector, no specific pods"
 	fi
-	oc get pods ${NS} -o yaml
-	oc get pods --selector='app=kubevirt-node-labeller' ${NS} -o json
+	set +x
 }
 
 is_template_validator_running() {
@@ -91,7 +89,7 @@ wait_template_validator_running() {
 			return 0
 		fi
 	done
-	dump_template_validator_state
+	dump_component_state "" "kubevirt.io=virt-template-validator"
 	return 1
 }
 
@@ -106,7 +104,7 @@ wait_node_labeller_running() {
 			return 0
 		fi
 	done
-	dump_node_labeller_state
+	dump_component_state "" 'app=kubevirt-node-labeller'
 	return 1
 }
 
