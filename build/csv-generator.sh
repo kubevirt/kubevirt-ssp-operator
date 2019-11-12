@@ -15,7 +15,9 @@ replace_env_var() {
     local value_offset="                  "
     local key=$1
     local var=$2
+    # Make sure to replace both valid YAML variants, structured and inline
     sed -i "s/- name: ${key}/- name: $1\n${value_offset}value: \"${var}\"/g" ${TMP_FILE}
+    sed -i "s/{name: ${key}}/{name: $1, value: \"${var}\"}/g" ${TMP_FILE}
 }
 
 help_text() {
