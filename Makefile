@@ -33,7 +33,7 @@ operator-sdk:
 	chmod 0755 operator-sdk
 
 operator-courier:
-	pip3 install operator-courier
+	pip3 install --user operator-courier
 
 manifests-prepare:
 	mkdir -p _out
