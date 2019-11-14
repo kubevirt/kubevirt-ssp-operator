@@ -10,10 +10,6 @@ COPY _defaults.yml ${HOME}/_defaults.yml
 COPY deploy/crds ${HOME}/deploy/crds
 COPY manifests/generated ${HOME}/manifests/generated
 COPY build/csv-generator.sh /usr/bin/csv-generator
-#original module k8s_status contains bugs, which prevents ssp operator to correctly set conditions
-#https://github.com/operator-framework/operator-sdk/pull/1820
-#https://github.com/operator-framework/operator-sdk/pull/1845
-COPY build/k8s_status.py /usr/share/ansible/openshift
 
 COPY build/preprocess_template.py ${HOME}/
 COPY patch.yaml ${HOME}/
