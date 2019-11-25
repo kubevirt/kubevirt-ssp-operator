@@ -74,7 +74,7 @@ spec:
           verbs: [create, update, get, list, patch, watch]
         - apiGroups: ['']
           resources: [serviceaccounts, configmaps, services]
-          verbs: [create, get, patch, list, watch]
+          verbs: [create, update, get, patch, list, watch]
         - apiGroups: ['']
           resources: [nodes]
           verbs: [get, patch, update]
