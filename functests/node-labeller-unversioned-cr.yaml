@@ -4,3 +4,4 @@ metadata:
   name: kubevirt-node-labeller-bundle
 spec:
   useKVM: false
+  maxRetries: 4

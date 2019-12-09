@@ -4,4 +4,5 @@ wait: true
 validator_image: kubevirt-template-validator
 validator_version: "{{ validator_tag | default('latest') }}"
 replicas: "{{ templateValidatorReplicas | default(2) }}"
+max_retries: "{{ maxRetries | default(300) }}"
 

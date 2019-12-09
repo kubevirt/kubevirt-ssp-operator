@@ -2,3 +2,5 @@ apiVersion: kubevirt.io/v1
 kind: KubevirtTemplateValidator
 metadata:
   name: kubevirt-template-validator
+spec:
+  maxRetries: 4

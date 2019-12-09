@@ -69,13 +69,15 @@ type VersionSpec struct {
 }
 
 type ComponentSpec struct {
-	Version string `json:"version,omitempty"`
-	UseKVM  bool   `json:"useKVM"`
+	Version    string `json:"version,omitempty"`
+	UseKVM     bool   `json:"useKVM"`
+	MaxRetries int    `json:"maxRetries,omitempty"`
 }
 
 type TemplateValidatorSpec struct {
 	Version                   string `json:"version,omitempty"`
 	TemplateValidatorReplicas int    `json:"templateValidatorReplicas,omitempty"`
+	MaxRetries                int    `json:"maxRetries,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
