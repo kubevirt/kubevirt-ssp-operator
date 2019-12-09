@@ -47,9 +47,9 @@
     namespace: "{{ tv_status.metadata.namespace }}"
   register: tv_status
   delay: 10
-  retries: 300
+  retries: 6
   until: tv_status.resources[0].status.availableReplicas|default(0) == tv_status.resources[0].status.readyReplicas|default(2) | default(false)
-
+  ignore_errors: yes
 
 - name: Set available condition
   k8s_status:

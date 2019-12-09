@@ -49,8 +49,9 @@
     namespace: "{{ nl.result.metadata.namespace }}"
   register: nl_status
   delay: 10
-  retries: 300
+  retries: 6
   until: nl_status.resources[0].status.currentNumberScheduled == nl_status.resources[0].status.numberReady | default(false)
+  ignore_errors: yes
 
 - name: Set available condition
   k8s_status:
