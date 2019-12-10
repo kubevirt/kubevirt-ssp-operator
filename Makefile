@@ -47,7 +47,7 @@ manifests: operator-courier csv-generator manifests-cleanup manifests-prepare op
 
 release: manifests container-build container-release
 
-functests:
+functests: manifests
 	cd functests && ./test-runner.sh
 
 .PHONY: functests release manifests manifests-prepare manifests-cleanup container-push container-build container-release
