@@ -108,20 +108,6 @@ wait_node_labeller_running() {
 	return 1
 }
 
-wait_node_labeller_deleted() {
-	NS="--all-namespaces"
-	if [ -n "$1" ]; then
-		NS="-n ${1}"
-	fi
-	local wait_secs=${2:-2}
-	local max_tries=${3:-15}
-	for num in $( seq 1 ${max_tries} ); do
-		if [ "$(oc get pods ${NS} | grep "kubevirt-node-labeller.*" | wc -l)" -eq 0 ]; then 
-		  return 0
-		fi
-	done
-}
-
 wait_for_condition() {
 	NS="--all-namespaces"
 	if [ -n "$1" ]; then

@@ -29,6 +29,15 @@ for idx in $( seq 1 30); do
 	fi
 	sleep 2s
 done
+
+if [ $RET -eq 1 ] ; then
+	exit 2
+fi
+
+#wait for ssp operator to set proper conditions
+wait_for_condition ${TEST_NS} 5 40 "KubevirtNodeLabellerBundle" "Available" "True"
+RET="$?"
+
 oc delete -n ${TEST_NS} -f "${SCRIPTPATH}/node-labeller-unversioned-cr.yaml" || exit 2
 
 exit $RET

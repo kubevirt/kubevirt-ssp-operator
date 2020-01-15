@@ -12,7 +12,14 @@ wait_template_validator_running ${TEST_NS} 5 60
 
 if is_template_validator_running ${TEST_NS}; then
 	RET=0
+else
+	exit 2
 fi
+
+#wait for ssp operator to set proper conditions
+wait_for_condition ${TEST_NS} 5 40 "KubevirtTemplateValidator" "Available" "True"
+RET="$?"
+
 oc delete -n ${TEST_NS} -f "${SCRIPTPATH}/template-validator-unversioned-cr.yaml" || exit 2
 
 exit $RET
