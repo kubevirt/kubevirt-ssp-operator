@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script needs openshift 4.*
+
 SCRIPTPATH=$( dirname $(readlink -f $0) )
 source ${SCRIPTPATH}/testlib.sh
 
