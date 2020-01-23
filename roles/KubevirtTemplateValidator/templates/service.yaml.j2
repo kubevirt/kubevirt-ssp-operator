@@ -40,7 +40,7 @@ spec:
   selector:
     kubevirt.io: virt-template-validator
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: virt-template-validator
@@ -49,6 +49,9 @@ metadata:
     name: virt-template-validator
 spec:
   replicas: {{ replicas }}
+  selector:
+    matchLabels:
+      kubevirt.io: virt-template-validator
   template:
     metadata:
       name: virt-template-validator
