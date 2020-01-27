@@ -5,7 +5,7 @@ Operator that manages Scheduling, Scale and Performance addons for [KubeVirt](ht
 
 - Golang environment and GOPATH correctly set
 - Docker (used for creating container images, etc.) with access for the current user
-- a Kubernetes/OpenShift/Minikube/Minishift instance
+- a Kubernetes 1.13 /OpenShift 4 instance
 - [Operator SDK](https://github.com/operator-framework/operator-sdk)
 
 ## Installation instructions
