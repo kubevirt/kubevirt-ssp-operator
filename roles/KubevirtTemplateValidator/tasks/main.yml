@@ -29,7 +29,7 @@
 # there will be no attributes like availableReplicas and readyReplicas
 - name: Set progressing condition
   k8s_status:
-    api_version: kubevirt.io/v1
+    api_version: ssp.kubevirt.io/v1
     kind: KubevirtTemplateValidator
     name: "{{ meta.name }}"
     namespace: "{{ meta.namespace }}"
@@ -53,7 +53,7 @@
 
 - name: Set available condition
   k8s_status:
-    api_version: kubevirt.io/v1
+    api_version: ssp.kubevirt.io/v1
     kind: KubevirtTemplateValidator
     name: "{{ meta.name }}"
     namespace: "{{ meta.namespace }}"
@@ -65,7 +65,7 @@
 
 - name: Set degraded condition
   k8s_status:
-    api_version: kubevirt.io/v1
+    api_version: ssp.kubevirt.io/v1
     kind: KubevirtTemplateValidator
     name: "{{ meta.name }}"
     namespace: "{{ meta.namespace }}"

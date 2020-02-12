@@ -5,6 +5,7 @@ metadata:
 rules:
 - apiGroups:
   - kubevirt.io
+  - ssp.kubevirt.io
   - template.openshift.io
   resources:
   - '*'

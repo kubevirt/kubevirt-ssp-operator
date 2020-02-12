@@ -49,7 +49,7 @@ _SPEC = {
 }
 
 _CRD_INFOS = {
-    'kubevirttemplatevalidators.kubevirt.io': {
+    'kubevirttemplatevalidators.ssp.kubevirt.io': {
         'displayName': 'KubeVirt Template Validator admission webhook',
         'description': \
                 'Represents a deployment of admission control webhook to validate the KubeVirt templates',
@@ -63,7 +63,7 @@ _CRD_INFOS = {
             ],
         }],
     },
-    'kubevirtcommontemplatesbundles.kubevirt.io': {
+    'kubevirtcommontemplatesbundles.ssp.kubevirt.io': {
         'displayName': 'KubeVirt common templates',
         'description': \
                 'Represents a deployment of the predefined VM templates',
@@ -77,7 +77,7 @@ _CRD_INFOS = {
             ],
         }],
     },
-    'kubevirtnodelabellerbundles.kubevirt.io': {
+    'kubevirtnodelabellerbundles.ssp.kubevirt.io': {
         'displayName': 'KubeVirt Node labeller',
         'description': \
                 'Represents a deployment of Node labeller component',
@@ -91,7 +91,7 @@ _CRD_INFOS = {
             ],
         }],
     },
-    'kubevirtmetricsaggregations.kubevirt.io': {
+    'kubevirtmetricsaggregations.ssp.kubevirt.io': {
         'displayName': 'KubeVirt Metric Aggregation',
         'description': \
                 'Provide aggregation rules for core kubevirt metrics',
