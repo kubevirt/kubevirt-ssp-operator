@@ -26,4 +26,4 @@ kubevirt_cpu_nfd_plugin_tag: "{{ lookup('env','CPU_PLUGIN_TAG')| default('v0.1.1
 virt_launcher_tag: "{{ lookup('env','VIRT_LAUNCHER_TAG')| default('v0.21.0', true) }}"
 validator_tag: "{{ lookup('env','VALIDATOR_TAG')| default('v0.6.4', true) }}"
 image_name_prefix: "{{ lookup('env','IMAGE_NAME_PREFIX')| default('', true) }}"
-templates_version: v0.8.2
+templates_version: v0.9.0
