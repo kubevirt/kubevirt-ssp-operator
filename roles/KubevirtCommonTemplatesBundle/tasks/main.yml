@@ -18,7 +18,7 @@
 
 - name: Set progressing condition
   k8s_status:
-    api_version: kubevirt.io/v1
+    api_version: ssp.kubevirt.io/v1
     kind: KubevirtCommonTemplatesBundle
     name: "{{ meta.name }}"
     namespace: "{{ meta.namespace }}"
@@ -30,7 +30,7 @@
 
 - name: Set available condition
   k8s_status:
-    api_version: kubevirt.io/v1
+    api_version: ssp.kubevirt.io/v1
     kind: KubevirtCommonTemplatesBundle
     name: "{{ meta.name }}"
     namespace: "{{ meta.namespace }}"

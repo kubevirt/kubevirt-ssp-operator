@@ -6,18 +6,18 @@ and their solutions.
 ## Emergency disable
 
 Starting version 1.0.14, the SSP operator supports emergency disable of the operands it manages.
-To engage this feature, you need to set the `kubevirt.io/operator.paused` annotation to `true` in the CR you want to disable.
+To engage this feature, you need to set the `ssp.kubevirt.io/operator.paused` annotation to `true` in the CR you want to disable.
 Add the key if missing.
 
 Example:
 ```yaml
-apiVersion: kubevirt.io/v1
+apiVersion: ssp.kubevirt.io/v1
 kind: KubevirtTemplateValidator
 metadata:
   name: kubevirt-template-validator
   namespace: kubevirt
   annotations:
-    kubevirt.io/operator.paused: "true"
+    ssp.kubevirt.io/operator.paused: "true"
 spec:
   version: v0.6.2
 ```
