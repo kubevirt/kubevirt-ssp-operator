@@ -206,7 +206,7 @@ spec:
                 - name: IMAGE_NAME_PREFIX
                 - name: OPERATOR_NAME
                   value: kubevirt-ssp-operator
-                image: quay.io/ksimon/kubevirt-ssp-operator-container:latest
+                image: REPLACE_IMAGE
                 imagePullPolicy: Always
                 name: kubevirt-ssp-operator
                 ports:
