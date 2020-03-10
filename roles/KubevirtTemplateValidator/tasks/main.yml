@@ -28,7 +28,7 @@
 # defaults in this ansible code are here because at the start of deployment, there is a chance 
 # there will be no attributes like availableReplicas and readyReplicas
 - name: Set progressing condition
-  k8s_status:
+  operator_sdk.util.k8s_status:
     api_version: ssp.kubevirt.io/v1
     kind: KubevirtTemplateValidator
     name: "{{ meta.name }}"
@@ -40,7 +40,7 @@
       message: "Template-validator is progressing."
 
 - name:  "Wait for the template-validator to start"
-  k8s_facts:
+  k8s_info:
     api_version: v1
     kind: "{{ tv_status.kind }}"
     name: "{{ tv_status.metadata.name }}"
@@ -52,7 +52,7 @@
 
 
 - name: Set available condition
-  k8s_status:
+  operator_sdk.util.k8s_status:
     api_version: ssp.kubevirt.io/v1
     kind: KubevirtTemplateValidator
     name: "{{ meta.name }}"
@@ -64,7 +64,7 @@
       message: "Template-validator is available."
 
 - name: Set degraded condition
-  k8s_status:
+  operator_sdk.util.k8s_status:
     api_version: ssp.kubevirt.io/v1
     kind: KubevirtTemplateValidator
     name: "{{ meta.name }}"
