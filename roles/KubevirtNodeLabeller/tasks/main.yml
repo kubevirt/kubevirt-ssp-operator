@@ -18,7 +18,7 @@
   register: nl_status
 
 - name: Set UseKVM condition
-  k8s_status:
+  operator_sdk.util.k8s_status:
     api_version: ssp.kubevirt.io/v1
     kind: KubevirtNodeLabellerBundle
     name: "{{ meta.name }}"
@@ -30,7 +30,7 @@
       message: "KVM support is enabled."
 
 - name: Set progressing condition
-  k8s_status:
+  operator_sdk.util.k8s_status:
     api_version: ssp.kubevirt.io/v1
     kind: KubevirtNodeLabellerBundle
     name: "{{ meta.name }}"
@@ -42,7 +42,7 @@
       message: "Node-labeller is progressing."
 
 - name:  "Wait for the node-labeller to start"
-  k8s_facts:
+  k8s_info:
     api_version: v1
     kind: "{{ nl.result.kind }}"
     name: "{{ nl.result.metadata.name }}"
@@ -53,7 +53,7 @@
   until: nl_status.resources[0].status.currentNumberScheduled == nl_status.resources[0].status.numberReady | default(false)
 
 - name: Set available condition
-  k8s_status:
+  operator_sdk.util.k8s_status:
     api_version: ssp.kubevirt.io/v1
     kind: KubevirtNodeLabellerBundle
     name: "{{ meta.name }}"
@@ -65,7 +65,7 @@
       message: "Node-labeller is available."
 
 - name: Set degraded condition 
-  k8s_status:
+  operator_sdk.util.k8s_status:
     api_version: ssp.kubevirt.io/v1
     kind: KubevirtNodeLabellerBundle
     name: "{{ meta.name }}"

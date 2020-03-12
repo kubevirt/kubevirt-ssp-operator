@@ -17,7 +17,7 @@
     deployed_templates_after: "{{ lookup('k8s', api_version=ct_status.results[0].result.apiVersion, kind='template')|length }}"
 
 - name: Set progressing condition
-  k8s_status:
+  operator_sdk.util.k8s_status:
     api_version: ssp.kubevirt.io/v1
     kind: KubevirtCommonTemplatesBundle
     name: "{{ meta.name }}"
@@ -29,7 +29,7 @@
       message: "Templates progressing."
 
 - name: Set available condition
-  k8s_status:
+  operator_sdk.util.k8s_status:
     api_version: ssp.kubevirt.io/v1
     kind: KubevirtCommonTemplatesBundle
     name: "{{ meta.name }}"
