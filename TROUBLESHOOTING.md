@@ -17,7 +17,7 @@ metadata:
   name: kubevirt-template-validator
   namespace: kubevirt
   annotations:
-    ssp.kubevirt.io/operator.paused: "true"
+    kubevirt.io/operator.paused: "true"
 spec:
   version: v0.6.2
 ```
