@@ -1,6 +1,0 @@
-apiVersion: ssp.kubevirt.io/v1
-kind: KubevirtNodeLabellerBundle
-metadata:
-  name: kubevirt-node-labeller-bundle
-spec:
-  version: v0.1.1
