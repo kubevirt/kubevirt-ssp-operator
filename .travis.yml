@@ -54,7 +54,6 @@ before_script:
 - sudo mount --make-rshared /
 
 - bash -x ci/ci/extra/get-kubevirt-releases
-
 - bash -x ci/prepare-host $CPLATFORM
 - bash -x ci/prepare-host virtctl
 - bash -x ci/start-cluster $CPLATFORM $CVER
