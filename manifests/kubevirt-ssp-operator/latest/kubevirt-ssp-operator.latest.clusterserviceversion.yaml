@@ -1,3 +1,4 @@
+---
 apiVersion: operators.coreos.com/v1alpha1
 kind: ClusterServiceVersion
 metadata:
@@ -7,7 +8,7 @@ metadata:
     categories: Openshift Optional
     containerImage: REPLACE_IMAGE
     description: Manages KubeVirt addons for Scheduling, Scale, Performance
-  name: kubevirt-ssp-operator.vPLACEHOLDER_CSV_VERSION
+  name: kubevirt-ssp-operator.vlatest
   namespace: kubevirt
 spec:
   apiservicedefinitions: {}
@@ -196,12 +197,19 @@ spec:
                 - name: IMAGE_REFERENCE
                   value: REPLACE_IMAGE
                 - name: WATCH_NAMESPACE
+                  value: ""
                 - name: KVM_INFO_TAG
+                  value: ""
                 - name: VALIDATOR_TAG
+                  value: ""
                 - name: VIRT_LAUNCHER_TAG
+                  value: ""
                 - name: NODE_LABELLER_TAG
+                  value: ""
                 - name: CPU_PLUGIN_TAG
+                  value: ""
                 - name: IMAGE_NAME_PREFIX
+                  value: ""
                 - name: OPERATOR_NAME
                   value: kubevirt-ssp-operator
                 image: REPLACE_IMAGE
@@ -248,4 +256,4 @@ spec:
     matchLabels:
       alm-owner-kubevirt: kubevirt-ssp-operator
       operated-by: kubevirt-ssp-operator
-  version: PLACEHOLDER_CSV_VERSION
+  version: latest

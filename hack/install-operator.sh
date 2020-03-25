@@ -9,7 +9,6 @@ NAMESPACE=${1:-kubevirt}
 source ${BASEPATH}/_common.sh
 
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_commontemplatesbundle_crd.yaml
-oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_nodelabellerbundle_crd.yaml
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_templatevalidator_crd.yaml
 oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_metricsaggregation_crd.yaml
 
