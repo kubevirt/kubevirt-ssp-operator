@@ -72,6 +72,7 @@ rules:
   - serviceaccounts
   - configmaps
   - services
+  - services/finalizers
   verbs:
   - create
   - update
