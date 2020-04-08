@@ -53,7 +53,10 @@ before_script:
 ### And https://github.com/LiliC/travis-minikube/blob/e0f26f7b388057f51a0e2558afd5f990e07b6c49/.travis.yml#L11
 - sudo mount --make-rshared /
 
-- bash -x ci/ci/extra/get-kubevirt-releases
+## FIXME - kubevirt v0.28.0 uses functionality which os-3.11.0 doesn't support
+## we need to migrate tests to use OKD/OCP - 4.*
+## For now kubevirt version is hardcoded to v0.27.0
+#- bash -x ci/ci/extra/get-kubevirt-releases
 - bash -x ci/prepare-host $CPLATFORM
 - bash -x ci/prepare-host virtctl
 - bash -x ci/start-cluster $CPLATFORM $CVER
