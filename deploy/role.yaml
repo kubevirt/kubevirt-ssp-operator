@@ -39,6 +39,7 @@ rules:
   - clusterroles
   verbs:
   - create
+  - list
   - watch
   - patch
 - apiGroups:
