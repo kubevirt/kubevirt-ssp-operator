@@ -2,9 +2,9 @@ FROM quay.io/operator-framework/ansible-operator:v0.16.0
 
 LABEL org.kubevirt.hco.csv-generator.v1="/usr/bin/csv-generator"
 
-COPY requirements.yml ${HOME}/requirements.yml
-RUN ansible-galaxy collection install -r ${HOME}/requirements.yml \
- && chmod -R ug+rwx ${HOME}/.ansible
+COPY build/release/ansible/ansible_collections ${HOME}/.ansible/collections/ansible_collections
+COPY build/release/ansible/update-collections.sh ${HOME}/.ansible/
+RUN ${HOME}/.ansible/update-collections.sh operator_sdk.util
  
 COPY roles/ ${HOME}/roles/
 COPY playbooks/ ${HOME}/
