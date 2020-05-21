@@ -1,0 +1,23 @@
+---
+apiVersion: ssp.kubevirt.io/v1
+kind: KubevirtCommonTemplatesBundle
+metadata:
+  name: kubevirt-common-template-bundle
+spec:
+  version: v0.7.0
+---
+apiVersion: ssp.kubevirt.io/v1
+kind: KubevirtMetricsAggregation
+metadata:
+  name: kubevirt-metrics-aggregation
+spec:
+  version: v0.0.1
+---
+apiVersion: ssp.kubevirt.io/v1
+kind: KubevirtTemplateValidator
+metadata:
+  name: kubevirt-template-validator
+  namespace: kubevirt
+spec:
+  version: v0.6.2
+  templateValidatorReplicas: 2

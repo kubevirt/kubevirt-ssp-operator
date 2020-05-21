@@ -20,7 +20,6 @@
 #
 # Any version, or default, should not be set more than once in a place in the source tree.
 
-kubevirt_node_labeller_tag: "{{ lookup('env','NODE_LABELLER_TAG')| default('v0.1.1', true) }}"
 kvm_info_nfd_plugin_tag: "{{ lookup('env','KVM_INFO_TAG')| default('v0.5.8', true) }}"
 kubevirt_cpu_nfd_plugin_tag: "{{ lookup('env','CPU_PLUGIN_TAG')| default('v0.1.1', true) }}"
 virt_launcher_tag: "{{ lookup('env','VIRT_LAUNCHER_TAG')| default('v0.21.0', true) }}"

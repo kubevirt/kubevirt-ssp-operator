@@ -6,7 +6,6 @@ import "fmt"
 
 const (
 	KubevirtCommonTemplates    string = "0.6.2"
-	KubevirtNodeLabeller       string = "0.1.1"
 	KubevirtTemplateValidator  string = "0.6.2"
 	KubevirtMetricsAggregation string = "0.0.1"
 )
