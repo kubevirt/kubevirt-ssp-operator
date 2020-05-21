@@ -196,11 +196,7 @@ spec:
                 - name: IMAGE_REFERENCE
                   value: REPLACE_IMAGE
                 - name: WATCH_NAMESPACE
-                - name: KVM_INFO_TAG
                 - name: VALIDATOR_TAG
-                - name: VIRT_LAUNCHER_TAG
-                - name: NODE_LABELLER_TAG
-                - name: CPU_PLUGIN_TAG
                 - name: IMAGE_NAME_PREFIX
                 - name: OPERATOR_NAME
                   value: kubevirt-ssp-operator

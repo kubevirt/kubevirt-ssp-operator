@@ -28,11 +28,7 @@ help_text() {
     echo "  --namespace:      (REQUIRED) The namespace set on the CSV file"
     echo "  --operator-image: (REQUIRED) The operator container image to use in the CSV file"
     echo "  --watch-namespace:   (OPTIONAL)"
-    echo "  --kvm-info-tag:      (OPTIONAL)"
     echo "  --validator-tag:     (OPTIONAL)"
-    echo "  --virt-launcher-tag: (OPTIONAL)"
-    echo "  --node-labeller-tag: (OPTIONAL)"
-    echo "  --cpu-plugin-tag:    (OPTIONAL)"
     echo "  --image-name-prefix: (OPTIONAL)"
     echo "  --dump-crds:         (OPTIONAL) Dumps CRD manifests with the CSV to stdout"
 }
@@ -44,11 +40,7 @@ OPERATOR_IMAGE=""
 
 # OPTIONAL ARGS
 WATCH_NAMESPACE=""
-KVM_INFO_TAG=""
 VALIDATOR_TAG=""
-VIRT_LAUNCHER_TAG=""
-NODE_LABELLER_TAG=""
-CPU_PLUGIN_TAG=""
 IMAGE_NAME_PREFIX=""
 DUMP_CRDS=""
 
@@ -70,20 +62,8 @@ while (( "$#" )); do
     --watch-namespace)
         WATCH_NAMESPACE=$VAL
         ;;
-    --kvm-info-tag)
-        KVM_INFO_TAG=$VAL
-        ;;
     --validator-tag)
         VALIDATOR_TAG=$VAL
-        ;;
-    --virt-launcher-tag)
-        VIRT_LAUNCHER_TAG=$VAL
-        ;;
-    --node-labeller-tag)
-        NODE_LABELLER_TAG=$VAL
-        ;;
-    --cpu-plugin-tag)
-        CPU_PLUGIN_TAG=$VAL
         ;;
     --image-name-prefix)
         IMAGE_NAME_PREFIX=$VAL
@@ -116,11 +96,7 @@ sed -i "s/namespace: placeholder/namespace: ${NAMESPACE}/g" ${TMP_FILE}
 sed -i "s|REPLACE_IMAGE|${OPERATOR_IMAGE}|g" ${TMP_FILE}
 
 replace_env_var "WATCH_NAMESPACE" $WATCH_NAMESPACE
-replace_env_var "KVM_INFO_TAG" $KVM_INFO_TAG
 replace_env_var "VALIDATOR_TAG" $VALIDATOR_TAG
-replace_env_var "VIRT_LAUNCHER_TAG" $VIRT_LAUNCHER_TAG
-replace_env_var "NODE_LABELLER_TAG" $NODE_LABELLER_TAG
-replace_env_var "CPU_PLUGIN_TAG" $CPU_PLUGIN_TAG
 replace_env_var "IMAGE_NAME_PREFIX" $IMAGE_NAME_PREFIX
 
 # dump CSV and CRD manifests to stdout
