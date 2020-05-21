@@ -20,6 +20,6 @@
 #
 # Any version, or default, should not be set more than once in a place in the source tree.
 
-validator_tag: "{{ lookup('env','VALIDATOR_TAG')| default('v0.6.5', true) }}"
+validator_tag: "{{ lookup('env','VALIDATOR_TAG')| default('v0.6.6', true) }}"
 image_name_prefix: "{{ lookup('env','IMAGE_NAME_PREFIX')| default('', true) }}"
 templates_version: v0.10.0
