@@ -34,6 +34,14 @@ type KubevirtMetricsAggregationListerExpansion interface{}
 // KubevirtMetricsAggregationNamespaceLister.
 type KubevirtMetricsAggregationNamespaceListerExpansion interface{}
 
+// KubevirtNodeLabellerBundleListerExpansion allows custom methods to be added to
+// KubevirtNodeLabellerBundleLister.
+type KubevirtNodeLabellerBundleListerExpansion interface{}
+
+// KubevirtNodeLabellerBundleNamespaceListerExpansion allows custom methods to be added to
+// KubevirtNodeLabellerBundleNamespaceLister.
+type KubevirtNodeLabellerBundleNamespaceListerExpansion interface{}
+
 // KubevirtTemplateValidatorListerExpansion allows custom methods to be added to
 // KubevirtTemplateValidatorLister.
 type KubevirtTemplateValidatorListerExpansion interface{}
