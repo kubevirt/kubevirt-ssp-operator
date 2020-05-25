@@ -36,7 +36,15 @@ spec:
               value: REPLACE_IMAGE
             - name: WATCH_NAMESPACE
               value: ""
+            - name: KVM_INFO_TAG
+              value: ""
             - name: VALIDATOR_TAG
+              value: ""
+            - name: VIRT_LAUNCHER_TAG
+              value: ""
+            - name: NODE_LABELLER_TAG
+              value: ""
+            - name: CPU_PLUGIN_TAG
               value: ""
             - name: IMAGE_NAME_PREFIX
               value: ""

@@ -29,6 +29,7 @@ type KubevirtV1Interface interface {
 	RESTClient() rest.Interface
 	KubevirtCommonTemplatesBundlesGetter
 	KubevirtMetricsAggregationsGetter
+	KubevirtNodeLabellerBundlesGetter
 	KubevirtTemplateValidatorsGetter
 }
 
@@ -43,6 +44,10 @@ func (c *KubevirtV1Client) KubevirtCommonTemplatesBundles(namespace string) Kube
 
 func (c *KubevirtV1Client) KubevirtMetricsAggregations(namespace string) KubevirtMetricsAggregationInterface {
 	return newKubevirtMetricsAggregations(c, namespace)
+}
+
+func (c *KubevirtV1Client) KubevirtNodeLabellerBundles(namespace string) KubevirtNodeLabellerBundleInterface {
+	return newKubevirtNodeLabellerBundles(c, namespace)
 }
 
 func (c *KubevirtV1Client) KubevirtTemplateValidators(namespace string) KubevirtTemplateValidatorInterface {

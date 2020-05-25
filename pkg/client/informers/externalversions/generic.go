@@ -57,6 +57,8 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Kubevirt().V1().KubevirtCommonTemplatesBundles().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("kubevirtmetricsaggregations"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Kubevirt().V1().KubevirtMetricsAggregations().Informer()}, nil
+	case v1.SchemeGroupVersion.WithResource("kubevirtnodelabellerbundles"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Kubevirt().V1().KubevirtNodeLabellerBundles().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("kubevirttemplatevalidators"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Kubevirt().V1().KubevirtTemplateValidators().Informer()}, nil
 

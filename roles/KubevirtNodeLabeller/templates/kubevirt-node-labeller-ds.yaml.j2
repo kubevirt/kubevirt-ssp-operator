@@ -1,0 +1,92 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: kubevirt-node-labeller
+  name: kubevirt-node-labeller
+  namespace: {{ meta.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: kubevirt-node-labeller
+  template:
+    metadata:
+      labels:
+        app: kubevirt-node-labeller
+    spec:
+      serviceAccount: kubevirt-node-labeller
+      containers:
+      - name: kubevirt-node-labeller-sleeper
+        image: {{ ssp_registry | default('quay.io/kubevirt') }}/{{ image_name_prefix }}{{ kubevirt_node_labeller_image }}{{"@" if kubevirt_node_labeller_tag.startswith("sha256:") else ":" }}{{ kubevirt_node_labeller_tag }}
+        command: ["sleep"]
+        args: ["infinity"]
+      initContainers:
+
+        - name: kvm-info-nfd-plugin
+          image: {{ ssp_registry | default('quay.io/kubevirt') }}/{{ image_name_prefix }}{{ kvm_info_nfd_plugin_image }}{{"@" if kvm_info_nfd_plugin_tag.startswith("sha256:") else ":" }}{{ kvm_info_nfd_plugin_tag }}
+          command: ["/bin/sh","-c"]
+          args: ["cp /usr/bin/kvm-caps-info-nfd-plugin /etc/kubernetes/node-feature-discovery/source.d/;"]
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: nfd-source
+              mountPath: "/etc/kubernetes/node-feature-discovery/source.d/"
+
+        - name: kubevirt-cpu-nfd-plugin
+          image: {{ ssp_registry | default('quay.io/kubevirt') }}/{{ image_name_prefix }}{{ kubevirt_cpu_nfd_plugin_image }}{{"@" if kubevirt_cpu_nfd_plugin_tag.startswith("sha256:") else ":" }}{{ kubevirt_cpu_nfd_plugin_tag }}
+          command: ["/bin/sh","-c"]
+          args: ["cp /plugin/dest/cpu-nfd-plugin /etc/kubernetes/node-feature-discovery/source.d/; cp /config/cpu-plugin-configmap.yaml /etc/kubernetes/node-feature-discovery/source.d/cpu-plugin-configmap.yaml;"]
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: nfd-source
+              mountPath: "/etc/kubernetes/node-feature-discovery/source.d/"
+            - mountPath: /config
+              name: cpu-config
+
+        - name: libvirt
+          image: {{ ssp_registry | default('kubevirt') }}/{{ image_name_prefix }}{{ virt_launcher_image }}{{"@" if virt_launcher_tag.startswith("sha256:") else ":" }}{{ virt_launcher_tag }}
+          command: ["/bin/sh","-c"]
+{% if use_kvm %}
+          args: ["libvirtd -d; chmod o+rw /dev/kvm; virsh domcapabilities --machine q35 --arch x86_64 --virttype kvm > /etc/kubernetes/node-feature-discovery/source.d/virsh_domcapabilities.xml; cp -r /usr/share/libvirt/cpu_map /etc/kubernetes/node-feature-discovery/source.d/"]
+{% else %}
+          args: ["libvirtd -d; virsh domcapabilities --machine q35 --arch x86_64 --virttype qemu > /etc/kubernetes/node-feature-discovery/source.d/virsh_domcapabilities.xml; cp -r /usr/share/libvirt/cpu_map /etc/kubernetes/node-feature-discovery/source.d/"]
+{% endif %}
+          imagePullPolicy: Always
+{% if use_kvm %}
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              devices.kubevirt.io/kvm: "1"
+            limits:
+              devices.kubevirt.io/kvm: "1"
+{% endif %}
+          volumeMounts:
+            - name: nfd-source
+              mountPath: "/etc/kubernetes/node-feature-discovery/source.d/"
+        - name: kubevirt-node-labeller
+          env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          image: {{ ssp_registry | default('quay.io/kubevirt') }}/{{ image_name_prefix }}{{ kubevirt_node_labeller_image }}{{"@" if kubevirt_node_labeller_tag.startswith("sha256:") else ":" }}{{ kubevirt_node_labeller_tag }}
+{% if use_kvm %}
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              devices.kubevirt.io/kvm: "1"
+            limits:
+              devices.kubevirt.io/kvm: "1"
+{% endif %}
+          volumeMounts:
+            - name: nfd-source
+              mountPath: "/etc/kubernetes/node-feature-discovery/source.d/"
+
+      volumes:
+        - name: nfd-source
+          emptyDir: {}
+        - name: cpu-config
+          configMap:
+            name: kubevirt-cpu-plugin-configmap

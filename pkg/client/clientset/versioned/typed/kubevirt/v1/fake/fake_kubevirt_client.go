@@ -36,6 +36,10 @@ func (c *FakeKubevirtV1) KubevirtMetricsAggregations(namespace string) v1.Kubevi
 	return &FakeKubevirtMetricsAggregations{c, namespace}
 }
 
+func (c *FakeKubevirtV1) KubevirtNodeLabellerBundles(namespace string) v1.KubevirtNodeLabellerBundleInterface {
+	return &FakeKubevirtNodeLabellerBundles{c, namespace}
+}
+
 func (c *FakeKubevirtV1) KubevirtTemplateValidators(namespace string) v1.KubevirtTemplateValidatorInterface {
 	return &FakeKubevirtTemplateValidators{c, namespace}
 }
