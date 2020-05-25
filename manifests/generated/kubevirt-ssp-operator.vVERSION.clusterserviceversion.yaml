@@ -2,7 +2,7 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: ClusterServiceVersion
 metadata:
   annotations:
-    alm-examples: '[{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.7.0"}},{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtMetricsAggregation","metadata":{"name":"kubevirt-metrics-aggregation"},"spec":{"version":"v0.0.1"}},{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator","namespace":"kubevirt"},"spec":{"templateValidatorReplicas":2,"version":"v0.6.2"}}]'
+    alm-examples: '[{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtNodeLabellerBundle","metadata":{"name":"kubevirt-node-labeller-bundle"},"spec":{"version":"v0.1.1"}},{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator","namespace":"kubevirt"},"spec":{"templateValidatorReplicas":2,"version":"v0.6.2"}},{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle"},"spec":{"version":"v0.7.0"}},{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtMetricsAggregation","metadata":{"name":"kubevirt-metrics-aggregation"},"spec":{"version":"v0.0.1"}}]'
     capabilities: Basic Install
     categories: Openshift Optional
     containerImage: REPLACE_IMAGE
@@ -30,6 +30,17 @@ spec:
       name: kubevirtmetricsaggregations.ssp.kubevirt.io
       specDescriptors:
       - description: The version of the aggregation rules to deploy
+        displayName: Version
+        path: version
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.ssp:version
+      version: v1
+    - description: Represents a deployment of Node labeller component
+      displayName: KubeVirt Node labeller
+      kind: KubevirtNodeLabellerBundle
+      name: kubevirtnodelabellerbundles.ssp.kubevirt.io
+      specDescriptors:
+      - description: The version of the node labeller to deploy
         displayName: Version
         path: version
         x-descriptors:
@@ -196,7 +207,11 @@ spec:
                 - name: IMAGE_REFERENCE
                   value: REPLACE_IMAGE
                 - name: WATCH_NAMESPACE
+                - name: KVM_INFO_TAG
                 - name: VALIDATOR_TAG
+                - name: VIRT_LAUNCHER_TAG
+                - name: NODE_LABELLER_TAG
+                - name: CPU_PLUGIN_TAG
                 - name: IMAGE_NAME_PREFIX
                 - name: OPERATOR_NAME
                   value: kubevirt-ssp-operator

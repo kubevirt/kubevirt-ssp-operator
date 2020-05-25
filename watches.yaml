@@ -9,5 +9,9 @@
   playbook: /opt/ansible/templatevalidator.yaml
 - version: v1
   group: ssp.kubevirt.io
+  kind: KubevirtNodeLabellerBundle
+  playbook: /opt/ansible/kubevirtnodelabeller.yaml
+- version: v1
+  group: ssp.kubevirt.io
   kind: KubevirtMetricsAggregation
   playbook: /opt/ansible/metricsaggregation.yaml

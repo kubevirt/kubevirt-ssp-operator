@@ -77,6 +77,20 @@ _CRD_INFOS = {
             ],
         }],
     },
+    'kubevirtnodelabellerbundles.ssp.kubevirt.io': {
+        'displayName': 'KubeVirt Node labeller',
+        'description': \
+                'Represents a deployment of Node labeller component',
+        'specDescriptors': [{
+            'description': \
+                'The version of the node labeller to deploy',
+            'displayName': 'Version',
+            'path': 'version',
+            'x-descriptors': [
+                'urn:alm:descriptor:io.kubernetes.ssp:version',
+            ],
+        }],
+    },
     'kubevirtmetricsaggregations.ssp.kubevirt.io': {
         'displayName': 'KubeVirt Metric Aggregation',
         'description': \

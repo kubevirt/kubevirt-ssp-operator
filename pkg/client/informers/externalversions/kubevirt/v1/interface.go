@@ -28,6 +28,8 @@ type Interface interface {
 	KubevirtCommonTemplatesBundles() KubevirtCommonTemplatesBundleInformer
 	// KubevirtMetricsAggregations returns a KubevirtMetricsAggregationInformer.
 	KubevirtMetricsAggregations() KubevirtMetricsAggregationInformer
+	// KubevirtNodeLabellerBundles returns a KubevirtNodeLabellerBundleInformer.
+	KubevirtNodeLabellerBundles() KubevirtNodeLabellerBundleInformer
 	// KubevirtTemplateValidators returns a KubevirtTemplateValidatorInformer.
 	KubevirtTemplateValidators() KubevirtTemplateValidatorInformer
 }
@@ -51,6 +53,11 @@ func (v *version) KubevirtCommonTemplatesBundles() KubevirtCommonTemplatesBundle
 // KubevirtMetricsAggregations returns a KubevirtMetricsAggregationInformer.
 func (v *version) KubevirtMetricsAggregations() KubevirtMetricsAggregationInformer {
 	return &kubevirtMetricsAggregationInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// KubevirtNodeLabellerBundles returns a KubevirtNodeLabellerBundleInformer.
+func (v *version) KubevirtNodeLabellerBundles() KubevirtNodeLabellerBundleInformer {
+	return &kubevirtNodeLabellerBundleInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
 // KubevirtTemplateValidators returns a KubevirtTemplateValidatorInformer.
