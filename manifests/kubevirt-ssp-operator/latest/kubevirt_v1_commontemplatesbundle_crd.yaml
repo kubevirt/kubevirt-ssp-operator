@@ -13,4 +13,21 @@ spec:
   version: v1
   subresources:
     status: {}
+  validation:
+    openAPIV3Schema:
+      type: object
+      properties:
+        apiVersion:
+          type: string
+        kind:
+          type: string
+        metadata:
+          type: object
+        spec:
+          type: object
+          properties:
+            version:
+              type: string
+        status:
+          type: object
 
