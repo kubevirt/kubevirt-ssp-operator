@@ -18,3 +18,5 @@ COPY build/csv-generator.sh /usr/bin/csv-generator
 COPY build/preprocess_template.py ${HOME}/
 COPY patch.yaml ${HOME}/
 RUN python3 ${HOME}/preprocess_template.py ${HOME}/patch.yaml ${HOME}/roles/KubevirtCommonTemplatesBundle/files/
+
+COPY cmd/webhook-updater/webhook-updater /usr/bin/webhook-updater

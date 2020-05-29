@@ -8,7 +8,7 @@ REGISTRY_IMAGE ?= kubevirt-ssp-operator-registry
 
 container-build: csv-generator container-build-operator container-build-registry
 
-container-build-operator:
+container-build-operator: webhook-updater
 	docker build -f build/Dockerfile -t $(IMAGE_REGISTRY)/$(OPERATOR_IMAGE):$(IMAGE_TAG) .
 
 container-build-registry:
@@ -24,6 +24,9 @@ container-push-registry:
 
 container-release:
 	./hack/docker-push.sh $(IMAGE_REGISTRY)/$(OPERATOR_IMAGE):$(IMAGE_TAG) $(IMAGE_REGISTRY)/$(REGISTRY_IMAGE):$(IMAGE_TAG)
+
+webhook-updater:
+	./hack/build-webhook-updater.sh
 
 csv-generator: operator-sdk
 	./build/make-csv-generator.sh
@@ -50,4 +53,7 @@ release: manifests container-build container-release
 functests: manifests
 	cd functests && ./test-runner.sh
 
-.PHONY: functests release manifests manifests-prepare manifests-cleanup container-push container-build container-release
+unittests:
+	go test -v ./...
+
+.PHONY: functests unittests release webhook-updater manifests manifests-prepare manifests-cleanup container-push container-build container-release
