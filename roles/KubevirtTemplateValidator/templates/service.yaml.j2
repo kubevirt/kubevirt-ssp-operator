@@ -73,8 +73,7 @@ spec:
           args:
             - -v=2
             - --port=8443
-            - --cert-file=/etc/webhook/certs/tls.crt
-            - --key-file=/etc/webhook/certs/tls.key
+            - --cert-dir=/etc/webhook/certs
           volumeMounts:
             - name: tls
               mountPath: /etc/webhook/certs
