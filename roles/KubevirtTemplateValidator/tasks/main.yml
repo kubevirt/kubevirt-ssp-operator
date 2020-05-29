@@ -9,18 +9,23 @@
     state: present
     definition: "{{ item | from_yaml }}"
   with_items: "{{ lookup('template', 'service.yaml.j2').split('\n---\n') | select('search', '(^|\n)[^#]') | list }}"
-# per https://docs.okd.io/latest/dev_guide/secrets.html#service-serving-certificate-secrets
-# *every* pod in the cluster has access to the service-ca.crt, so we can safely use
-# the one inside the operator POD
   register: tv
-- name: Extract the CA bundle
-  set_fact:
-    cabundle: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt') | b64encode }}"
 - name: Register the webhook
   k8s:
     state: present
     definition: "{{ lookup('template', 'webhook.yaml.j2') | from_yaml }}"
-  
+# per https://docs.okd.io/latest/dev_guide/secrets.html#service-serving-certificate-secrets
+# *every* pod in the cluster has access to the service-ca.crt, so we can safely use
+# the one inside the operator POD
+- name: Notify webhook-updater
+  uri:
+    url: "http://localhost:8081/"
+    method: POST
+    body_format: json
+    body:
+      webhook: "virt-template-validator"
+      ca_dir: "/var/run/secrets/kubernetes.io/serviceaccount"
+      ca_file: "service-ca.crt"
 - name: Refresh template-validator var
   set_fact:
     tv_status: "{{ lookup('k8s', kind=tv.results[3].result.kind, namespace=tv.results[3].result.metadata.namespace, resource_name=tv.results[3].result.metadata.name) | from_yaml }}"

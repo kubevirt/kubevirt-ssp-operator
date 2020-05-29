@@ -50,3 +50,8 @@ spec:
               value: ""
             - name: OPERATOR_NAME
               value: "kubevirt-ssp-operator"
+        - name: webhook-updater
+          image: REPLACE_IMAGE
+          command: ["webhook-updater"]
+          args: ["--port", "8081"]
+          imagePullPolicy: Always
