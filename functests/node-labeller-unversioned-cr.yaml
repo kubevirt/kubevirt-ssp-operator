@@ -3,4 +3,3 @@ kind: KubevirtNodeLabellerBundle
 metadata:
   name: kubevirt-node-labeller-bundle
 spec:
-  useKVM: false
