@@ -27,3 +27,4 @@ virt_launcher_tag: "{{ lookup('env','VIRT_LAUNCHER_TAG')| default('v0.21.0', tru
 validator_tag: "{{ lookup('env','VALIDATOR_TAG')| default('v0.6.6', true) }}"
 image_name_prefix: "{{ lookup('env','IMAGE_NAME_PREFIX')| default('', true) }}"
 templates_version: v0.11.2
+operator_version: "{{ lookup('env', 'OPERATOR_VERSION') }}"
