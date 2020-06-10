@@ -9,13 +9,7 @@
     state: present
     definition: "{{ item | from_yaml }}"
   with_items: "{{ lookup('template', 'service.yaml.j2').split('\n---\n') | select('search', '(^|\n)[^#]') | list }}"
-# per https://docs.okd.io/latest/dev_guide/secrets.html#service-serving-certificate-secrets
-# *every* pod in the cluster has access to the service-ca.crt, so we can safely use
-# the one inside the operator POD
   register: tv
-- name: Extract the CA bundle
-  set_fact:
-    cabundle: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt') | b64encode }}"
 - name: Register the webhook
   k8s:
     state: present
