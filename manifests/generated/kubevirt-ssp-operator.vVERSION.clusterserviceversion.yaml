@@ -222,15 +222,6 @@ spec:
                 - containerPort: 60000
                   name: metrics
                 resources: {}
-              - args:
-                - --port
-                - '8081'
-                command:
-                - webhook-updater
-                image: REPLACE_IMAGE
-                imagePullPolicy: Always
-                name: webhook-updater
-                resources: {}
               serviceAccountName: kubevirt-ssp-operator
     strategy: deployment
   installModes:

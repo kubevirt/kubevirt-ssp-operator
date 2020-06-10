@@ -9,6 +9,7 @@ webhooks:
       name: virt-template-validator
       namespace: "{{ meta.namespace }}"
       path: "/virtualmachine-template-validate"
+    caBundle: "{{ cabundle }}"
   rules:
     - operations: ["CREATE","UPDATE"]
       apiGroups: ["kubevirt.io"]
