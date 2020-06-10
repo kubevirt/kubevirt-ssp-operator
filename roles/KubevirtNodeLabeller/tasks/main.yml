@@ -17,18 +17,6 @@
     definition: "{{ lookup('k8s', kind=nl.result.kind, namespace=nl.result.metadata.namespace, resource_name=nl.result.metadata.name) | from_yaml }}"
   register: nl_status
 
-- name: Set UseKVM condition
-  operator_sdk.util.k8s_status:
-    api_version: ssp.kubevirt.io/v1
-    kind: KubevirtNodeLabellerBundle
-    name: "{{ meta.name }}"
-    namespace: "{{ meta.namespace }}"
-    conditions:
-    - type: KVMSupport
-      status: "{{ use_kvm }}"
-      reason: "enabled"
-      message: "KVM support is enabled."
-
 - name: Set progressing condition
   operator_sdk.util.k8s_status:
     api_version: ssp.kubevirt.io/v1
