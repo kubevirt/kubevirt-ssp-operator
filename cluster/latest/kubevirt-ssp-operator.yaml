@@ -195,8 +195,3 @@ spec:
               value: ""
             - name: OPERATOR_NAME
               value: "kubevirt-ssp-operator"
-        - name: webhook-updater
-          image: quay.io/fromani/kubevirt-ssp-operator-container:latest
-          command: ["webhook-updater"]
-          args: ["--port", "8081"]
-          imagePullPolicy: Always
