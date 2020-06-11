@@ -2,5 +2,3 @@ operator-sdk
 _out
 releases.json
 versionsrc
-
-cmd/webhook-updater/webhook-updater
