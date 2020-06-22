@@ -63,13 +63,6 @@ spec:
         - name: webhook
           image: {{ ssp_registry | default("quay.io/kubevirt") }}/{{ image_name_prefix }}{{ validator_image }}{{"@" if validator_version.startswith("sha256:") else ":" }}{{ validator_version }}
           imagePullPolicy: Always
-          resources:
-            limits:
-              memory: 250Mi
-              cpu: 300m
-            requests:
-              memory: 250Mi
-              cpu: 300m
           args:
             - -v=2
             - --port=8443
