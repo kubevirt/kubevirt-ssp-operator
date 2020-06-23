@@ -178,6 +178,16 @@ spec:
           - watch
         - apiGroups:
           - security.openshift.io
+          resources:
+          - securitycontextconstraints
+          verbs:
+          - get
+          - list
+          - create
+          - watch
+          - patch
+        - apiGroups:
+          - security.openshift.io
           resourceNames:
           - privileged
           resources:
