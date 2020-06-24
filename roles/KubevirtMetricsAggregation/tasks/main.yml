@@ -1,9 +1,75 @@
 ---
+- name: Set operatorVersion and targetVersion
+  operator_sdk.util.k8s_status:
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
+    status:
+      operatorVersion: "{{ operator_version }}"
+      targetVersion: "{{ operator_version }}"
+
 # tasks file for KubevirtMetricsAggregation
 - name: Install VMI count aggregation rule
   k8s:
     state: present
     namespace: "{{ meta.namespace }}"
     definition: "{{ item | from_yaml }}"
+    apply: yes
   with_items: "{{ lookup('template', 'aggregation-rule-vmi-count.yaml.j2').split('\n---\n') | select('search', '(^|\n)[^#]') |list }}"
+  register: promrules
 
+- name: Inject owner references for KubevirtMetricsAggregation
+  include_role:
+    name: ClaimOwnership
+  vars:
+    object: "{{ item.result }}"
+    owner: "{{ cr_info }}"
+  with_items: "{{ promrules.results }}"
+
+- name: Set available condition
+  operator_sdk.util.k8s_status:
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
+    conditions:
+    - type: Available
+      status: "True"
+      reason: "available"
+      message: "KubevirtMetricsAggregation is available."
+
+# There is no logic for the Progressing/Degraded conditions for KubevirtMetricsAggregation
+# so using these constant conditions
+- name: Set progressing condition
+  operator_sdk.util.k8s_status:
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
+    conditions:
+    - type: Progressing
+      status: "False"
+      reason: "progressing"
+      message: "KubevirtMetricsAggregation progressing"
+
+- name: Set degraded condition
+  operator_sdk.util.k8s_status:
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
+    conditions:
+    - type: Degraded
+      status: "False"
+      reason: "degraded"
+      message: "KubevirtMetricsAggregation degraded"
+
+- name: Set observedVersion
+  operator_sdk.util.k8s_status:
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
+    status:
+      observedVersion: "{{ operator_version }}"

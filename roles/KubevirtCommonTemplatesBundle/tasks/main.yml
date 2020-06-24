@@ -1,46 +1,113 @@
 ---
+- name: Set operatorVersion and targetVersion
+  operator_sdk.util.k8s_status:
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
+    status:
+      operatorVersion: "{{ operator_version }}"
+      targetVersion: "{{ operator_version }}"
+
 # tasks file for KubevirtCommonTemplatesBundle
 - name: Install VM templates
   k8s:
     state: present
-    namespace: "{{ meta.namespace }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
     definition: "{{ item | from_yaml }}"
+    apply: yes
   with_items: "{{ lookup('file', 'common-templates-'+ version +'.yaml').split('\n---\n') | select('search', '(^|\n)[^#]') | list }}"
   register: ct_status
+
+# Get all templates
+- name: Fetching all templates
+  set_fact:
+    templates: "{{ lookup('k8s', api_version=ct_status.results[0].result.apiVersion, kind='template') }}"
+
+- name: Fetch old cr
+  block:
+  - set_fact:
+      old_cr: "{{ lookup('k8s', api_version='kubevirt.io/v1', kind='KubevirtCommonTemplatesBundle') }}"
+  - set_fact:
+      old_cr_exists: true
+  rescue:
+  - set_fact:
+      old_cr_exists: false
+
+- name: Filter for templates owned by the old cr
+  set_fact:
+    old_cr_templates: "{{ templates | k8s_owned_by(old_cr) }}"
+  when: "{{ old_cr_exists==true }}"
+
+# Inject ownerReferences
+- name: Inject owner references for KubevirtCommonTemplatesBundle
+  include_role: 
+    name: ClaimOwnership
+  vars:
+    object: "{{ item }}"
+    owner: "{{ cr_info }}"
+  when: "{{ old_cr_exists==true }}"
+  with_items: "{{ old_cr_templates }}" # Templates
 
 - name: "Count all new templates in file"
   set_fact:
     new_templates: "{{ lookup('file', 'common-templates-'+ version +'.yaml').split('\n---\n') | select('search', '(^|\n)[^#]') | list | length }}"
 
-
 - name: "Set label"
   set_fact:
     label: "template.kubevirt.io/version={{ version }}"
-  
+
 - name: "Get all templates"
   set_fact:
-    deployed_templates_after: "{{ lookup('k8s', api_version=ct_status.results[0].result.apiVersion, kind='template', label_selector=label)|length }}"
+    deployed_templates_after: "{{ lookup('k8s', api_version=ct_status.results[0].result.apiVersion, kind='template', label_selector=label) | length }}"
+
+- name: "Set Available status"
+  set_fact:
+    available: "{{ true if new_templates <= deployed_templates_after else false }}"
 
 - name: Set progressing condition
   operator_sdk.util.k8s_status:
-    api_version: ssp.kubevirt.io/v1
-    kind: KubevirtCommonTemplatesBundle
-    name: "{{ meta.name }}"
-    namespace: "{{ meta.namespace }}"
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
     conditions:
     - type: Progressing
-      status: "{{ 'True' if new_templates > deployed_templates_after else 'False' }}"
+      status: "False"
       reason: "progressing"
-      message: "Templates progressing."
+      message: "Templates progressing (deployed templates: {{ deployed_templates_after }}, desired deployed templated: {{ new_templates }})."
 
 - name: Set available condition
   operator_sdk.util.k8s_status:
-    api_version: ssp.kubevirt.io/v1
-    kind: KubevirtCommonTemplatesBundle
-    name: "{{ meta.name }}"
-    namespace: "{{ meta.namespace }}"
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
     conditions:
     - type: Available
-      status: "{{ 'True' if new_templates <= deployed_templates_after else 'False' }}"
+      status: "True"
       reason: "available"
-      message: "Common templates available."
+      message: "Common templates available (deployed templates: {{ deployed_templates_after }}, desired deployed templated: {{ new_templates }})."
+
+- name: Set degraded condition
+  operator_sdk.util.k8s_status:
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
+    conditions:
+    - type: Degraded
+      status: "False"
+      reason: "degraded"
+      message: "Templates degraded (deployed templates: {{ deployed_templates_after }}, desired deployed templated: {{ new_templates }})."
+
+# Update observerVersion when the CR is Available to indicate a successfull upgrade
+- name: Set observedVersion
+  operator_sdk.util.k8s_status:
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
+    status:
+      observedVersion: "{{ operator_version }}"
+  when: "{{ available==true }}"
