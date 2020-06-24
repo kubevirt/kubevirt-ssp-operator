@@ -1,70 +1,112 @@
 ---
 # tasks file for KubevirtTemplateValidator
+- name: Set operatorVersion and targetVersion
+  operator_sdk.util.k8s_status:
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
+    status:
+      operatorVersion: "{{ operator_version }}"
+      targetVersion: "{{ operator_version }}"
+
 - name: Set template:view role
   k8s:
     state: present
     definition: "{{ lookup('template', 'template-view-role.yaml.j2') | from_yaml }}"
+    apply: yes
 - name: Create the service
   k8s:
     state: present
     definition: "{{ item | from_yaml }}"
+    apply: yes
   with_items: "{{ lookup('template', 'service.yaml.j2').split('\n---\n') | select('search', '(^|\n)[^#]') | list }}"
   register: tv
+
+# Actively inject owner references in order to adopt existing resources during an upgrade
+- name: Inject owner references for KubevirtTemplateValidator
+  include_role:
+    name: ClaimOwnership
+  vars:
+    object: "{{ item }}"
+    owner: "{{ cr_info }}"
+  with_list:
+  - "{{ tv.results[0].result }}" # ServiceAccount
+  - "{{ tv.results[2].result }}" # Service
+  - "{{ tv.results[3].result }}" # Deployment
+
 - name: Register the webhook
   k8s:
     state: present
     definition: "{{ lookup('template', 'webhook.yaml.j2') | from_yaml }}"
+    apply: yes
   
 - name: Refresh template-validator var
   set_fact:
     tv_status: "{{ lookup('k8s', kind=tv.results[3].result.kind, namespace=tv.results[3].result.metadata.namespace, resource_name=tv.results[3].result.metadata.name) | from_yaml }}"
 
+- name: "Set Progressing status"
+  set_fact:
+    progressing: "{{ true if tv_status.status.readyReplicas|default(0) != tv_status.status.replicas|default(2) else false }}"
+
+- name: "Set Available status"
+  set_fact:
+    available: "{{ true if tv_status.status.readyReplicas|default(0) == tv_status.status.replicas|default(2) else false }}"
+
+- name: "Set Degraded status"
+  set_fact:
+    degraded: "{{ true if tv_status.status.readyReplicas|default(0) != tv_status.status.replicas|default(2) else false }}"
+
 # defaults in this ansible code are here because at the start of deployment, there is a chance 
 # there will be no attributes like availableReplicas and readyReplicas
 - name: Set progressing condition
   operator_sdk.util.k8s_status:
-    api_version: ssp.kubevirt.io/v1
-    kind: KubevirtTemplateValidator
-    name: "{{ meta.name }}"
-    namespace: "{{ meta.namespace }}"
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
     conditions:
     - type: Progressing
-      status: "{{ 'True' if tv_status.status.availableReplicas|default(0) != tv_status.status.readyReplicas|default(2) else 'False' }}"
+      status: "{{ 'True' if progressing else 'False' }}"
       reason: "progressing"
-      message: "Template-validator is progressing."
-
-- name:  "Wait for the template-validator to start"
-  k8s_info:
-    api_version: v1
-    kind: "{{ tv_status.kind }}"
-    name: "{{ tv_status.metadata.name }}"
-    namespace: "{{ tv_status.metadata.namespace }}"
-  register: tv_status
-  delay: 10
-  retries: 300
-  until: tv_status.resources[0].status.availableReplicas|default(0) == tv_status.resources[0].status.readyReplicas|default(2) | default(false)
-
+      message: "Template-validator is progressing (readyReplicas: {{ tv_status.status.readyReplicas|default(0) }}, desired replicas: {{ tv_status.status.replicas|default(2) }})."
 
 - name: Set available condition
   operator_sdk.util.k8s_status:
-    api_version: ssp.kubevirt.io/v1
-    kind: KubevirtTemplateValidator
-    name: "{{ meta.name }}"
-    namespace: "{{ meta.namespace }}"
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
     conditions:
     - type: Available
-      status: "{{ 'True' if tv_status.resources[0].status.availableReplicas|default(0) == tv_status.resources[0].status.readyReplicas|default(2) else 'False' }}"
+      status: "{{ 'True' if available else 'False' }}"
       reason: "available"
-      message: "Template-validator is available."
+      message: "Template-validator is available (readyReplicas: {{ tv_status.status.readyReplicas|default(0) }},  desired replicas: {{ tv_status.status.replicas|default(2) }})."
 
 - name: Set degraded condition
   operator_sdk.util.k8s_status:
-    api_version: ssp.kubevirt.io/v1
-    kind: KubevirtTemplateValidator
-    name: "{{ meta.name }}"
-    namespace: "{{ meta.namespace }}"
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
     conditions:
     - type: Degraded
-      status: "{{ 'True' if tv_status.resources[0].status.availableReplicas|default(0) != tv_status.resources[0].status.readyReplicas|default(2) else 'False' }}"
+      status: "{{ 'True' if degraded else 'False' }}"
       reason: "degraded"
-      message: "Template-validator is degraded."
+      message: "Template-validator is degraded (readyReplicas: {{ tv_status.status.readyReplicas|default(0) }}, desired replicas: {{ tv_status.status.replicas|default(2) }})."
+
+# Update observerVersion when the CR is Available to indicate a successfull upgrade
+- name: Set observedVersion
+  operator_sdk.util.k8s_status:
+    api_version: "{{ cr_info.apiVersion }}"
+    kind: "{{ cr_info.kind }}"
+    name: "{{ cr_info.metadata.name }}"
+    namespace: "{{ cr_info.metadata.namespace }}"
+    status:
+      observedVersion: "{{ operator_version }}"
+  when: "{{ available==true }}"
+
+- name: Reque if KubevirtTemplateValidator not available
+  fail:
+    msg: "Requeing until KubevirtTemplateValidator is available"
+  when: tv_status.status.readyReplicas|default(0) != tv_status.status.replicas|default(2)

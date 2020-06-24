@@ -16,6 +16,7 @@ rules:
   - patch
   - update
   - watch
+  - delete
 - apiGroups:
   - monitoring.coreos.com
   resources:
@@ -26,6 +27,7 @@ rules:
   - list
   - patch
   - watch
+  - delete
 - apiGroups:
   - monitoring.coreos.com
   resources:
@@ -67,6 +69,7 @@ rules:
   - list
   - patch
   - watch
+  - delete
 - apiGroups:
   - ""
   resources:
@@ -81,6 +84,7 @@ rules:
   - patch
   - list
   - watch
+  - delete
 - apiGroups:
   - ""
   resources:

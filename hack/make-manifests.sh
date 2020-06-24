@@ -12,7 +12,7 @@ CHANNEL="beta"
 CLUSTER_VERSIONED_DIR="cluster/${VERSION}"
 MANIFESTS_DIR="manifests/kubevirt-ssp-operator"
 MANIFESTS_VERSIONED_DIR="${MANIFESTS_DIR}/${TAG}"
-IMAGE_PATH="quay.io/fromani/kubevirt-ssp-operator-container:latest"
+IMAGE_PATH="quay.io/fromani/kubevirt-ssp-operator-container:${TAG}"
 
 HAVE_COURIER=0
 if which operator-courier &> /dev/null; then
@@ -39,11 +39,11 @@ done
 (
 for MF in deploy/service_account.yaml deploy/role.yaml deploy/role_binding.yaml deploy/operator.yaml; do
 	echo "---"
-	sed "s|REPLACE_IMAGE|${IMAGE_PATH}|" < ${MF}
+	sed "s|REPLACE_IMAGE|${IMAGE_PATH}|g ; s|REPLACE_VERSION|${TAG}|g" < ${MF}
 done
 ) > ${CLUSTER_VERSIONED_DIR}/kubevirt-ssp-operator.yaml
 
-${BASEPATH}/../build/csv-generator.sh --csv-version=${VERSION} --namespace=placeholder --operator-image=REPLACE_IMAGE > ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.${TAG}.clusterserviceversion.yaml
+${BASEPATH}/../build/csv-generator.sh --csv-version=${VERSION} --namespace=placeholder --operator-image=REPLACE_IMAGE --operator-version=REPLACE_VERSION > ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.${TAG}.clusterserviceversion.yaml
 
 # caution: operator-courier (as in 5a4852c) wants *one* entity per yaml file (e.g. it does NOT use safe_load_all)
 for CRD in $( ls deploy/crds/kubevirt_*crd.yaml ); do

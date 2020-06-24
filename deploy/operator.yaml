@@ -50,3 +50,5 @@ spec:
               value: ""
             - name: OPERATOR_NAME
               value: "kubevirt-ssp-operator"
+            - name: OPERATOR_VERSION
+              value: REPLACE_VERSION
