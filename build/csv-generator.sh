@@ -21,12 +21,13 @@ replace_env_var() {
 }
 
 help_text() {
-    echo "USAGE: csv-generator --csv-version=<version> --namespace=<namespace> --operator-image=<operator image> [optional args]"
+    echo "USAGE: csv-generator --csv-version=<version> --namespace=<namespace> --operator-image=<operator image> --operator-version=<operator version> [optional args]"
     echo ""
     echo "ARGS:"
     echo "  --csv-version:    (REQUIRED) The version of the CSV file"
     echo "  --namespace:      (REQUIRED) The namespace set on the CSV file"
     echo "  --operator-image: (REQUIRED) The operator container image to use in the CSV file"
+    echo "  --operator-version: (REQUIRED) The version of the operator to use in the CSV file"
     echo "  --watch-namespace:   (OPTIONAL)"
     echo "  --kvm-info-tag:      (OPTIONAL)"
     echo "  --validator-tag:     (OPTIONAL)"
@@ -41,6 +42,7 @@ help_text() {
 CSV_VERSION=""
 NAMESPACE=""
 OPERATOR_IMAGE=""
+OPERATOR_VERSION=""
 
 # OPTIONAL ARGS
 WATCH_NAMESPACE=""
@@ -66,6 +68,9 @@ while (( "$#" )); do
         ;;
     --operator-image)
         OPERATOR_IMAGE=$VAL
+        ;;
+    --operator-version)
+        OPERATOR_VERSION=$VAL
         ;;
     --watch-namespace)
         WATCH_NAMESPACE=$VAL
@@ -101,7 +106,7 @@ while (( "$#" )); do
     esac
 done
 
-if [ -z "$CSV_VERSION" ] || [ -z "$NAMESPACE" ] || [ -z "$OPERATOR_IMAGE" ]; then
+if [ -z "$CSV_VERSION" ] || [ -z "$NAMESPACE" ] || [ -z "$OPERATOR_IMAGE" ] || [ -z "$OPERATOR_VERSION" ]; then
     echo "Error: Missing required arguments"
     help_text
     exit 1
@@ -114,6 +119,7 @@ cp ${MANIFESTS_GENERATED_CSV} ${TMP_FILE}
 sed -i "s/PLACEHOLDER_CSV_VERSION/${CSV_VERSION}/g" ${TMP_FILE}
 sed -i "s/namespace: placeholder/namespace: ${NAMESPACE}/g" ${TMP_FILE}
 sed -i "s|REPLACE_IMAGE|${OPERATOR_IMAGE}|g" ${TMP_FILE}
+sed -i "s|REPLACE_VERSION|${OPERATOR_VERSION}|g" ${TMP_FILE}
 
 replace_env_var "WATCH_NAMESPACE" $WATCH_NAMESPACE
 replace_env_var "KVM_INFO_TAG" $KVM_INFO_TAG
