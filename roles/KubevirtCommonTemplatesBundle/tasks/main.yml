@@ -24,15 +24,24 @@
   set_fact:
     templates: "{{ lookup('k8s', api_version=ct_status.results[0].result.apiVersion, kind='template') }}"
 
-- name: Fetch old cr
-  block:
-  - set_fact:
+- block:
+  - name: Fetch old CR
+    set_fact:
       old_cr: "{{ lookup('k8s', api_version='kubevirt.io/v1', kind='KubevirtCommonTemplatesBundle') }}"
-  - set_fact:
-      old_cr_exists: true
   rescue:
-  - set_fact:
-      old_cr_exists: false
+  - name: Fail if k8s lookup plugin errored
+    fail:
+      msg: "An error occured while fetching the old CR: {{ ansible_failed_result.msg }}"
+    when:
+    # This is the error that is raised when a resource is not found
+    # see: https://github.com/ansible-collections/community.kubernetes/blob/9fb808c7f37caea0300db1b466117ad0367db492/plugins/module_utils/common.py#L230
+    # this means there is no old CR to take ownership from
+    - '"Failed to find exact match" not in ansible_failed_result.msg'
+
+# If the old cr exists, it would have a metadata field
+- name: Check if the old CR exists
+  set_fact:
+    old_cr_exists: "{{ true if (old_cr is defined) and (old_cr.metadata | default(None)) != None else false }}"
 
 - name: Filter for templates owned by the old cr
   set_fact:
