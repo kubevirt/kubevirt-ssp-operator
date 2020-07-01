@@ -77,6 +77,7 @@ spec:
           - patch
           - update
           - watch
+          - delete
         - apiGroups:
           - monitoring.coreos.com
           resources:
@@ -87,6 +88,7 @@ spec:
           - list
           - patch
           - watch
+          - delete
         - apiGroups:
           - monitoring.coreos.com
           resources:
@@ -128,6 +130,7 @@ spec:
           - list
           - patch
           - watch
+          - delete
         - apiGroups:
           - ''
           resources:
@@ -142,6 +145,7 @@ spec:
           - patch
           - list
           - watch
+          - delete
         - apiGroups:
           - ''
           resources:
@@ -225,6 +229,8 @@ spec:
                 - name: IMAGE_NAME_PREFIX
                 - name: OPERATOR_NAME
                   value: kubevirt-ssp-operator
+                - name: OPERATOR_VERSION
+                  value: REPLACE_VERSION
                 image: REPLACE_IMAGE
                 imagePullPolicy: Always
                 name: kubevirt-ssp-operator
