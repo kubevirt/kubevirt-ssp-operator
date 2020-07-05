@@ -13,7 +13,7 @@
   k8s:
     state: present
     definition: "{{ item | from_yaml }}"
-    apply: yes
+    merge_type: ['merge', 'json']
   with_items: "{{ lookup('template', 'kubevirt-node-labeller-roles.yaml.j2').split('\n---\n') | select('search', '(^|\n)[^#]') | list }}"
   register: roles
 
@@ -21,7 +21,7 @@
   k8s:
     state: present
     definition: "{{ lookup('template', 'kubevirt-node-labeller-ds.yaml.j2') | from_yaml }}"
-    apply: yes
+    merge_type: ['merge', 'json']
   register: nl
 
 # Actively inject owner references in order to adopt existing resources during an upgrade

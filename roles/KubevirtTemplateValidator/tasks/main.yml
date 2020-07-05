@@ -14,12 +14,12 @@
   k8s:
     state: present
     definition: "{{ lookup('template', 'template-view-role.yaml.j2') | from_yaml }}"
-    apply: yes
+    merge_type: ['merge', 'json']
 - name: Create the service
   k8s:
     state: present
     definition: "{{ item | from_yaml }}"
-    apply: yes
+    merge_type: ['merge', 'json']
   with_items: "{{ lookup('template', 'service.yaml.j2').split('\n---\n') | select('search', '(^|\n)[^#]') | list }}"
   register: tv
 
@@ -39,7 +39,7 @@
   k8s:
     state: present
     definition: "{{ lookup('template', 'webhook.yaml.j2') | from_yaml }}"
-    apply: yes
+    merge_type: ['merge', 'json']
   
 - name: Refresh template-validator var
   set_fact:
