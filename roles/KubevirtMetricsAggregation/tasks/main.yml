@@ -15,7 +15,7 @@
     state: present
     namespace: "{{ meta.namespace }}"
     definition: "{{ item | from_yaml }}"
-    apply: yes
+    merge_type: ['merge', 'json']
   with_items: "{{ lookup('template', 'aggregation-rule-vmi-count.yaml.j2').split('\n---\n') | select('search', '(^|\n)[^#]') |list }}"
   register: promrules
 

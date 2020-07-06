@@ -15,14 +15,14 @@
     state: present
     namespace: "{{ cr_info.metadata.namespace }}"
     definition: "{{ item | from_yaml }}"
-    apply: yes
+    merge_type: ['merge', 'json']
   with_items: "{{ lookup('file', 'common-templates-'+ version +'.yaml').split('\n---\n') | select('search', '(^|\n)[^#]') | list }}"
   register: ct_status
 
 # Get all templates
 - name: Fetching all templates
   set_fact:
-    templates: "{{ lookup('k8s', api_version=ct_status.results[0].result.apiVersion, kind='template') }}"
+    templates: "{{ lookup('k8s', api_version=ct_status.results[0].result.apiVersion, kind='templates') }}"
 
 - block:
   - name: Fetch old CR
@@ -54,6 +54,7 @@
     name: ClaimOwnership
   vars:
     object: "{{ item }}"
+    objectKind: "templates"
     owner: "{{ cr_info }}"
   when: "{{ old_cr_exists==true }}"
   with_items: "{{ old_cr_templates }}" # Templates
