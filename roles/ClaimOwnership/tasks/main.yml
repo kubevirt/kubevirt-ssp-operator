@@ -5,7 +5,7 @@
     state: present
     resource_definition:
       apiVersion: "{{ object.apiVersion }}"
-      kind: "{{ object.kind }}"
+      kind: "{{ objectKind | default(object.kind) }}"
       metadata:
         name: "{{ object.metadata.name }}"
         namespace: "{{ object.metadata.namespace }}"
