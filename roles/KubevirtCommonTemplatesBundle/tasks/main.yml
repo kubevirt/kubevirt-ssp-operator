@@ -14,15 +14,14 @@
   k8s:
     state: present
     namespace: "{{ cr_info.metadata.namespace }}"
-    definition: "{{ item | from_yaml }}"
     merge_type: ['merge', 'json']
-  with_items: "{{ lookup('file', 'common-templates-'+ version +'.yaml').split('\n---\n') | select('search', '(^|\n)[^#]') | list }}"
+    resource_definition: "{{ lookup('file', 'common-templates-'+ version +'.yaml') }}"
   register: ct_status
 
 # Get all templates
 - name: Fetching all templates
   set_fact:
-    templates: "{{ lookup('k8s', api_version=ct_status.results[0].result.apiVersion, kind='templates') }}"
+    templates: "{{ lookup('k8s', api_version=ct_status.result.results[0].result.apiVersion, kind='templates') }}"
 
 - block:
   - name: Fetch old CR
@@ -50,14 +49,12 @@
 
 # Inject ownerReferences
 - name: Inject owner references for KubevirtCommonTemplatesBundle
-  include_role: 
-    name: ClaimOwnership
-  vars:
-    object: "{{ item }}"
-    objectKind: "templates"
-    owner: "{{ cr_info }}"
-  when: "{{ old_cr_exists==true }}"
-  with_items: "{{ old_cr_templates }}" # Templates
+  k8s:
+    state: present
+    namespace: "{{ cr_info.metadata.namespace }}"
+    merge_type: ['merge', 'json']
+    resource_definition: "{{ old_cr_templates | k8s_inject_ownership(cr_info) }}"
+  when: "{{ (old_cr_templates is defined) and (old_cr_templates | length > 0) }}"
 
 - name: "Count all new templates in file"
   set_fact:
@@ -69,7 +66,7 @@
 
 - name: "Get all templates"
   set_fact:
-    deployed_templates_after: "{{ lookup('k8s', api_version=ct_status.results[0].result.apiVersion, kind='template', label_selector=label) | length }}"
+    deployed_templates_after: "{{ lookup('k8s', api_version=ct_status.result.results[0].result.apiVersion, kind='template', label_selector=label) | length }}"
 
 - name: "Set Available status"
   set_fact:
