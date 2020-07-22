@@ -23,9 +23,9 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "github.com/MarSik/kubevirt-ssp-operator/pkg/client/clientset/versioned"
-	internalinterfaces "github.com/MarSik/kubevirt-ssp-operator/pkg/client/informers/externalversions/internalinterfaces"
-	kubevirt "github.com/MarSik/kubevirt-ssp-operator/pkg/client/informers/externalversions/kubevirt"
+	versioned "github.com/kubevirt/kubevirt-ssp-operator/pkg/client/clientset/versioned"
+	internalinterfaces "github.com/kubevirt/kubevirt-ssp-operator/pkg/client/informers/externalversions/internalinterfaces"
+	kubevirt "github.com/kubevirt/kubevirt-ssp-operator/pkg/client/informers/externalversions/kubevirt"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
