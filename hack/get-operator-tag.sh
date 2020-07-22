@@ -11,5 +11,5 @@ if [ -n "${TRAVIS_TAG}" ]; then
 	echo "${TRAVIS_TAG}"
 else
 	# refreshing manifests, getting the last stable tag
-	_curl -s 'https://api.github.com/repos/MarSik/kubevirt-ssp-operator/tags' | jq -r '.[].name' | sort -r | head -1
+	_curl -s 'https://api.github.com/repos/kubevirt/kubevirt-ssp-operator/tags' | jq -r '.[].name' | sort -r | head -1
 fi
