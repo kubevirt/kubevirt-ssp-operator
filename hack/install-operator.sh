@@ -18,7 +18,7 @@ LAST_TAG=""
 if [ "${CI}" != "true" ] || [ "${TRAVIS}" != "true" ]; then
 	# TODO: consume releases, not tags
 	# TODO: check if the github APIs guarantee the ordering
-	LAST_TAG=$( _curl -s https://api.github.com/repos/MarSik/kubevirt-ssp-operator/tags | jq -r '.[].name' | sort -rV | head -1 )
+	LAST_TAG=$( _curl -s https://api.github.com/repos/kubevirt/kubevirt-ssp-operator/tags | jq -r '.[].name' | sort -rV | head -1 )
 fi
 
 oc create -n ${NAMESPACE} -f ${BASEPATH}/../deploy/service_account.yaml

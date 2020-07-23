@@ -62,7 +62,7 @@ Degraded - False
 
 6. you can of course delete pods and test if it changes conditions (but take in account, every iteration is slow, so when you delete e.g. node-labeller, it can be recreated between the iterations and ansible will not notice that it was deleted).
 The Easiest way is to create e.g. 2 nodes, let node-labeller to be deployed on both nodes and then disable one (`sudo ifconfig eth0 down && sleep 10 && sudo ifconfig eth0 up`)
-and then wait for [300x10 second](https://github.com/MarSik/kubevirt-ssp-operator/pull/76/files#diff-d1fae8c4046ebdb431e9b097881fc1b7R39 I think we should lower this constant) after that it should set conditions:
+and then wait for [300x10 second](https://github.com/kubevirt/kubevirt-ssp-operator/pull/76/files#diff-d1fae8c4046ebdb431e9b097881fc1b7R39 I think we should lower this constant) after that it should set conditions:
 ```
 Progressing - True
 Available - False

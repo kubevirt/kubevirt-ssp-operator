@@ -19,8 +19,8 @@ limitations under the License.
 package kubevirt
 
 import (
-	internalinterfaces "github.com/MarSik/kubevirt-ssp-operator/pkg/client/informers/externalversions/internalinterfaces"
-	v1 "github.com/MarSik/kubevirt-ssp-operator/pkg/client/informers/externalversions/kubevirt/v1"
+	internalinterfaces "github.com/kubevirt/kubevirt-ssp-operator/pkg/client/informers/externalversions/internalinterfaces"
+	v1 "github.com/kubevirt/kubevirt-ssp-operator/pkg/client/informers/externalversions/kubevirt/v1"
 )
 
 // Interface provides access to each of this group's versions.

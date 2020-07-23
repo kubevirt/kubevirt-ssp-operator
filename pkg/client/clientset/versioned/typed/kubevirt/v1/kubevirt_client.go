@@ -19,8 +19,8 @@ limitations under the License.
 package v1
 
 import (
-	v1 "github.com/MarSik/kubevirt-ssp-operator/pkg/apis/kubevirt/v1"
-	"github.com/MarSik/kubevirt-ssp-operator/pkg/client/clientset/versioned/scheme"
+	v1 "github.com/kubevirt/kubevirt-ssp-operator/pkg/apis/kubevirt/v1"
+	"github.com/kubevirt/kubevirt-ssp-operator/pkg/client/clientset/versioned/scheme"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	rest "k8s.io/client-go/rest"
 )
