@@ -10,6 +10,7 @@ COPY roles/ ${HOME}/roles/
 COPY playbooks/ ${HOME}/
 COPY watches.yaml ${HOME}/watches.yaml
 COPY _defaults.yml ${HOME}/_defaults.yml
+COPY filter_plugins/ ${HOME}/filter_plugins/
 
 COPY deploy/crds ${HOME}/deploy/crds
 COPY manifests/generated ${HOME}/manifests/generated

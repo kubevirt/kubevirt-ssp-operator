@@ -24,17 +24,20 @@
     merge_type: ['merge', 'json']
   register: nl
 
+- name: "collect all objects"
+  set_fact:
+    objects:
+      - "{{ roles.results[0].result }}" # ServiceAccount
+      - "{{ roles.results[4].result }}" # ConfigMap
+      - "{{ nl.result }}"
+
 # Actively inject owner references in order to adopt existing resources during an upgrade
 - name: Inject owner references for KubevirtNodeLabellerBundle
-  include_role: 
-    name: ClaimOwnership
-  vars:
-    object: "{{ item }}"
-    owner: "{{ cr_info }}"
-  with_list:
-  - "{{ roles.results[0].result }}" # ServiceAccount
-  - "{{ roles.results[4].result }}" # ConfigMap
-  - "{{ nl.result }}"               # DaemonSet
+  k8s:
+    state: present
+    namespace: "{{ cr_info.metadata.namespace }}"
+    merge_type: ['merge', 'json']
+    resource_definition: "{{ objects | k8s_inject_ownership(cr_info) }}"
 
 - name: "Refresh node-labeller var"
   k8s:
