@@ -8,7 +8,7 @@ source ${SCRIPTPATH}/testlib.sh
 RET=1
 TEST_NS="${KV_NAMESPACE}"
 
-oc create -n ${KV_NAMESPACE} -f "${SCRIPTPATH}/common-templates-versioned-cr.yaml" || exit 2
+oc create -n ${KV_NAMESPACE} -f "${SCRIPTPATH}/common-templates-unversioned-cr.yaml" || exit 2
 
 wait_for_deployment_ready ${TEST_NS} 5 90 "KubevirtCommonTemplatesBundle" "Running" "Successful"
 RET="$?"
@@ -29,6 +29,6 @@ done
 wait_for_condition ${TEST_NS} 5 40 "KubevirtCommonTemplatesBundle" "Available" "True"
 RET="$?"
 
-oc delete -n ${TEST_NS} -f "${SCRIPTPATH}/common-templates-versioned-cr.yaml" || exit 2
+oc delete -n ${TEST_NS} -f "${SCRIPTPATH}/common-templates-unversioned-cr.yaml" || exit 2
 
 exit $RET
