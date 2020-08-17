@@ -47,10 +47,8 @@ manifests: operator-courier csv-generator manifests-cleanup manifests-prepare op
 
 # This target is used to create manifests for Openshift CI clsuters (presubmit jobs)
 ci-manifests: operator-courier csv-generator manifests-cleanup manifests-prepare operator-sdk
-	component=$(OPERATOR_IMAGE)
-	IMAGE=`eval echo ${IMAGE_FORMAT}`
-	./hack/make-manifests.sh $(IMAGE)
-	./hack/release-manifests.sh $(IMAGE#*:)
+	./hack/make-manifests.sh $(IMAGE_FORMAT)$(OPERATOR_IMAGE)
+	./hack/release-manifests.sh devel
 
 deploy: manifests
 	./hack/deploy-operator.sh
