@@ -42,12 +42,22 @@ manifests-cleanup:
 	rm -rf _out
 
 manifests: operator-courier csv-generator manifests-cleanup manifests-prepare operator-sdk
-	./hack/make-manifests.sh ${IMAGE_TAG}
+	./hack/make-manifests.sh ${IMAGE_REGISTRY}/${OPERATOR_IMAGE}:${IMAGE_TAG}
 	./hack/release-manifests.sh ${IMAGE_TAG}
+
+# This target is used to create manifests for Openshift CI clsuters (presubmit jobs)
+ci-manifests: operator-courier csv-generator manifests-cleanup manifests-prepare operator-sdk
+	component=$(OPERATOR_IMAGE)
+	IMAGE=`eval echo ${IMAGE_FORMAT}`
+	./hack/make-manifests.sh $(IMAGE)
+	./hack/release-manifests.sh $(IMAGE#*:)
+
+deploy: manifests
+	./hack/deploy-operator.sh
 
 release: manifests container-build container-release
 
 functests: manifests
 	cd functests && ./test-runner.sh
 
-.PHONY: functests release manifests manifests-prepare manifests-cleanup container-push container-build container-release
+.PHONY: functests release manifests manifests-prepare manifests-cleanup container-push container-build container-release deploy ci-manifests
