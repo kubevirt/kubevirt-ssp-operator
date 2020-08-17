@@ -6,13 +6,19 @@ SELF=$( realpath $0 )
 BASEPATH=$( dirname $SELF )
 
 # intentionally "impossible"/obviously wrong version
-TAG="${1:-v0.0.0}"
+IMAGE_PATH=$1
+
+if [ -z "$IMAGE_PATH" ]; then
+  echo "Expecting image path as \$1"
+  exit 1
+fi
+
+TAG="${IMAGE_PATH#*:}"
 VERSION=${TAG#v}  # prune initial 'v', which should be present
 CHANNEL="beta"
 CLUSTER_VERSIONED_DIR="cluster/${VERSION}"
 MANIFESTS_DIR="manifests/kubevirt-ssp-operator"
 MANIFESTS_VERSIONED_DIR="${MANIFESTS_DIR}/${TAG}"
-IMAGE_PATH="quay.io/fromani/kubevirt-ssp-operator-container:${TAG}"
 
 HAVE_COURIER=0
 if which operator-courier &> /dev/null; then
