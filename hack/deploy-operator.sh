@@ -6,6 +6,8 @@ BASEPATH=$( dirname $SELF )
 
 NAMESPACE=${1:-kubevirt}
 
+oc create ns ${NAMESPACE}
+
 oc apply -n ${NAMESPACE} -f ${BASEPATH}/../_out/kubevirt-ssp-operator-crd.yaml
 oc apply -n ${NAMESPACE} -f ${BASEPATH}/../_out/kubevirt-ssp-operator-cr.yaml
 
