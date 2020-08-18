@@ -16,6 +16,6 @@ sed "s|imagePullPolicy: Always|imagePullPolicy: IfNotPresent|g" < ${BASEPATH}/..
 
 oc wait --for=condition=Available --timeout=600s -n $NAMESPACE deployment/kubevirt-ssp-operator
 
-echo "Opearator successfully deployed"
+echo "Operator successfully deployed"
 
 oc get pods -n $NAMESPACE
