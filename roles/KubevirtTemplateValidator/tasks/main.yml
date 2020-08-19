@@ -24,16 +24,19 @@
   register: tv
 
 # Actively inject owner references in order to adopt existing resources during an upgrade
+- name: Collect owned objects
+  set_fact:
+    objects:
+      - "{{ tv.results[0].result }}" # ServiceAccount
+      - "{{ tv.results[2].result }}" # Service
+      - "{{ tv.results[3].result }}" # Deployment
+
 - name: Inject owner references for KubevirtTemplateValidator
-  include_role:
-    name: ClaimOwnership
-  vars:
-    object: "{{ item }}"
-    owner: "{{ cr_info }}"
-  with_list:
-  - "{{ tv.results[0].result }}" # ServiceAccount
-  - "{{ tv.results[2].result }}" # Service
-  - "{{ tv.results[3].result }}" # Deployment
+  k8s:
+    state: present
+    namespace: "{{ cr_info.metadata.namespace }}"
+    merge_type: ['merge', 'json']
+    resource_definition: "{{ objects | k8s_inject_ownership(cr_info) }}"
 
 - name: Register the webhook
   k8s:
