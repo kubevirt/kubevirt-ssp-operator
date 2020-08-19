@@ -20,12 +20,11 @@
   register: promrules
 
 - name: Inject owner references for KubevirtMetricsAggregation
-  include_role:
-    name: ClaimOwnership
-  vars:
-    object: "{{ item.result }}"
-    owner: "{{ cr_info }}"
-  with_items: "{{ promrules.results }}"
+  k8s:
+    state: present
+    namespace: "{{ cr_info.metadata.namespace }}"
+    merge_type: ['merge', 'json']
+    definition: "{{ [promrules.results[0].result] | k8s_inject_ownership(cr_info) }}"
 
 - name: Set available condition
   operator_sdk.util.k8s_status:
