@@ -2,5 +2,3 @@ apiVersion: ssp.kubevirt.io/v1
 kind: KubevirtMetricsAggregation
 metadata:
   name: kubevirt-metrics-aggregation
-spec:
-  version: v0.0.1
