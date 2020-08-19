@@ -28,6 +28,14 @@ fi
 mkdir -p ${CLUSTER_VERSIONED_DIR}
 mkdir -p ${MANIFESTS_VERSIONED_DIR}
 
+# Use image digest instead of tag
+# Pull the remote image to get the digest
+docker pull $IMAGE_PATH
+
+IMAGE_PATH_NO_TAG=$(echo $IMAGE_PATH | cut -d':' -f 1)
+IMAGE_DIGEST=$(docker images --digests | grep $IMAGE_PATH_NO_TAG | grep $TAG | tr -s ' ' | cut -d' ' -f 3)
+IMAGE_PATH_WITH_DIGEST=${IMAGE_PATH_NO_TAG}@${IMAGE_DIGEST}
+
 (
 for CRD in $( ls deploy/crds/kubevirt_*crd.yaml ); do
 	echo "---"
@@ -45,7 +53,7 @@ done
 (
 for MF in deploy/service_account.yaml deploy/role.yaml deploy/role_binding.yaml deploy/operator.yaml; do
 	echo "---"
-	sed "s|REPLACE_IMAGE|${IMAGE_PATH}|g ; s|REPLACE_VERSION|${TAG}|g" < ${MF}
+	sed "s|REPLACE_IMAGE|${IMAGE_PATH_WITH_DIGEST}|g ; s|REPLACE_VERSION|${TAG}|g" < ${MF}
 done
 ) > ${CLUSTER_VERSIONED_DIR}/kubevirt-ssp-operator.yaml
 
