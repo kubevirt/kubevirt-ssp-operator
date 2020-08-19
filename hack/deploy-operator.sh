@@ -14,7 +14,6 @@ metadata:
 EOF
 
 oc apply -n ${NAMESPACE} -f ${BASEPATH}/../_out/kubevirt-ssp-operator-crd.yaml
-#oc apply -n ${NAMESPACE} -f ${BASEPATH}/../_out/kubevirt-ssp-operator-cr.yaml
 
 sed "s|imagePullPolicy: Always|imagePullPolicy: IfNotPresent|g" < ${BASEPATH}/../_out/kubevirt-ssp-operator.yaml | \
     oc apply -n ${NAMESPACE} -f -
