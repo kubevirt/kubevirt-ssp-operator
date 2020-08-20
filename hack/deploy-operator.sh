@@ -13,6 +13,45 @@ metadata:
   name: ${NAMESPACE}
 EOF
 
+# Deploying kuebvirt
+LATEST_KV=$(curl -L https://api.github.com/repos/kubevirt/kubevirt/releases | \
+            jq '.[] | select(.prerelease==false) | .name' | head -n 1 | tr -d '"')
+
+oc apply -n $NAMESPACE -f https://github.com/kubevirt/kubevirt/releases/download/${LATEST_KV}/kubevirt-operator.yaml
+oc apply -n $NAMESPACE -f https://github.com/kubevirt/kubevirt/releases/download/${LATEST_KV}/kubevirt-cr.yaml
+
+oc apply -n $NAMESPACE -f - <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    kubevirt.io: ""
+  name: kubevirt-config
+data:
+  feature-gates: DataVolumes, CPUManager, LiveMigration #, ExperimentalIgnitionSupport, Sidecar, Snapshot
+  selinuxLauncherType: virt_launcher.process
+EOF
+
+oc wait --for=condition=Available --timeout=600s -n $NAMESPACE kv/kubevirt
+
+# Deploying CDI
+CDI_NAMESPACE=cdi
+oc apply -f - <<EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: $CDI_NAMESPACE
+EOF
+
+LATEST_CDI=$(curl -L https://api.github.com/repos/kubevirt/containerized-data-importer/releases | \
+             jq '.[] | select(.prerelease==false) | .tag_name' | head -n 1 | tr -d '"')
+
+oc apply -n $CDI_NAMESPACE -f https://github.com/kubevirt/containerized-data-importer/releases/download/${LATEST_CDI}/cdi-operator.yaml
+oc apply -n $CDI_NAMESPACE -f https://github.com/kubevirt/containerized-data-importer/releases/download/${LATEST_CDI}/cdi-cr.yaml
+
+oc wait --for=condition=Available --timeout=600s -n $CDI_NAMESPACE cdi/cdi
+
+# Deploying the operator
 oc apply -n ${NAMESPACE} -f ${BASEPATH}/../_out/kubevirt-ssp-operator-crd.yaml
 
 sed "s|imagePullPolicy: Always|imagePullPolicy: IfNotPresent|g" < ${BASEPATH}/../_out/kubevirt-ssp-operator.yaml | \
@@ -27,6 +66,7 @@ oc wait --for=condition=Available --timeout=600s -n $NAMESPACE deployment/kubevi
 #oc wait --for=condition=Available --timeout=600s -n $NAMESPACE KubevirtNodeLabellerBundle/kubevirt-node-labeller-bundle
 #oc wait --for=condition=Available --timeout=600s -n $NAMESPACE KubevirtTemplateValidator/kubevirt-template-validator
 
-echo "Operator successfully deployed"
+echo "##### Operator successfully deployed #####"
 
 oc get pods -n $NAMESPACE
+oc get pods -n $CDI_NAMESPACE
