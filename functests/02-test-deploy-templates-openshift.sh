@@ -6,7 +6,7 @@ source ${SCRIPTPATH}/testlib.sh
 RET=1
 TEST_NS="openshift"  # TODO: check this exists?
 
-oc create -n ${TEST_NS} -f "${SCRIPTPATH}/common-templates-versioned-cr.yaml" || exit 2
+oc create -n ${TEST_NS} -f "${SCRIPTPATH}/common-templates-unversioned-cr.yaml" || exit 2
 # TODO: SSP-operator needs to improve its feedback mechanism
 sleep 21s
 for idx in $( seq 1 40); do
@@ -19,6 +19,6 @@ for idx in $( seq 1 40); do
 	fi
 	sleep 3s
 done
-oc delete -n ${TEST_NS} -f "${SCRIPTPATH}/common-templates-versioned-cr.yaml" || exit 2
+oc delete -n ${TEST_NS} -f "${SCRIPTPATH}/common-templates-unversioned-cr.yaml" || exit 2
 
 exit $RET
