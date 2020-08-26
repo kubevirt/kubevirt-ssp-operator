@@ -50,7 +50,7 @@ deploy: manifests
 
 release: manifests container-build container-release
 
-functests: manifests
+functests:
 	cd functests && ./test-runner.sh
 
 # OCP CI specific targets
