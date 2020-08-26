@@ -58,9 +58,8 @@ functests: manifests
 # IMAGE_FORMAT environment variable contains the container registry of the build image 
 # like so: 'registry.svc.ci.openshift.org/ci-op-qr0i5qnz/stable:' then the tag of that
 # image should be the image name of our operator.
-ocp-ci-manifests: operator-courier csv-generator manifests-cleanup manifests-prepare operator-sdk
-	component=$(OPERATOR_IMAGE) ./hack/make-manifests.sh $(IMAGE_FORMAT)$(OPERATOR_IMAGE)
-	./hack/release-manifests.sh $(OPERATOR_IMAGE)
+ocp-ci-manifests: manifests-cleanup manifests-prepare
+	component=$(OPERATOR_IMAGE) ./hack/make-ocp-ci-manifests.sh $(IMAGE_FORMAT)$(OPERATOR_IMAGE)
 
 ocp-ci-deploy: ocp-ci-manifests
 	./hack/deploy-operator.sh
