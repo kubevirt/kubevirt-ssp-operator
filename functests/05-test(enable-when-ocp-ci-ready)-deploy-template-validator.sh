@@ -10,7 +10,7 @@ TEST_NS="${KV_NAMESPACE}"
 
 oc create -n ${TEST_NS} -f "${SCRIPTPATH}/template-validator-unversioned-cr.yaml" || exit 2
 # TODO: SSP-operator needs to improve its feedback mechanism
-wait_template_validator_running ${TEST_NS} 5 600
+wait_template_validator_running ${TEST_NS} 5 60
 
 if is_template_validator_running ${TEST_NS}; then
 	RET=0

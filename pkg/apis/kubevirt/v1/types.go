@@ -2,6 +2,7 @@ package v1
 
 import (
 	conditionsv1 "github.com/openshift/custom-resource-status/conditions/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -75,6 +76,9 @@ type ComponentSpec struct {
 type TemplateValidatorSpec struct {
 	Version                   string `json:"version,omitempty"`
 	TemplateValidatorReplicas int    `json:"templateValidatorReplicas,omitempty"`
+	Affinity v1.Affinity `json:"affinity,omitempty"`
+	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
+	Tolerations []v1.Toleration `json:"tolerations,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
