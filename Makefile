@@ -31,7 +31,7 @@ manifests-cleanup:
 	rm -rf _out
 
 generate-crds: operator-sdk
-	./operator-sdk generate crds
+	./hack/generate-crds.sh
 
 generate: generate-crds csv-generator
 
@@ -42,6 +42,7 @@ deploy: manifests
 	./hack/deploy-operator.sh
 
 release: manifests container-build
+	./hack/docker-push.sh ${IMAGE_REGISTRY}/${OPERATOR_IMAGE}:${IMAGE_TAG}
 
 functests:
 	cd functests && ./test-runner.sh
