@@ -12,8 +12,7 @@ COPY watches.yaml ${HOME}/watches.yaml
 COPY _defaults.yml ${HOME}/_defaults.yml
 COPY filter_plugins/ ${HOME}/filter_plugins/
 
-COPY deploy/crds ${HOME}/deploy/crds
-COPY manifests/generated ${HOME}/manifests/generated
+COPY deploy ${HOME}/deploy
 COPY build/csv-generator.sh /usr/bin/csv-generator
 
 COPY build/preprocess_template.py ${HOME}/

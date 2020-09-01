@@ -2,3 +2,4 @@ apiVersion: ssp.kubevirt.io/v1
 kind: KubevirtNodeLabellerBundle
 metadata:
   name: kubevirt-node-labeller-bundle
+  namespace: kubevirt

@@ -2,3 +2,4 @@ apiVersion: ssp.kubevirt.io/v1
 kind: KubevirtMetricsAggregation
 metadata:
   name: kubevirt-metrics-aggregation
+  namespace: kubevirt
