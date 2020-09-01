@@ -17,7 +17,7 @@ limitations under the License.
 package v1
 
 import (
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -38,7 +38,11 @@ type HorizontalPodAutoscalerSpec struct {
 	// reference to scaled resource; horizontal pod autoscaler will learn the current resource consumption
 	// and will set the desired number of pods by using its Scale subresource.
 	ScaleTargetRef CrossVersionObjectReference `json:"scaleTargetRef" protobuf:"bytes,1,opt,name=scaleTargetRef"`
-	// lower limit for the number of pods that can be set by the autoscaler, default 1.
+	// minReplicas is the lower limit for the number of replicas to which the autoscaler
+	// can scale down.  It defaults to 1 pod.  minReplicas is allowed to be 0 if the
+	// alpha feature gate HPAScaleToZero is enabled and at least one Object or External
+	// metric is configured.  Scaling is active as long as at least one metric value is
+	// available.
 	// +optional
 	MinReplicas *int32 `json:"minReplicas,omitempty" protobuf:"varint,2,opt,name=minReplicas"`
 	// upper limit for the number of pods that can be set by the autoscaler; cannot be smaller than MinReplicas.
@@ -211,6 +215,16 @@ type ObjectMetricSource struct {
 	MetricName string `json:"metricName" protobuf:"bytes,2,name=metricName"`
 	// targetValue is the target value of the metric (as a quantity).
 	TargetValue resource.Quantity `json:"targetValue" protobuf:"bytes,3,name=targetValue"`
+
+	// selector is the string-encoded form of a standard kubernetes label selector for the given metric.
+	// When set, it is passed as an additional parameter to the metrics server for more specific metrics scoping
+	// When unset, just the metricName will be used to gather metrics.
+	// +optional
+	Selector *metav1.LabelSelector `json:"selector,omitempty" protobuf:"bytes,4,name=selector"`
+	// averageValue is the target value of the average of the
+	// metric across all relevant pods (as a quantity)
+	// +optional
+	AverageValue *resource.Quantity `json:"averageValue,omitempty" protobuf:"bytes,5,name=averageValue"`
 }
 
 // PodsMetricSource indicates how to scale on a metric describing each pod in
@@ -223,6 +237,12 @@ type PodsMetricSource struct {
 	// targetAverageValue is the target value of the average of the
 	// metric across all relevant pods (as a quantity)
 	TargetAverageValue resource.Quantity `json:"targetAverageValue" protobuf:"bytes,2,name=targetAverageValue"`
+
+	// selector is the string-encoded form of a standard kubernetes label selector for the given metric
+	// When set, it is passed as an additional parameter to the metrics server for more specific metrics scoping
+	// When unset, just the metricName will be used to gather metrics.
+	// +optional
+	Selector *metav1.LabelSelector `json:"selector,omitempty" protobuf:"bytes,3,name=selector"`
 }
 
 // ResourceMetricSource indicates how to scale on a resource metric known to
@@ -344,6 +364,16 @@ type ObjectMetricStatus struct {
 	MetricName string `json:"metricName" protobuf:"bytes,2,name=metricName"`
 	// currentValue is the current value of the metric (as a quantity).
 	CurrentValue resource.Quantity `json:"currentValue" protobuf:"bytes,3,name=currentValue"`
+
+	// selector is the string-encoded form of a standard kubernetes label selector for the given metric
+	// When set in the ObjectMetricSource, it is passed as an additional parameter to the metrics server for more specific metrics scoping.
+	// When unset, just the metricName will be used to gather metrics.
+	// +optional
+	Selector *metav1.LabelSelector `json:"selector,omitempty" protobuf:"bytes,4,name=selector"`
+	// averageValue is the current value of the average of the
+	// metric across all relevant pods (as a quantity)
+	// +optional
+	AverageValue *resource.Quantity `json:"averageValue,omitempty" protobuf:"bytes,5,name=averageValue"`
 }
 
 // PodsMetricStatus indicates the current value of a metric describing each pod in
@@ -354,6 +384,12 @@ type PodsMetricStatus struct {
 	// currentAverageValue is the current value of the average of the
 	// metric across all relevant pods (as a quantity)
 	CurrentAverageValue resource.Quantity `json:"currentAverageValue" protobuf:"bytes,2,name=currentAverageValue"`
+
+	// selector is the string-encoded form of a standard kubernetes label selector for the given metric
+	// When set in the PodsMetricSource, it is passed as an additional parameter to the metrics server for more specific metrics scoping.
+	// When unset, just the metricName will be used to gather metrics.
+	// +optional
+	Selector *metav1.LabelSelector `json:"selector,omitempty" protobuf:"bytes,3,name=selector"`
 }
 
 // ResourceMetricStatus indicates the current value of a resource metric known to
