@@ -34,9 +34,9 @@ type FakeKubevirtTemplateValidators struct {
 	ns   string
 }
 
-var kubevirttemplatevalidatorsResource = schema.GroupVersionResource{Group: "kubevirt.io", Version: "v1", Resource: "kubevirttemplatevalidators"}
+var kubevirttemplatevalidatorsResource = schema.GroupVersionResource{Group: "ssp.kubevirt.io", Version: "v1", Resource: "kubevirttemplatevalidators"}
 
-var kubevirttemplatevalidatorsKind = schema.GroupVersionKind{Group: "kubevirt.io", Version: "v1", Kind: "KubevirtTemplateValidator"}
+var kubevirttemplatevalidatorsKind = schema.GroupVersionKind{Group: "ssp.kubevirt.io", Version: "v1", Kind: "KubevirtTemplateValidator"}
 
 // Get takes name of the kubevirtTemplateValidator, and returns the corresponding kubevirtTemplateValidator object, and an error if there is any.
 func (c *FakeKubevirtTemplateValidators) Get(name string, options v1.GetOptions) (result *kubevirtv1.KubevirtTemplateValidator, err error) {

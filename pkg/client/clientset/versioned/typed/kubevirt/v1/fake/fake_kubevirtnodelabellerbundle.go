@@ -34,9 +34,9 @@ type FakeKubevirtNodeLabellerBundles struct {
 	ns   string
 }
 
-var kubevirtnodelabellerbundlesResource = schema.GroupVersionResource{Group: "kubevirt.io", Version: "v1", Resource: "kubevirtnodelabellerbundles"}
+var kubevirtnodelabellerbundlesResource = schema.GroupVersionResource{Group: "ssp.kubevirt.io", Version: "v1", Resource: "kubevirtnodelabellerbundles"}
 
-var kubevirtnodelabellerbundlesKind = schema.GroupVersionKind{Group: "kubevirt.io", Version: "v1", Kind: "KubevirtNodeLabellerBundle"}
+var kubevirtnodelabellerbundlesKind = schema.GroupVersionKind{Group: "ssp.kubevirt.io", Version: "v1", Kind: "KubevirtNodeLabellerBundle"}
 
 // Get takes name of the kubevirtNodeLabellerBundle, and returns the corresponding kubevirtNodeLabellerBundle object, and an error if there is any.
 func (c *FakeKubevirtNodeLabellerBundles) Get(name string, options v1.GetOptions) (result *kubevirtv1.KubevirtNodeLabellerBundle, err error) {
