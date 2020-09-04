@@ -633,7 +633,7 @@ spec:
                 description: Defines the desired number of replicas for TemplateValidator
                 type: integer
               tolerations:
-                description: Define tolreations for TemplateValidator
+                description: Define tolerations for TemplateValidator
                 items:
                   description: The pod this Toleration is attached to tolerates any
                     taint that matches the triple <key,value,effect> using the matching

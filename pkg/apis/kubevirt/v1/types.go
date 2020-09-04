@@ -116,10 +116,19 @@ type VersionSpec struct {
 	Version string `json:"version,omitempty"`
 }
 
-// Defines the configuration of the operand
+// Defines the configuration of the NodeLabeller
 type ComponentSpec struct {
-	// Defines the version of the operand
+	// Defines the version of the NodeLabeller
 	Version string `json:"version,omitempty"`
+
+	// Define the node affinity for NodeLabeller pods
+	Affinity v1.Affinity `json:"affinity,omitempty"`
+
+	// Define node selector labels for NodeLabeller pods
+	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
+
+	// Define tolerations for NodeLabeller pods
+	Tolerations []v1.Toleration `json:"tolerations,omitempty"`
 }
 
 // Defines the configuration of Template Validator
@@ -136,7 +145,7 @@ type TemplateValidatorSpec struct {
 	// Define node selector labels for TemplateValidator
 	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
 
-	// Define tolreations for TemplateValidator
+	// Define tolerations for TemplateValidator
 	Tolerations []v1.Toleration `json:"tolerations,omitempty"`
 }
 

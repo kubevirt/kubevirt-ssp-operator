@@ -1,0 +1,21 @@
+apiVersion: ssp.kubevirt.io/v1
+kind: KubevirtNodeLabellerBundle
+metadata:
+  name: kubevirt-node-labeller-bundle
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - preference:
+            matchExpressions:
+              - key: testKey
+                operator: In
+                values:
+                  - testValue
+          weight: 1
+  nodeSelector:
+    testKey: testValue
+  tolerations:
+  - effect: NoSchedule
+    key: testKey
+    operator: Exists
