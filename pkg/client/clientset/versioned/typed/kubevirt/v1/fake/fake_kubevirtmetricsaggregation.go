@@ -34,9 +34,9 @@ type FakeKubevirtMetricsAggregations struct {
 	ns   string
 }
 
-var kubevirtmetricsaggregationsResource = schema.GroupVersionResource{Group: "kubevirt.io", Version: "v1", Resource: "kubevirtmetricsaggregations"}
+var kubevirtmetricsaggregationsResource = schema.GroupVersionResource{Group: "ssp.kubevirt.io", Version: "v1", Resource: "kubevirtmetricsaggregations"}
 
-var kubevirtmetricsaggregationsKind = schema.GroupVersionKind{Group: "kubevirt.io", Version: "v1", Kind: "KubevirtMetricsAggregation"}
+var kubevirtmetricsaggregationsKind = schema.GroupVersionKind{Group: "ssp.kubevirt.io", Version: "v1", Kind: "KubevirtMetricsAggregation"}
 
 // Get takes name of the kubevirtMetricsAggregation, and returns the corresponding kubevirtMetricsAggregation object, and an error if there is any.
 func (c *FakeKubevirtMetricsAggregations) Get(name string, options v1.GetOptions) (result *kubevirtv1.KubevirtMetricsAggregation, err error) {

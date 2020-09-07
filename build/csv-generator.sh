@@ -2,13 +2,17 @@
 
 set -e
 
-MANIFESTS_GENERATED_DIR="manifests/generated"
+MANIFESTS_GENERATED_DIR="deploy/olm-catalog"
 CRDS_DIR="deploy/crds"
+
+# If the above directories do not exist, csv-generator is run inside the operator container, which
+# copies manifests to $HOME
 if ! [ -d $MANIFESTS_GENERATED_DIR ]; then
-    MANIFESTS_GENERATED_DIR="${HOME}/manifests/generated"
+    MANIFESTS_GENERATED_DIR="${HOME}/deploy/olm-catalog"
     CRDS_DIR="${HOME}/deploy/crds"
 fi
-MANIFESTS_GENERATED_CSV=${MANIFESTS_GENERATED_DIR}/kubevirt-ssp-operator.vVERSION.clusterserviceversion.yaml
+MANIFESTS_GENERATED_CSV=${MANIFESTS_GENERATED_DIR}/kubevirt-ssp-operator.clusterserviceversion.yaml
+
 TMP_FILE=$(mktemp)
 
 replace_env_var() {
@@ -134,7 +138,7 @@ echo "---"
 cat ${TMP_FILE}
 rm ${TMP_FILE}
 if [ "$DUMP_CRDS" = "true" ]; then
-    for CRD in $( ls ${CRDS_DIR}/kubevirt_*crd.yaml ); do
+    for CRD in $( ls ${CRDS_DIR}/*crd.yaml ); do
         echo "---"
         cat ${CRD}
     done

@@ -16,17 +16,6 @@ fi
 TAG="${IMAGE_PATH#*:}"
 VERSION=${TAG#v}  # prune initial 'v', which should be present
 CHANNEL="beta"
-CLUSTER_VERSIONED_DIR="cluster/${VERSION}"
-MANIFESTS_DIR="manifests/kubevirt-ssp-operator"
-MANIFESTS_VERSIONED_DIR="${MANIFESTS_DIR}/${TAG}"
-
-HAVE_COURIER=0
-if which operator-courier &> /dev/null; then
-	HAVE_COURIER=1
-fi
-
-mkdir -p ${CLUSTER_VERSIONED_DIR}
-mkdir -p ${MANIFESTS_VERSIONED_DIR}
 
 # Use image digest instead of tag
 # Pull the remote image to get the digest
@@ -37,47 +26,37 @@ IMAGE_DIGEST=$(docker images --digests | grep $IMAGE_PATH_NO_TAG | grep $TAG | t
 IMAGE_PATH_WITH_DIGEST=${IMAGE_PATH_NO_TAG}@${IMAGE_DIGEST}
 
 (
-for CRD in $( ls deploy/crds/kubevirt_*crd.yaml ); do
+for CRD in $( ls deploy/crds/*crd.yaml ); do
 	echo "---"
 	cat ${CRD}
 done
-) > ${CLUSTER_VERSIONED_DIR}/kubevirt-ssp-operator-crd.yaml
+) > _out/kubevirt-ssp-operator-crd.yaml
 
 (
-for CR in $( ls deploy/crds/kubevirt_*cr.yaml ); do
+for CR in $( ls deploy/crds/*cr.yaml ); do
 	echo "---"
 	cat ${CR}
 done
-) > ${CLUSTER_VERSIONED_DIR}/kubevirt-ssp-operator-cr.yaml
+) > _out/kubevirt-ssp-operator-cr.yaml
 
 (
 for MF in deploy/service_account.yaml deploy/role.yaml deploy/role_binding.yaml deploy/operator.yaml; do
 	echo "---"
 	sed "s|REPLACE_IMAGE|${IMAGE_PATH_WITH_DIGEST}|g ; s|REPLACE_VERSION|${TAG}|g" < ${MF}
 done
-) > ${CLUSTER_VERSIONED_DIR}/kubevirt-ssp-operator.yaml
+) > _out/kubevirt-ssp-operator.yaml
 
-${BASEPATH}/../build/csv-generator.sh --csv-version=${VERSION} --namespace=placeholder --operator-image=REPLACE_IMAGE --operator-version=REPLACE_VERSION > ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.${TAG}.clusterserviceversion.yaml
+${BASEPATH}/../build/csv-generator.sh --csv-version=${VERSION} \
+										--namespace=kubevirt \
+										--operator-image=${IMAGE_PATH_WITH_DIGEST} \
+										--operator-version=${TAG} \
+										> _out/olm-catalog/kubevirt-ssp-operator.clusterserviceversion.yaml
 
-# caution: operator-courier (as in 5a4852c) wants *one* entity per yaml file (e.g. it does NOT use safe_load_all)
-for CRD in $( ls deploy/crds/kubevirt_*crd.yaml ); do
-	cp ${CRD} ${MANIFESTS_VERSIONED_DIR}
-done
+cp deploy/crds/*crd.yaml _out/olm-catalog
 
-cat << EOF > ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.package.yaml
+cat << EOF > _out/olm-catalog/kubevirt-ssp-operator.package.yaml
 packageName: kubevirt-ssp-operator
 channels:
 - name: ${CHANNEL}
   currentCSV: kubevirt-ssp-operator.${TAG}
 EOF
-
-# needed to make operator-courier happy
-cp ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.package.yaml ${MANIFESTS_DIR}
-
-if [ "${HAVE_COURIER}" == "1" ]; then
-	operator-courier verify ${MANIFESTS_VERSIONED_DIR} && echo "OLM verify passed" || echo "OLM verify failed"
-fi
-
-## otherwise the image registry won't build
-# TODO: who's at fault here? the registry build procedure? the courier? something else?
-rm ${MANIFESTS_VERSIONED_DIR}/kubevirt-ssp-operator.package.yaml

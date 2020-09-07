@@ -1,4 +1,0 @@
-apiVersion: ssp.kubevirt.io/v1
-kind: KubevirtCommonTemplatesBundle
-metadata:
-  name: kubevirt-common-template-bundle

@@ -1,4 +1,5 @@
 operator-sdk
+operator-sdk-csv
 _out
 releases.json
 versionsrc

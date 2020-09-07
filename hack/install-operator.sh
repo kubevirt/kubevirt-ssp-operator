@@ -8,10 +8,12 @@ NAMESPACE=${1:-kubevirt}
 
 source ${BASEPATH}/_common.sh
 
-oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_commontemplatesbundle_crd.yaml
-oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_nodelabellerbundle_crd.yaml
-oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_templatevalidator_crd.yaml
-oc create -f ${BASEPATH}/../deploy/crds/kubevirt_v1_metricsaggregation_crd.yaml
+# With the upgrade of CRDs to v1 (to make them 'oc explain'able) we must patch the CRDs in order to deploy on OS 3.11 (travis)
+# until we are fully compliant with OCP CI, then we can remove this
+oc create -f ${BASEPATH}/../deploy/old_crds_for_travis/ssp.kubevirt.io_commontemplatesbundle_crd.yaml
+oc create -f ${BASEPATH}/../deploy/old_crds_for_travis/ssp.kubevirt.io_metricsaggregation_crd.yaml
+oc create -f ${BASEPATH}/../deploy/old_crds_for_travis/ssp.kubevirt.io_nodelabellerbundle_crd.yaml
+oc create -f ${BASEPATH}/../deploy/old_crds_for_travis/ssp.kubevirt.io_templatevalidator_crd.yaml
 
 # we need to do this before to deploy any manifest, so if this fails we bail out as soon as possible.
 LAST_TAG=""

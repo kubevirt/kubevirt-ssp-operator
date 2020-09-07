@@ -34,9 +34,9 @@ type FakeKubevirtCommonTemplatesBundles struct {
 	ns   string
 }
 
-var kubevirtcommontemplatesbundlesResource = schema.GroupVersionResource{Group: "kubevirt.io", Version: "v1", Resource: "kubevirtcommontemplatesbundles"}
+var kubevirtcommontemplatesbundlesResource = schema.GroupVersionResource{Group: "ssp.kubevirt.io", Version: "v1", Resource: "kubevirtcommontemplatesbundles"}
 
-var kubevirtcommontemplatesbundlesKind = schema.GroupVersionKind{Group: "kubevirt.io", Version: "v1", Kind: "KubevirtCommonTemplatesBundle"}
+var kubevirtcommontemplatesbundlesKind = schema.GroupVersionKind{Group: "ssp.kubevirt.io", Version: "v1", Kind: "KubevirtCommonTemplatesBundle"}
 
 // Get takes name of the kubevirtCommonTemplatesBundle, and returns the corresponding kubevirtCommonTemplatesBundle object, and an error if there is any.
 func (c *FakeKubevirtCommonTemplatesBundles) Get(name string, options v1.GetOptions) (result *kubevirtv1.KubevirtCommonTemplatesBundle, err error) {

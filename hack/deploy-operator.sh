@@ -32,6 +32,7 @@ data:
   selinuxLauncherType: virt_launcher.process
 EOF
 
+echo "Waiting for Kubevirt to be ready..."
 oc wait --for=condition=Available --timeout=600s -n $NAMESPACE kv/kubevirt
 
 # Deploying CDI
@@ -49,15 +50,17 @@ LATEST_CDI=$(curl -L https://api.github.com/repos/kubevirt/containerized-data-im
 oc apply -n $CDI_NAMESPACE -f https://github.com/kubevirt/containerized-data-importer/releases/download/${LATEST_CDI}/cdi-operator.yaml
 oc apply -n $CDI_NAMESPACE -f https://github.com/kubevirt/containerized-data-importer/releases/download/${LATEST_CDI}/cdi-cr.yaml
 
+echo "Waiting for CDI to be ready..."
+
 oc wait --for=condition=Available --timeout=600s -n $CDI_NAMESPACE cdi/cdi
 
 # Deploying the operator
 oc apply -n ${NAMESPACE} -f ${BASEPATH}/../_out/kubevirt-ssp-operator-crd.yaml
 
-sed "s|imagePullPolicy: Always|imagePullPolicy: IfNotPresent|g" < ${BASEPATH}/../_out/kubevirt-ssp-operator.yaml | \
-    oc apply -n ${NAMESPACE} -f -
+oc apply -f ${BASEPATH}/../_out/kubevirt-ssp-operator.yaml
 
 # Wait for the operator deployment to be ready
+echo "Waiting for Kubevirt SSP Operator to be ready..."
 oc wait --for=condition=Available --timeout=600s -n $NAMESPACE deployment/kubevirt-ssp-operator
 
 # Wait for the operator operands to be ready

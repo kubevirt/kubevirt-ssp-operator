@@ -52,7 +52,7 @@ func (f *genericInformer) Lister() cache.GenericLister {
 // TODO extend this to unknown resources with a client pool
 func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource) (GenericInformer, error) {
 	switch resource {
-	// Group=kubevirt.io, Version=v1
+	// Group=ssp.kubevirt.io, Version=v1
 	case v1.SchemeGroupVersion.WithResource("kubevirtcommontemplatesbundles"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Kubevirt().V1().KubevirtCommonTemplatesBundles().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("kubevirtmetricsaggregations"):
