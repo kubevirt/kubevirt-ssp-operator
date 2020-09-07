@@ -13,6 +13,9 @@ container-build: generate csv-generator
 container-push:
 	docker push $(IMAGE_REGISTRY)/$(OPERATOR_IMAGE):$(IMAGE_TAG)
 
+container-release:
+	./hack/docker-push.sh ${IMAGE_REGISTRY}/${OPERATOR_IMAGE}:${IMAGE_TAG}
+
 csv-generator: operator-sdk-csv
 	./build/make-csv-generator.sh
 
@@ -35,14 +38,13 @@ generate-crds: operator-sdk
 
 generate: generate-crds csv-generator
 
-manifests: manifests-cleanup manifests-prepare csv-generator
+manifests: manifests-cleanup manifests-prepare generate csv-generator
 	./hack/make-manifests.sh ${IMAGE_REGISTRY}/${OPERATOR_IMAGE}:${IMAGE_TAG}
 
 deploy: manifests
 	./hack/deploy-operator.sh
 
-release: manifests container-build
-	./hack/docker-push.sh ${IMAGE_REGISTRY}/${OPERATOR_IMAGE}:${IMAGE_TAG}
+release: container-build container-release manifests
 
 functests:
 	cd functests && ./test-runner.sh
@@ -59,4 +61,4 @@ ocp-ci-manifests: operator-sdk manifests-cleanup manifests-prepare
 ocp-ci-deploy: ocp-ci-manifests
 	./hack/deploy-operator.sh
 
-.PHONY: functests release manifests manifests-prepare manifests-cleanup container-build deploy generate generate-crds ocp-ci-manifests ocp-ci-deploy
+.PHONY: functests release manifests manifests-prepare manifests-cleanup container-build container-push container-release deploy generate generate-crds ocp-ci-manifests ocp-ci-deploy
