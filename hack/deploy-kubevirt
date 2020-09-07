@@ -1,6 +1,0 @@
-#!/bin/bash
-# usage: deploy-kubevirt (minikube|minishift|oc_cluster) $KUBEVIRT_VERSION
-
-set -x
-
-$(dirname $(realpath $0))/../ci/deploy-kubevirt $1 $( $(dirname $(realpath $0))/../ci/ci/extra/cat-kubevirt-release last)
