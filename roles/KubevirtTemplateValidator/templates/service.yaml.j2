@@ -58,9 +58,9 @@ spec:
       labels:
         kubevirt.io: virt-template-validator
     spec:
-      affinity: {{ cr_info.spec.affinity | default("", true) | to_json }}
-      nodeSelector: {{ cr_info.spec.nodeSelector | default("", true) | to_json }}
-      tolerations: {{ cr_info.spec.tolerations | default("", true) | to_json }}
+      affinity: {{ cr_info.spec.affinity | default({}, true) | to_json }}
+      nodeSelector: {{ cr_info.spec.nodeSelector | default({}, true) | to_json }}
+      tolerations: {{ cr_info.spec.tolerations | default([], true) | to_json }}
       serviceAccountName: template-validator
       containers:
         - name: webhook
