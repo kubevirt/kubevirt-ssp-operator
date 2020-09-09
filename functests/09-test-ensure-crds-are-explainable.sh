@@ -4,6 +4,7 @@ SCRIPTPATH=$( dirname $(readlink -f $0) )
 RES_DIR=${SCRIPTPATH}/$(basename -s .sh $0)
 source ${SCRIPTPATH}/testlib.sh
 
+echo "[test_id:4864]: SSP CRs should be explainable"
 # If the CRD OpenAPI schema is not complete (ALL fields have descriptions) the CRD is not explainable
 # and an 'empty description' would appear and this test would fail
 RET=0
