@@ -15,6 +15,9 @@ spec:
       labels:
         app: kubevirt-node-labeller
     spec:
+      affinity: {{ cr_info.spec.affinity | default({}, true) | to_json }}
+      nodeSelector: {{ cr_info.spec.nodeSelector | default({}, true) | to_json }}
+      tolerations: {{ cr_info.spec.tolerations | default([], true) | to_json }}
       serviceAccount: kubevirt-node-labeller
       containers:
       - name: kubevirt-node-labeller-sleeper
