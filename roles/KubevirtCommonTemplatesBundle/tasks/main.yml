@@ -9,6 +9,21 @@
       operatorVersion: "{{ operator_version }}"
       targetVersion: "{{ operator_version }}"
 
+- name: Create namespace for golden images
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'kubevirt-os-images-namespace.yaml.j2') | from_yaml }}"
+    merge_type: ['merge', 'json']
+
+- name: Create RBAC for Golden Images
+  k8s:
+    state: present
+    resource_definition:
+    - "{{ lookup('template', 'kubevirt-os-images-viewrole.yaml.j2') | from_yaml }}"
+    - "{{ lookup('template', 'kubevirt-os-images-viewrolebinding.yaml.j2') | from_yaml }}"
+    - "{{ lookup('template', 'kubevirt-os-images-editrole.yaml.j2') | from_yaml }}"
+    merge_type: ['merge', 'json']
+
 # tasks file for KubevirtCommonTemplatesBundle
 - name: Install VM templates
   k8s:
