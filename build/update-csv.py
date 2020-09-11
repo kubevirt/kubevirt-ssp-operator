@@ -58,6 +58,7 @@ _CRD_INFOS = {
                 'The version of the KubeVirt Template Validator to deploy',
             'displayName': 'Version',
             'path': 'version',
+            'version': 'v1',
             'x-descriptors': [
                 'urn:alm:descriptor:io.kubernetes.ssp:version',
             ],
@@ -72,6 +73,7 @@ _CRD_INFOS = {
                 'The version of the KubeVirt Templates to deploy',
             'displayName': 'Version',
             'path': 'version',
+            'version': 'v1',
             'x-descriptors': [
                 'urn:alm:descriptor:io.kubernetes.ssp:version',
             ],
@@ -86,6 +88,7 @@ _CRD_INFOS = {
                 'The version of the node labeller to deploy',
             'displayName': 'Version',
             'path': 'version',
+            'version': 'v1',
             'x-descriptors': [
                 'urn:alm:descriptor:io.kubernetes.ssp:version',
             ],
@@ -100,6 +103,7 @@ _CRD_INFOS = {
                 'The version of the aggregation rules to deploy',
             'displayName': 'Version',
             'path': 'version',
+            'version': 'v1',
             'x-descriptors': [
                 'urn:alm:descriptor:io.kubernetes.ssp:version',
             ],
