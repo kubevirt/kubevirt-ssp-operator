@@ -53,6 +53,7 @@ _CRD_INFOS = {
         'displayName': 'KubeVirt Template Validator admission webhook',
         'description': \
                 'Represents a deployment of admission control webhook to validate the KubeVirt templates',
+        'version': 'v1',
         'specDescriptors': [{
             'description': \
                 'The version of the KubeVirt Template Validator to deploy',
@@ -68,6 +69,7 @@ _CRD_INFOS = {
         'displayName': 'KubeVirt common templates',
         'description': \
                 'Represents a deployment of the predefined VM templates',
+        'version': 'v1',
         'specDescriptors': [{
             'description': \
                 'The version of the KubeVirt Templates to deploy',
@@ -81,6 +83,7 @@ _CRD_INFOS = {
     },
     'kubevirtnodelabellerbundles.ssp.kubevirt.io': {
         'displayName': 'KubeVirt Node labeller',
+        'version': 'v1',
         'description': \
                 'Represents a deployment of Node labeller component',
         'specDescriptors': [{
@@ -98,6 +101,7 @@ _CRD_INFOS = {
         'displayName': 'KubeVirt Metric Aggregation',
         'description': \
                 'Provide aggregation rules for core kubevirt metrics',
+        'version': 'v1',
         'specDescriptors': [{
             'description': \
                 'The version of the aggregation rules to deploy',
