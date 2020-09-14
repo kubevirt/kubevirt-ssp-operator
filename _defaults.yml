@@ -20,11 +20,11 @@
 #
 # Any version, or default, should not be set more than once in a place in the source tree.
 
-kubevirt_node_labeller_tag: "{{ lookup('env','NODE_LABELLER_TAG')| default('v0.1.1', true) }}"
+kubevirt_node_labeller_tag: "{{ lookup('env','NODE_LABELLER_TAG')| default('v0.2.0', true) }}"
 kvm_info_nfd_plugin_tag: "{{ lookup('env','KVM_INFO_TAG')| default('v0.5.8', true) }}"
 kubevirt_cpu_nfd_plugin_tag: "{{ lookup('env','CPU_PLUGIN_TAG')| default('v0.1.1', true) }}"
 virt_launcher_tag: "{{ lookup('env','VIRT_LAUNCHER_TAG')| default('v0.21.0', true) }}"
-validator_tag: "{{ lookup('env','VALIDATOR_TAG')| default('v0.6.6', true) }}"
+validator_tag: "{{ lookup('env','VALIDATOR_TAG')| default('v0.7.0', true) }}"
 image_name_prefix: "{{ lookup('env','IMAGE_NAME_PREFIX')| default('', true) }}"
 templates_version: v0.12.0
 operator_version: "{{ lookup('env', 'OPERATOR_VERSION') }}"
