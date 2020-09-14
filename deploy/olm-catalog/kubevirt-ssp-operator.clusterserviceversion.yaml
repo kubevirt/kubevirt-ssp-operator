@@ -2,7 +2,7 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: ClusterServiceVersion
 metadata:
   annotations:
-    alm-examples: '[{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtMetricsAggregation","metadata":{"name":"kubevirt-metrics-aggregation","namespace":"kubevirt"}},{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtNodeLabellerBundle","metadata":{"name":"kubevirt-node-labeller-bundle","namespace":"kubevirt"}},{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator","namespace":"kubevirt"},"spec":{"templateValidatorReplicas":2}},{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle","namespace":"kubevirt"}}]'
+    alm-examples: '[{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtCommonTemplatesBundle","metadata":{"name":"kubevirt-common-template-bundle","namespace":"kubevirt"}},{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtMetricsAggregation","metadata":{"name":"kubevirt-metrics-aggregation","namespace":"kubevirt"}},{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtNodeLabellerBundle","metadata":{"name":"kubevirt-node-labeller-bundle","namespace":"kubevirt"}},{"apiVersion":"ssp.kubevirt.io/v1","kind":"KubevirtTemplateValidator","metadata":{"name":"kubevirt-template-validator","namespace":"kubevirt"},"spec":{"templateValidatorReplicas":2}}]'
     capabilities: Basic Install
     categories: Openshift Optional
     containerImage: REPLACE_IMAGE
@@ -24,7 +24,7 @@ spec:
         version: v1
         x-descriptors:
         - urn:alm:descriptor:io.kubernetes.ssp:version
-      version: ''
+      version: v1
     - description: Provide aggregation rules for core kubevirt metrics
       displayName: KubeVirt Metric Aggregation
       kind: KubevirtMetricsAggregation
@@ -36,7 +36,7 @@ spec:
         version: v1
         x-descriptors:
         - urn:alm:descriptor:io.kubernetes.ssp:version
-      version: ''
+      version: v1
     - description: Represents a deployment of Node labeller component
       displayName: KubeVirt Node labeller
       kind: KubevirtNodeLabellerBundle
@@ -48,7 +48,7 @@ spec:
         version: v1
         x-descriptors:
         - urn:alm:descriptor:io.kubernetes.ssp:version
-      version: ''
+      version: v1
     - description: Represents a deployment of admission control webhook to validate
         the KubeVirt templates
       displayName: KubeVirt Template Validator admission webhook
@@ -61,7 +61,7 @@ spec:
         version: v1
         x-descriptors:
         - urn:alm:descriptor:io.kubernetes.ssp:version
-      version: ''
+      version: v1
   description: KubeVirt Schedule, Scale and Performance Operator
   displayName: Kubevirt Ssp Operator
   install:
