@@ -39,7 +39,7 @@ if [ "$NODE_SELECTOR" != "testValue" ]; then
   RET=1
 fi
 
-echo "[test_id:4856]: Check if Tolerations is set as expectedd"
+echo "[test_id:4856]: Check if Tolerations is set as expected"
 TOLERATION=$(oc get -n ${TEST_NS} ds kubevirt-node-labeller -ojson | jq '.spec.template.spec.tolerations[0].key' | tr -d '"')
 if [ "$TOLERATION" != "testKey" ]; then
   echo $TOLERATION
@@ -52,6 +52,48 @@ AFFINITY=$(oc get -n ${TEST_NS} ds kubevirt-node-labeller -ojson | jq '.spec.tem
 if [ "$AFFINITY" != "testKey" ]; then
   echo $AFFINITY
   echo "node labeller daemon set is missing proper affinity"
+  RET=1
+fi
+
+timeout=300
+sample=10
+current_time=0
+
+echo "[test_id:4997]: Check if patch is applied without error"
+oc patch -n ${TEST_NS} KubevirtNodeLabellerBundle kubevirt-node-labeller-bundle --type='json' -p='[{"op": "remove", "path": "/spec/affinity"}, {"op": "remove", "path": "/spec/nodeSelector"}, {"op": "remove", "path": "/spec/tolerations"}]'
+#wait until operator applies newest configuration
+while [ $(oc get -n ${TEST_NS} pods | grep node-labeller.*Running | wc -l) -lt 1 ] ; do 
+  oc get pods
+  if [ $current_time -gt $timeout ]; then
+    RET=1
+    echo "node-labeller is not in running state"
+    break
+  fi
+  current_time=$((current_time + sample))
+  sleep $sample;
+done
+
+echo "[test_id:4998]: Check if nodeSelector is set as expected"
+NODE_SELECTOR=$(oc get -n ${TEST_NS} ds kubevirt-node-labeller -ojson | jq '.spec.template.spec.nodeSelector.testKey' | tr -d '"')
+if [ "$NODE_SELECTOR" != "null" ] && [ "$NODE_SELECTOR" != "{}" ]; then
+  echo $NODE_SELECTOR
+  echo "node labeller is missing proper nodeSelector after update"
+  RET=1
+fi
+
+echo "[test_id:4999]: Check if tolerations is set as expected"
+TOLERATION=$(oc get -n ${TEST_NS} ds kubevirt-node-labeller -ojson | jq '.spec.template.spec.tolerations[0].key' | tr -d '"')
+if [ "$TOLERATION" != "null" ] && [ "$TOLERATION" != "[]" ]; then
+  echo $TOLERATION
+  echo "node labeller daemon is missing proper tolerations after update"
+  RET=1
+fi
+
+echo "[test_id:5000]: Check if affinity is set as expected"
+AFFINITY=$(oc get -n ${TEST_NS} ds kubevirt-node-labeller -ojson | jq '.spec.template.spec.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].key' | tr -d '"')
+if [ "$AFFINITY" != "null" ] && [ "$AFFINITY" != "{}" ]; then
+  echo $AFFINITY
+  echo "node labeller daemon is missing proper affinity after update"
   RET=1
 fi
 

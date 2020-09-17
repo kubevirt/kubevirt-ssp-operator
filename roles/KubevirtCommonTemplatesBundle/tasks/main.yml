@@ -132,4 +132,4 @@
     namespace: "{{ cr_info.metadata.namespace }}"
     status:
       observedVersion: "{{ operator_version }}"
-  when: "{{ available==true }}"
+  when: available == true

@@ -18,8 +18,8 @@
 - name: Create the service
   k8s:
     state: present
+    apply: True
     definition: "{{ item | from_yaml }}"
-    merge_type: ['merge', 'json']
   with_items: "{{ lookup('template', 'service.yaml.j2').split('\n---\n') | select('search', '(^|\n)[^#]') | list }}"
   register: tv
 
@@ -107,7 +107,7 @@
     namespace: "{{ cr_info.metadata.namespace }}"
     status:
       observedVersion: "{{ operator_version }}"
-  when: "{{ available==true }}"
+  when: available==true
 
 - name: Reque if KubevirtTemplateValidator not available
   fail:
