@@ -76,6 +76,7 @@ if [ "$DAEMONSET_DELETED" == "false" ]; then
 fi
 
 # Test if empty affinity/nodeSelector/tolerations values are propagated to the daemon set
+echo "[test_id:4884]: Check if Node Labeller Daemon set is created"
 oc create -n ${TEST_NS} -f "${RES_DIR}/11-node-labeller-empty-affinity-nodeSelector-tolerations.yaml" || exit 2
 
 DAEMONSET_FOUND=false
@@ -95,6 +96,7 @@ if [ "$DAEMONSET_FOUND" == "false" ]; then
   exit 1
 fi
 
+echo "[test_id:4885]: Check if Node selector value is set as expected"
 oc get -n ${TEST_NS} ds kubevirt-node-labeller -ojson | jq '.spec.template.spec'
 
 NODE_SELECTOR=$(oc get -n ${TEST_NS} ds kubevirt-node-labeller -ojson | jq '.spec.template.spec.nodeSelector' | tr -d '"')
@@ -104,6 +106,7 @@ if [ "$NODE_SELECTOR" != "null" ] && [ "$NODE_SELECTOR" != "{}" ]; then
   RET=1
 fi
 
+echo "[test_id:4886]: Check if Tolerations is set as expectedd"
 TOLERATION=$(oc get -n ${TEST_NS} ds kubevirt-node-labeller -ojson | jq '.spec.template.spec.tolerations' | tr -d '"')
 if [ "$TOLERATION" != "null" ] && [ "$TOLERATIONS" != "[]" ]; then
   echo $TOLERATION
@@ -111,6 +114,7 @@ if [ "$TOLERATION" != "null" ] && [ "$TOLERATIONS" != "[]" ]; then
   RET=1
 fi
 
+echo "[test_id:4887]: Check if Affinity is set as expected"
 AFFINITY=$(oc get -n ${TEST_NS} ds kubevirt-node-labeller -ojson | jq '.spec.template.spec.affinity' | tr -d '"')
 if [ "$AFFINITY" != "null" ] && [ "$AFFINITY" != "{}" ] ; then
   echo $AFFINITY
