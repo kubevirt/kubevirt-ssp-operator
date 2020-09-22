@@ -8,6 +8,7 @@ RET=0
 TEST_NS="${KV_NAMESPACE}"
 
 # Test if existing affinities/nodeSelectors/tolerations are propagated to the deployment
+echo "[test_id:4860]: Check if Template Validator deployment is created"
 oc create -n ${TEST_NS} -f "${RES_DIR}/10-template-validator-affinity-nodeSelector-tolerations.yaml" || exit 2
 
 # Wait for the operator to create the deployment, we don't care if pods are actually ready, as
@@ -29,6 +30,7 @@ if [ "$DEPLOYMENT_FOUND" == "false" ]; then
   exit 1
 fi
 
+echo "[test_id:4861]: Check if Node selector value is set as expected"
 oc get -n ${TEST_NS} deploy virt-template-validator -ojson | jq '.spec.template.spec'
 
 NODE_SELECTOR=$(oc get -n ${TEST_NS} deploy virt-template-validator -ojson | jq '.spec.template.spec.nodeSelector.testKey' | tr -d '"')
@@ -38,6 +40,7 @@ if [ "$NODE_SELECTOR" != "testValue" ]; then
   RET=1
 fi
 
+echo "[test_id:4862]: Check if Tolerations is set as expectedd"
 TOLERATION=$(oc get -n ${TEST_NS} deploy virt-template-validator -ojson | jq '.spec.template.spec.tolerations[0].key' | tr -d '"')
 if [ "$TOLERATION" != "testKey" ]; then
   echo $TOLERATION
@@ -45,6 +48,7 @@ if [ "$TOLERATION" != "testKey" ]; then
   RET=1
 fi
 
+echo "[test_id:4863]: Check if Affinity is set as expected"
 AFFINITY=$(oc get -n ${TEST_NS} deploy virt-template-validator -ojson | jq '.spec.template.spec.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].key' | tr -d '"')
 if [ "$AFFINITY" != "testKey" ]; then
   echo $AFFINITY
@@ -73,6 +77,7 @@ if [ "$DEPLOYMENT_DELETED" == "false" ]; then
 fi
 
 # Test if empty affinity/nodeSelector/tolerations values are propagated to the deployment
+echo "[test_id:4902]: Check if Template Validator Deployment is created"
 oc create -n ${TEST_NS} -f "${RES_DIR}/10-template-validator-empty-affinity-nodeSelector-tolerations.yaml" || exit 2
 
 DEPLOYMENT_FOUND=false
@@ -92,6 +97,7 @@ if [ "$DEPLOYMENT_FOUND" == "false" ]; then
   exit 1
 fi
 
+echo "[test_id:4903]: Check if Node selector value is set as expected"
 oc get -n ${TEST_NS} deploy virt-template-validator -ojson | jq '.spec.template.spec'
 
 NODE_SELECTOR=$(oc get -n ${TEST_NS} deploy virt-template-validator -ojson | jq '.spec.template.spec.nodeSelector' | tr -d '"')
@@ -101,6 +107,7 @@ if [ "$NODE_SELECTOR" != "null" ] && [ "$NODE_SELECTOR" != "{}" ]; then
   RET=1
 fi
 
+echo "[test_id:4904]: Check if Tolerations is set as expectedd"
 TOLERATION=$(oc get -n ${TEST_NS} deploy virt-template-validator -ojson | jq '.spec.template.spec.tolerations' | tr -d '"')
 if [ "$TOLERATION" != "null" ] && [ "$TOLERATIONS" != "[]" ]; then
   echo $TOLERATION
@@ -108,6 +115,7 @@ if [ "$TOLERATION" != "null" ] && [ "$TOLERATIONS" != "[]" ]; then
   RET=1
 fi
 
+echo "[test_id:4905]: Check if Affinity is set as expected"
 AFFINITY=$(oc get -n ${TEST_NS} deploy virt-template-validator -ojson | jq '.spec.template.spec.affinity' | tr -d '"')
 if [ "$AFFINITY" != "null" ] && [ "$AFFINITY" != "{}" ] ; then
   echo $AFFINITY

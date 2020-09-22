@@ -158,7 +158,7 @@ fi
 ((${V} >= 1)) && echo "Service Account ${TEST_SA} is unable to delete PVCs in namespace ${TEST_NS}"
 
 # Verify ServiceAccount with only view role cannot view DVs
-echo "[test_id:]: ServiceAccounts with only view role cannot view DVs"
+echo "[test_id:4875]: ServiceAccounts with only view role cannot view DVs"
 oc auth can-i get dv --as system:serviceaccount:${TEST_SA_NS}:${TEST_SA} -n ${TEST_NS}
 if [ $? == 0 ]; then
   quit_cleanup 1
@@ -166,7 +166,7 @@ fi
 ((${V} >= 1)) && echo "Service Account ${TEST_SA} is unable to view DVs in namespace ${TEST_NS}"
 
 # Verify ServiceAccount with only view role cannot create DVs
-echo "[test_id:]: ServiceAccounts with only view role cannot create DVs"
+echo "[test_id:4874]: ServiceAccounts with only view role cannot create DVs"
 oc auth can-i create dv --as system:serviceaccount:${TEST_SA_NS}:${TEST_SA} -n ${TEST_NS}
 if [ $? == 0 ]; then
   quit_cleanup 1
@@ -174,12 +174,20 @@ fi
 ((${V} >= 1)) && echo "Service Account ${TEST_SA} is unable to create DVs in namespace ${TEST_NS}"
 
 # Verify ServiceAccount with only view role cannot delete DVs
-echo "[test_id:]: ServiceAccounts with only view role cannot delete DVs"
+echo "[test_id:4873]: ServiceAccounts with only view role cannot delete DVs"
 oc auth can-i delete dv --as system:serviceaccount:${TEST_SA_NS}:${TEST_SA} -n ${TEST_NS}
 if [ $? == 0 ]; then
   quit_cleanup 1
 fi
 ((${V} >= 1)) && echo "Service Account ${TEST_SA} is unable to delete DVs in namespace ${TEST_NS}"
+
+# Verify ServiceAccount with only view role cannot create any other resurces other than the ones listed in the Viewrole
+echo "[test_id:4879]: ServiceAccounts with only view role cannot create any other resurces other than the ones listed in the Viewrole"
+oc auth can-i create pods --as system:serviceaccount:${TEST_SA_NS}:${TEST_SA} -n ${TEST_NS}
+if [ $? == 0 ]; then
+  quit_cleanup 1
+fi
+((${V} >= 1)) && echo "Service Account ${TEST_SA} is unable to create pods in namespace ${TEST_NS}"
 
 # Verify ServiceAccount with edit role can create PVCs
 echo "[test_id:4774]: ServiceAcounts with edit role can create PVCs"
@@ -194,19 +202,27 @@ oc auth can-i delete pvc --as system:serviceaccount:${TEST_SA_NS}:${TEST_SA} -n 
 ((${V} >= 1)) && echo "Service Account ${TEST_SA} is able to delete PVCs in namespace ${TEST_NS}"
 
 # Verify ServiceAccount with edit role can view DVs
-echo "[test_id:]: ServiceAccounts with edit role can view DVs"
+echo "[test_id:4877]: ServiceAccounts with edit role can view DVs"
 oc auth can-i get dv --as system:serviceaccount:${TEST_SA_NS}:${TEST_SA} -n ${TEST_NS} || exit
 ((${V} >= 1)) && echo "Service Account ${TEST_SA} is able to view DVs in namespace ${TEST_NS}"
 
 # Verify ServiceAccount with edit role can create DVs
-echo "[test_id:]: ServiceAcounts with edit role can create DVs"
+echo "[test_id:4872]: ServiceAcounts with edit role can create DVs"
 oc auth can-i create dv --as system:serviceaccount:${TEST_SA_NS}:${TEST_SA} -n ${TEST_NS} || exit
 ((${V} >= 1)) && echo "Service Account ${TEST_SA} is able to create DVs in namespace ${TEST_NS}"
 
 # Verify ServiceAccount with edit role can delete DVs
-echo "[test_id:]: ServiceAcounts with edit role can delete DVs"
+echo "[test_id:4876]: ServiceAcounts with edit role can delete DVs"
 oc auth can-i delete dv --as system:serviceaccount:${TEST_SA_NS}:${TEST_SA} -n ${TEST_NS} || exit
 ((${V} >= 1)) && echo "Service Account ${TEST_SA} is able to delete DVs in namespace ${TEST_NS}"
+
+# Verify ServiceAccount with edit role cannot create any other resurces other than the ones listed in the Edit role
+echo "[test_id:4878]: ServiceAccounts with edit role cannot create any other resurces other than the ones listed in the Edit Cluster role"
+oc auth can-i create pods --as system:serviceaccount:${TEST_SA_NS}:${TEST_SA} -n ${TEST_NS}
+if [ $? == 0 ]; then
+  quit_cleanup 1
+fi
+((${V} >= 1)) && echo "Service Account ${TEST_SA} is unable to create pods in namespace ${TEST_NS}"
 
 oc delete -n ${SSP_OP_POD_NAMESPACE} -f "${SCRIPTPATH}/common-templates-unversioned-cr.yaml" || exit
 oc delete clusterrole ${EDIT_ROLE} || exit
