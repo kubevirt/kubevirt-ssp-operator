@@ -7,6 +7,9 @@ subjects:
 - kind: Group 
   name: system:authenticated
   apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: system:serviceaccounts
+  apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: Role
   name: os-images.kubevirt.io:view
