@@ -20,8 +20,8 @@
 - name: Create the node labeller daemon set
   k8s:
     state: present
+    apply: True
     definition: "{{ lookup('template', 'kubevirt-node-labeller-ds.yaml.j2') | from_yaml }}"
-    merge_type: ['merge', 'json']
   register: nl
 
 - name: "collect all objects"
@@ -102,7 +102,7 @@
     namespace: "{{ cr_info.metadata.namespace }}"
     status:
       observedVersion: "{{ operator_version }}"
-  when: "{{ available==true }}"
+  when: available == true
 
 - name: Reque if KubevirtNodeLabellerBundle not available
   fail:
