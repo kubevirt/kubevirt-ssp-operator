@@ -173,6 +173,11 @@ if [ $? == 0 ]; then
 fi
 ((${V} >= 1)) && echo "Service Account ${TEST_SA} is unable to create DVs in namespace ${TEST_NS}"
 
+# Verify ServiceAccount with only view role can create dv/source
+echo "[test_id:5005]: ServiceAccounts with only view role can create dv/source"
+oc auth can-i create dv --subresource=source --as system:serviceaccount:${TEST_SA_NS}:${TEST_SA} -n ${TEST_NS} || exit
+((${V} >= 1)) && echo "Service Account ${TEST_SA} is able to create dv/source in namespace ${TEST_NS}"
+
 # Verify ServiceAccount with only view role cannot delete DVs
 echo "[test_id:]: ServiceAccounts with only view role cannot delete DVs"
 oc auth can-i delete dv --as system:serviceaccount:${TEST_SA_NS}:${TEST_SA} -n ${TEST_NS}
