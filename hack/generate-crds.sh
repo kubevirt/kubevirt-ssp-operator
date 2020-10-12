@@ -10,5 +10,7 @@ crd_files=$(ls deploy/crds/*crd.yaml)
 
 for crd in $crd_files
 do
-  echo "  preserveUnknownFields: false" >> $crd
+  if [ $(grep "preserveUnknownFields" $crd | wc -l) -eq 0 ]; then
+    echo "  preserveUnknownFields: false" >> $crd
+  fi
 done
