@@ -17,4 +17,11 @@ COPY build/csv-generator.sh /usr/bin/csv-generator
 
 COPY build/preprocess_template.py ${HOME}/
 COPY patch.yaml ${HOME}/
+
+# For some reason, OCP CI started failing without modifying the permissions on the template fiels
+# this is a workaround until that is addressed.
+USER root
+RUN chmod 777 ${HOME}/roles/KubevirtCommonTemplatesBundle/files/*
+USER ansible-operator
+
 RUN python3 ${HOME}/preprocess_template.py ${HOME}/patch.yaml ${HOME}/roles/KubevirtCommonTemplatesBundle/files/
