@@ -55,12 +55,12 @@
 # If the old cr exists, it would have a metadata field
 - name: Check if the old CR exists
   set_fact:
-    old_cr_exists: "{{ true if (old_cr is defined) and (old_cr.metadata | default(None)) != None else false }}"
+    old_cr_exists: "{{ True if (old_cr is defined) and (old_cr.metadata | default(None)) != None else False }}"
 
 - name: Filter for templates owned by the old cr
   set_fact:
     old_cr_templates: "{{ templates | k8s_owned_by(old_cr) }}"
-  when: "{{ old_cr_exists==true }}"
+  when: old_cr_exists == True
 
 # Inject ownerReferences
 - name: Inject owner references for KubevirtCommonTemplatesBundle
@@ -69,23 +69,19 @@
     namespace: "{{ cr_info.metadata.namespace }}"
     merge_type: ['merge', 'json']
     resource_definition: "{{ old_cr_templates | k8s_inject_ownership(cr_info) }}"
-  when: "{{ (old_cr_templates is defined) and (old_cr_templates | length > 0) }}"
+  when: (old_cr_templates is defined) and (old_cr_templates | length > 0)
 
 - name: "Count all new templates in file"
   set_fact:
     new_templates: "{{ lookup('file', 'common-templates-'+ version +'.yaml').split('\n---\n') | select('search', '(^|\n)[^#]') | list | length }}"
 
-- name: "Set label"
-  set_fact:
-    label: "template.kubevirt.io/version={{ version }}"
-
 - name: "Get all templates"
   set_fact:
-    deployed_templates_after: "{{ lookup('k8s', api_version=ct_status.result.results[0].result.apiVersion, kind='template', label_selector=label) | length }}"
+    deployed_templates_after: "{{ lookup('k8s', api_version=ct_status.result.results[0].result.apiVersion, kind='template', label_selector='template.kubevirt.io/type=base') | length }}"
 
 - name: "Set Available status"
   set_fact:
-    available: "{{ true if new_templates <= deployed_templates_after else false }}"
+    available: "{{ True if new_templates <= deployed_templates_after else False }}"
 
 - name: Set progressing condition
   operator_sdk.util.k8s_status:
@@ -132,4 +128,4 @@
     namespace: "{{ cr_info.metadata.namespace }}"
     status:
       observedVersion: "{{ operator_version }}"
-  when: available == true
+  when: available == True
