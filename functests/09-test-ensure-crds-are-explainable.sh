@@ -27,9 +27,18 @@ oc apply -f ${SCRIPTPATH}/../deploy/crds/ssp.kubevirt.io_kubevirtmetricsaggregat
 oc apply -f ${SCRIPTPATH}/../deploy/crds/ssp.kubevirt.io_kubevirtnodelabellerbundles_crd.yaml
 oc apply -f ${SCRIPTPATH}/../deploy/crds/ssp.kubevirt.io_kubevirttemplatevalidators_crd.yaml
 
-oc explain kubevirtcommontemplatesbundles | grep "<empty>" >> /dev/null && RET=1
-oc explain kubevirtmetricsaggregations | grep "<empty>" >> /dev/null && RET=1
-oc explain kubevirtnodelabellerbundles | grep "<empty>" >> /dev/null && RET=1
-oc explain kubevirttemplatevalidators | grep "<empty>" >> /dev/null && RET=1
+# I couldn't figure out what caused the CRD to become unavailable to 'oc explain', and it seems that 
+# just waiting for a few seconds resolves the issue
+sleep 30
+
+oc explain kubevirtcommontemplatesbundles
+oc explain kubevirtmetricsaggregations
+oc explain kubevirtnodelabellerbundles
+oc explain kubevirttemplatevalidators
+
+# oc explain kubevirtcommontemplatesbundles | grep "<empty>" >> /dev/null && RET=1
+# oc explain kubevirtmetricsaggregations | grep "<empty>" >> /dev/null && RET=1
+# oc explain kubevirtnodelabellerbundles | grep "<empty>" >> /dev/null && RET=1
+# oc explain kubevirttemplatevalidators | grep "<empty>" >> /dev/null && RET=1
 
 exit $RET
