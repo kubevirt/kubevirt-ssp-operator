@@ -1,3 +1,5 @@
+This project has been deprecated, and replaced by the [new SSP operator](https://github.com/kubevirt/ssp-operator).
+
 # kubevirt-ssp-operator
 Operator that manages Scheduling, Scale and Performance addons for [KubeVirt](https://kubevirt.io)
 
