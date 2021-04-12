@@ -12,5 +12,5 @@ spec:
   - name: cnv.rules
     rules:
     - expr: |
-        sum(kubevirt_vmi_phase_count{phase="running"}) by (node)
+        sum(kubevirt_vmi_phase_count{phase="running"}) by (node,os,flavor,workload)
       record: cnv:vmi_status_running:count
