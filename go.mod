@@ -3,7 +3,7 @@ module github.com/kubevirt/kubevirt-ssp-operator
 go 1.13
 
 require (
-	github.com/emicklei/go-restful v2.9.6+incompatible // indirect
+	github.com/emicklei/go-restful v2.16.0+incompatible // indirect
 	github.com/go-openapi/spec v0.19.2
 	github.com/go-openapi/swag v0.19.5 // indirect
 	github.com/gogo/protobuf v1.2.1 // indirect
